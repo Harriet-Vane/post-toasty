@@ -234,18 +234,24 @@ function ToppingLayer({
       );
     }
     case "drizzle": {
-      // zigzag squeeze pattern
+      // spiral squeeze pattern (like a squirt of honey/ketchup spinning down)
       const seed = hash(seedKey);
-      const offset = (rand(seed, 1) - 0.5) * 14;
-      const path =
-        `M40 ${70 + offset} ` +
-        Array.from({ length: 6 })
-          .map((_, i) => {
-            const x1 = 40 + i * 24 + 12;
-            const y1 = i % 2 === 0 ? 110 + offset : 70 + offset;
-            return `L${x1} ${y1}`;
-          })
-          .join(" ");
+      const cx = 100 + (rand(seed, 1) - 0.5) * 18;
+      const cy = 100 + (rand(seed, 2) - 0.5) * 18;
+      const turns = 3 + rand(seed, 3) * 1.2;
+      const startAngle = rand(seed, 4) * Math.PI * 2;
+      const maxR = 58;
+      const steps = 90;
+      const pts: string[] = [];
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const angle = startAngle + t * turns * Math.PI * 2;
+        const r = 4 + t * maxR;
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
+        pts.push(`${x.toFixed(2)} ${y.toFixed(2)}`);
+      }
+      const path = `M${pts[0]} L${pts.slice(1).join(" L")}`;
       return (
         <g>
           <path
