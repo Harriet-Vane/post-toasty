@@ -75,7 +75,7 @@ function RunchBase() {
         </div>
 
         {/* Screen */}
-        <div className="relative arcade-screen crt p-4 sm:p-8 min-h-[520px]">
+        <div className="relative arcade-screen crt p-4 sm:p-8 min-h-[520px] flex flex-col">
           {/* HUD top-left appears in builder & later */}
           {(phase === "builder" || phase === "share") && (
             <div className="absolute top-3 left-3 z-10">
