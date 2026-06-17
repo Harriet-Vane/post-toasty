@@ -132,7 +132,7 @@ function RunchBase() {
         {/* Cabinet footer */}
         <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
           <span className="font-pixel text-[9px]">© RUNCHBASE</span>
-          <span className="font-body text-xs">toast is the unit · no scores, no pace</span>
+          <span className="font-body text-xs">toast is the unit, the process, the goal</span>
         </div>
       </div>
     </main>
