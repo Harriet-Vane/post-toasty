@@ -302,6 +302,52 @@ function ToppingLayer({
     case "scatter": {
       const count =
         topping.id === "sprinkles" ? 55 : topping.id === "cinnamon" ? 60 : topping.id === "tomato" ? 7 : 14;
+      if (topping.id === "pineapple") {
+        const ringPath =
+          "M100 22 A78 78 0 1 0 100 178 A78 78 0 1 0 100 22 Z " +
+          "M100 76 A24 24 0 1 1 100 124 A24 24 0 1 1 100 76 Z";
+        const segments = [];
+        for (let i = 0; i < 16; i++) {
+          const angle = (i / 16) * Math.PI * 2;
+          const x1 = 100 + Math.cos(angle) * 28;
+          const y1 = 100 + Math.sin(angle) * 28;
+          const x2 = 100 + Math.cos(angle) * 74;
+          const y2 = 100 + Math.sin(angle) * 74;
+          segments.push(
+            <line
+              key={i}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke={topping.accent}
+              strokeWidth="2"
+              opacity="0.6"
+            />
+          );
+        }
+        const eyes = [];
+        for (let i = 0; i < 12; i++) {
+          const angle = (i / 12) * Math.PI * 2 + 0.3;
+          const r = 42 + (i % 3) * 12;
+          const x = 100 + Math.cos(angle) * r;
+          const y = 100 + Math.sin(angle) * r;
+          eyes.push(<circle key={i} cx={x} cy={y} r="3" fill={topping.accent} opacity="0.5" />);
+        }
+        return (
+          <g>
+            <path
+              d={ringPath}
+              fill={topping.color}
+              stroke={topping.accent}
+              strokeWidth="3"
+              fillRule="evenodd"
+            />
+            {segments}
+            {eyes}
+          </g>
+        );
+      }
       const pts = scatterPositions(count, seedKey);
       return (
         <g>
