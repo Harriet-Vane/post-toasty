@@ -64,11 +64,10 @@ function breadClipPath(breadId: BreadId) {
 function breadTexture(breadId: BreadId) {
   switch (breadId) {
     case "sourdough":
-      // hand-drawn swirl
+      // hand-drawn swirl (spiral scoring pattern)
       return (
-        <g stroke="var(--toast-crust)" fill="none" strokeWidth="2.5" strokeLinecap="round">
-          <path d="M100 100 m-22 0 a22 22 0 1 0 44 0 a22 22 0 1 0 -44 0 M100 100 m-12 0 a12 12 0 1 0 24 0 a12 12 0 1 0 -24 0" />
-          <path d="M100 88 L100 70" />
+        <g stroke="var(--toast-crust)" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M100 70 L100 70.1 M100 70.1 C114 72, 124 86, 120 100 C116 114, 100 122, 86 116 C72 110, 68 92, 78 80 C88 68, 108 66, 120 78 C132 90, 130 112, 116 124 C102 136, 78 134, 68 118" />
         </g>
       );
     case "wholewheat":
