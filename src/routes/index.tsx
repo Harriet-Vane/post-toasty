@@ -20,22 +20,22 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "RunchBase — Celebrate your runs with toast" },
+      { title: "RunToast — Celebrate your runs with toast" },
       {
         name: "description",
         content:
           "Enter your run time. Get a toast count. Build the toast. Toast is the unit of measurement for the run itself.",
       },
-      { property: "og:title", content: "RunchBase" },
+      { property: "og:title", content: "RunToast" },
       { property: "og:description", content: "Toast, the champion of post-run treats." },
     ],
   }),
-  component: RunchBase,
+  component: RunToast,
 });
 
 type Phase = "input" | "builder" | "share";
 
-function RunchBase() {
+function RunToast() {
   const [phase, setPhase] = useState<Phase>("input");
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
@@ -61,7 +61,7 @@ function RunchBase() {
               className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
               style={{ textShadow: "2px 2px 0 var(--tomato)" }}
             >
-              RUNCHBASE
+              RunToast
             </h1>
           </div>
           <div className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block">
@@ -105,7 +105,7 @@ function RunchBase() {
 
         {/* Cabinet footer */}
         <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
-          <span className="font-pixel text-[9px]">© RUNCHBASE</span>
+          <span className="font-pixel text-[9px]">© RunToast</span>
           <span className="font-body text-xs">toast is the unit, the process, the goal</span>
         </div>
       </div>
@@ -423,8 +423,8 @@ function ShareScreen({
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
 
-  const shareText = `${name} — a ${bread.name} toast for my ${toastCount}-toast run. Built on RunchBase.`;
-  const shareUrl = typeof window !== "undefined" ? window.location.origin : "https://runchbase.app";
+  const shareText = `${name} — a ${bread.name} toast for my ${toastCount}-toast run. Built on RunToast.`;
+  const shareUrl = typeof window !== "undefined" ? window.location.origin : "https://runtoast.app";
 
   async function copyLink() {
     try {
@@ -487,7 +487,7 @@ function ShareScreen({
         <header className="mb-3">
           <div className="w-full">
             <p className="font-pixel text-[9px]" style={{ color: "var(--toast-crust)" }}>
-              ★ RUNCHBASE ★
+              ★ RunToast ★
             </p>
             <h3 className="font-pixel text-[14px] sm:text-[16px] mt-2 leading-tight text-[var(--ink)]">
               {name.toUpperCase()}
@@ -535,7 +535,7 @@ function ShareScreen({
 
         <footer className="flex items-center justify-between mt-4 pt-3" style={{ borderTop: "2px dashed var(--ink)" }}>
           <span className="font-pixel text-[8px]" style={{ color: "var(--toast-crust)" }}>
-            BUILT ON RUNCHBASE
+            BUILT ON RunToast
           </span>
           <a
             href={shareUrl}
@@ -612,7 +612,7 @@ function ShareScreen({
                   onClick={async () => {
                     try {
                       await (navigator as Navigator).share({
-                        title: "RunchBase",
+                        title: "RunToast",
                         text: shareText,
                         url: shareUrl,
                       });

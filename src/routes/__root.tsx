@@ -79,10 +79,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "RunchBase — Celebrate your runs with toast" },
+      { title: "RunToast — Celebrate your runs with toast" },
       { name: "description", content: "Enter your run time, get a toast count, build your post-run toast. Toast is the unit. No pace, no calories, no scoring." },
-      { name: "author", content: "RunchBase" },
-      { property: "og:title", content: "RunchBase — Celebrate your runs with toast" },
+      { name: "author", content: "RunToast" },
+      { property: "og:title", content: "RunToast — Celebrate your runs with toast" },
       { property: "og:description", content: "Toast is the champion of post-run treats." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
