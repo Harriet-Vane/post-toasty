@@ -59,16 +59,30 @@ function breadClipPath(breadId: BreadId) {
   }
 }
 
-/* ---------------- Bread texture overlays (drawn before toppings) ---------------- */
+const SOURDOUGH_SWIRL = (() => {
+  const cx = 100;
+  const cy = 100;
+  const turns = 2.5;
+  const steps = 80;
+  const maxR = 38;
+  let d = "";
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const angle = -Math.PI / 2 + t * turns * Math.PI * 2;
+    const r = t * maxR;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+    d += `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
+  }
+  return d;
+})();
 
 function breadTexture(breadId: BreadId) {
   switch (breadId) {
     case "sourdough":
-      // hand-drawn swirl
       return (
-        <g stroke="var(--toast-crust)" fill="none" strokeWidth="2.5" strokeLinecap="round">
-          <path d="M100 100 m-22 0 a22 22 0 1 0 44 0 a22 22 0 1 0 -44 0 M100 100 m-12 0 a12 12 0 1 0 24 0 a12 12 0 1 0 -24 0" />
-          <path d="M100 88 L100 70" />
+        <g stroke="var(--toast-crust)" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d={SOURDOUGH_SWIRL} />
         </g>
       );
     case "wholewheat":
