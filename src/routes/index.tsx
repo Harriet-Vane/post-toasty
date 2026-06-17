@@ -13,7 +13,7 @@ import {
   generateRecipe,
   getBread,
   getTopping,
-  
+  toastsForMinutes,
   type BreadId,
   type ToppingId,
 } from "@/lib/runchbase";
@@ -36,26 +36,20 @@ export const Route = createFileRoute("/")({
 
 type Phase = "input" | "reveal" | "builder" | "share";
 
-const INCHES_PER_TOAST = 5;
-
 function RunchBase() {
   const [phase, setPhase] = useState<Phase>("input");
-  const [distance, setDistance] = useState<string>("");
-  const [committedDistance, setCommittedDistance] = useState<number>(0);
-  const [unit, setUnit] = useState<"mi" | "km">("mi");
+  const [minutes, setMinutes] = useState<string>("");
+  const [committedMinutes, setCommittedMinutes] = useState<number>(0);
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
   const [toppings, setToppings] = useState<ToppingId[]>([]);
 
-  const toastCount = useMemo(
-    () => Math.max(0, Math.floor((committedDistance || 0) / INCHES_PER_TOAST)),
-    [committedDistance]
-  );
+  const toastCount = useMemo(() => toastsForMinutes(committedMinutes || 0), [committedMinutes]);
 
   function reset() {
     setPhase("input");
-    setDistance("");
-    setCommittedDistance(0);
+    setMinutes("");
+    setCommittedMinutes(0);
     setBreadId("white");
     setBreadStep(true);
     setToppings([]);
@@ -96,12 +90,10 @@ function RunchBase() {
 
           {phase === "input" && (
             <InputScreen
-              distance={distance}
-              setDistance={setDistance}
-              unit={unit}
-              setUnit={setUnit}
-              onSubmit={(d) => {
-                setCommittedDistance(d);
+              minutes={minutes}
+              setMinutes={setMinutes}
+              onSubmit={(m) => {
+                setCommittedMinutes(m);
                 setPhase("reveal");
               }}
             />
@@ -109,8 +101,7 @@ function RunchBase() {
 
           {phase === "reveal" && (
             <RevealScreen
-              distance={committedDistance}
-              unit={unit}
+              minutes={committedMinutes}
               count={toastCount}
               onContinue={() => setPhase("builder")}
             />
@@ -151,27 +142,22 @@ function RunchBase() {
 /* -------------------- Input -------------------- */
 
 function InputScreen({
-  distance,
-  setDistance,
-  unit,
-  setUnit,
+  minutes,
+  setMinutes,
   onSubmit,
 }: {
-  distance: string;
-  setDistance: (v: string) => void;
-  unit: "mi" | "km";
-  setUnit: (u: "mi" | "km") => void;
-  onSubmit: (d: number) => void;
+  minutes: string;
+  setMinutes: (v: string) => void;
+  onSubmit: (m: number) => void;
 }) {
   function submit(e?: React.FormEvent) {
     e?.preventDefault();
-    const d = parseInt(distance, 10);
-    if (!Number.isFinite(d) || d <= 0) {
-      sonnerToast("How far did you run?");
+    const m = parseInt(minutes, 10);
+    if (!Number.isFinite(m) || m <= 0) {
+      sonnerToast("How long were you out there? (in minutes)");
       return;
     }
-    const inches = unit === "mi" ? d * 63360 : d * 39370.0787;
-    onSubmit(inches);
+    onSubmit(m);
   }
   return (
     <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8">
@@ -179,10 +165,12 @@ function InputScreen({
         ★ POST-RUN TREATS DEPARTMENT ★
       </p>
       <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
-        HOW FAR DID YOU RUN?
+        HOW LONG WERE YOU
+        <br />
+        OUT THERE?
       </h2>
-      <p className="font-body mt-4 text-[var(--ink)] opacity-80 whitespace-pre-line">
-        Every run has a purpose.{"\n"}Sometimes that purpose is toast.
+      <p className="font-body mt-4 text-[var(--ink)] opacity-80">
+        Just minutes. No distance. No pace.{"\n\n"}
       </p>
 
       <form onSubmit={submit} className="mt-8 w-full max-w-sm">
@@ -190,22 +178,19 @@ function InputScreen({
           <input
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="3"
-            value={distance}
-            onChange={(e) => setDistance(e.target.value.replace(/[^0-9]/g, ""))}
+            placeholder="32"
+            value={minutes}
+            onChange={(e) => setMinutes(e.target.value.replace(/[^0-9]/g, ""))}
             className="pixel-input"
-            aria-label={`Run distance in ${unit === "mi" ? "miles" : "kilometers"}`}
+            aria-label="Run length in minutes"
             autoFocus
           />
-          <button
-            type="button"
-            onClick={() => setUnit(unit === "mi" ? "km" : "mi")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 font-pixel text-[10px] px-1.5 py-0.5"
-            style={{ color: "var(--toast-crust)", border: "2px solid var(--toast-crust)" }}
-            aria-label="Toggle distance unit"
+          <span
+            className="absolute right-4 top-1/2 -translate-y-1/2 font-pixel text-[10px]"
+            style={{ color: "var(--toast-crust)" }}
           >
-            {unit === "mi" ? "MILE" : "KM"}
-          </button>
+            MIN
+          </span>
         </div>
         <button type="submit" className="pixel-btn-primary mt-6 mx-auto">
           <span className="text-2xl leading-none align-middle mr-1" aria-hidden="true">🍞</span>
@@ -223,18 +208,14 @@ function InputScreen({
 /* -------------------- Reveal -------------------- */
 
 function RevealScreen({
-  distance,
-  unit,
+  minutes,
   count,
   onContinue,
 }: {
-  distance: number;
-  unit: "mi" | "km";
+  minutes: number;
   count: number;
   onContinue: () => void;
 }) {
-  const displayValue = Math.round(distance / (unit === "mi" ? 63360 : 39370.0787));
-  const unitLabel = unit === "mi" ? "miles" : "km";
   const article = articleForCount(count);
   return (
     <div className="h-full flex flex-col items-center justify-center text-center py-12 pt-20">
@@ -262,10 +243,10 @@ function RevealScreen({
             THE MATH
           </p>
           <p className="font-body">
-            You ran <strong>{displayValue} {unitLabel}</strong>. A perfect slice of toast is <strong>exactly 5 inches</strong> wide. That's just science. Pure facts.&nbsp;
+            You ran <strong>{minutes} minutes</strong>. It takes <strong>~4 minutes to make a perfect slice of toast</strong>. That's just science. Pure facts.&nbsp;
           </p>
           <p className="font-body mt-1">
-            {distance} ÷ 5 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
+            {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
             <br />
             <br />
             <br />
