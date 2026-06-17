@@ -170,7 +170,7 @@ function InputScreen({
         OUT THERE?
       </h2>
       <p className="font-body mt-4 text-[var(--ink)] opacity-80">
-        Just minutes. No distance. No pace.
+        Just minutes. No distance. No pace.{"\n\n"}
       </p>
 
       <form onSubmit={submit} className="mt-8 w-full max-w-sm">
