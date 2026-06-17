@@ -351,7 +351,7 @@ function BuilderScreen({
 
       <div className="flex justify-center mt-6">
         <button onClick={onLock} className="pixel-btn-primary">
-          Let&apos;s eat! 🍽
+          Let&apos;s eat!
         </button>
       </div>
     </div>
