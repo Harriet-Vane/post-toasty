@@ -196,7 +196,7 @@
   width: 100%;
   outline: none;
 }
-.pixel-input:focus { border-color: var(--tomato); }
+.pixel-input:focus { border-color: var(--turquoise); }
 
 /* CRT scanline overlay */
 .crt::after {
@@ -217,7 +217,7 @@
 
 /* Drag/drop target */
 .drop-target { transition: outline-color 120ms ease, transform 120ms ease; }
-.drop-target.is-over { outline: 3px dashed var(--tomato); outline-offset: 4px; }
+.drop-target.is-over { outline: 3px dashed var(--turquoise); outline-offset: 4px; }
 
 .topping-chip {
   font-family: var(--font-body);
