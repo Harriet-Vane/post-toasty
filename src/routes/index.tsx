@@ -229,8 +229,8 @@ function BuilderScreen({
                 onClick={() => setBreadId(b.id)}
                 className="flex flex-col items-center p-2 bg-[var(--card)]"
                 style={{
-                  border: `3px solid ${selected ? "var(--tomato)" : "var(--ink)"}`,
-                  boxShadow: selected ? "4px 4px 0 0 var(--tomato)" : "3px 3px 0 0 var(--ink)",
+                  border: `3px solid ${selected ? "var(--turquoise)" : "var(--ink)"}`,
+                  boxShadow: selected ? "4px 4px 0 0 var(--turquoise)" : "3px 3px 0 0 var(--ink)",
                   cursor: "pointer",
                 }}
                 aria-pressed={selected}
