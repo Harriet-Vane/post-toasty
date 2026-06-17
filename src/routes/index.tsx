@@ -171,7 +171,6 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
             </p>
             <div className="flex justify-center">
               <button onClick={onContinue} className="pixel-btn-primary">
-                
                 <span className="align-middle">Time for toast</span>
               </button>
             </div>
@@ -593,7 +592,6 @@ function ShareScreen({
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
                 >
-                  
                   <span>{s.label}</span>
                 </a>
               ))}
