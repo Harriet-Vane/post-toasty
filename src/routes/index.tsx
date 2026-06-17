@@ -245,10 +245,10 @@ function RevealScreen({
           THE MATH
         </p>
         <p className="font-body text-[var(--ink)]">
-          You ran <strong>{minutes} minutes</strong>. It takes <strong>~4 minutes to make a perfect slice of toast</strong>.
+          You ran <strong>{minutes} minutes</strong>. It takes <strong>~4 minutes to make a perfect slice of toast</strong>. That's just science.&nbsp;
         </p>
         <p className="font-body mt-1 text-[var(--ink)]">
-          {minutes} ÷ 4 ≈ <strong>{count}</strong> toast{count === 1 ? "" : "s"}.
+          {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
         </p>
       </div>
 
