@@ -148,64 +148,228 @@ export function generateName(breadId: BreadId, toppings: ToppingId[]): string {
   return tpl.replace("{hero}", hero).replace("{time}", time);
 }
 
-const REPEAT_PHRASES = [
-  "Add more {x}.",
-  "Keep the {x} coming.",
-  "Don't hold back on the {x}.",
-  "You know what this needs? More {x}.",
-  "Another round of {x}.",
-  "Why stop? More {x}.",
-  "Yes, even more {x}.",
-  "Lay it on — more {x}.",
+const INTENSITY: Record<string, number> = {
+  pickle: 1,
+  cinnamon: 1,
+  fluff: 1,
+  frosting: 1,
+  whip: 1,
+  cereal: 1,
+  sprinkles: 1,
+  ranch: 2,
+  ketchup: 2,
+  mayo: 2,
+  sardines: 2,
+  gummy: 2,
+  ghost: 3,
+  hotdog: 3,
+};
+
+const REAL_BREAD_FRAMES = [
+  "Start with a slice of {bread} — give it a second, that smell is doing some of the work already.",
+  "{bread}. Straight up. No notes needed.",
+  "Grab your {bread}. This is the part that matters most, even though it's the plainest.",
+  "One slice of {bread}, please — inhale that scent before anything else happens.",
+  "{bread} it is. Respect the crust.",
 ];
+
+const MYSTERY_BREAD_FRAMES = [
+  "Unwrap whatever that is from the back of the freezer. Brave of you.",
+  "Mystery bread, defrosting as we speak. Nobody's filed a report yet.",
+  "Nobody knows what this is. That's not stopping us.",
+  "Something freezer-shaped. We're calling it bread. Onward.",
+];
+
+const TOAST_GENERAL = [
+  "Toast it like you mean it.",
+  "Give it the full cycle. Don't rush this part.",
+  "However your toaster handles a slice this size, trust it.",
+  "Give it the works.",
+];
+
+const TOAST_MYSTERY_EXTRA = [
+  "Toast it and hope. That's the whole instruction.",
+  "However it comes out is canon now.",
+];
+
+const SPREAD_VERBS = ["smear", "slather", "spread", "layer on", "swipe on", "pile on"];
+const SPREAD_MODIFIERS = [
+  "don't hold back",
+  "like you mean it",
+  "generously",
+  "with conviction",
+  "no half measures",
+];
+const SPREAD_FRAMES = [
+  "{Verb} on the {topping}, {modifier}.",
+  "The {topping} goes on next — {modifier}.",
+  "{Verb} the {topping} {modifier}.",
+];
+
+const DRIZZLE_VERBS = ["drizzle", "zigzag", "stripe on", "lash on", "go back and forth with"];
+const DRIZZLE_FRAMES = [
+  "{Verb} the {topping} across the top.",
+  "{Verb} on the {topping} — don't overthink the pattern.",
+  "The {topping} gets a quick {verb} across everything.",
+];
+
+const SCATTER_VERBS = [
+  "scatter",
+  "shower",
+  "rain down",
+  "scatter generously",
+  "fling on (affectionately)",
+];
+const SCATTER_FRAMES = [
+  "{Verb} the {topping} across the whole thing.",
+  "{topping} goes everywhere — {verb} it on.",
+  "Give it a generous {verb} of {topping}.",
+];
+
+const EGG_LINES = [
+  "Let the egg happen.",
+  "Yolk goes wherever it wants. That's the deal.",
+  "Egg on top, full coverage. No pan in sight.",
+];
+
+const DISCRETE_FRAMES = [
+  "Add the {topping}. Yes, really.",
+  "Place the {topping} on top. No further instructions necessary.",
+  "{topping}, just like that. Moving on.",
+];
+
+const CLOSING_T1 = [
+  "Eat it slow. This one's exactly right.",
+  "No notes. Sit down and enjoy it.",
+  "Simple, and that's the whole point. Dig in.",
+  "This one's for you. Take your time with it.",
+];
+const CLOSING_T2 = [
+  "Bold combination. You knew exactly what you were doing.",
+  "Didn't see that one coming, but it works.",
+  "Respect. Eat it before it gets any braver.",
+  "That's a swerve, and a good one. Go enjoy it.",
+];
+const CLOSING_T3 = [
+  "Not for the faint of heart. Good thing it's for you.",
+  "This is less a snack and more a statement. Eat it proudly.",
+  "No apologies. Hold onto something.",
+  "Legendary. Possibly concerning. Eat it anyway.",
+];
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function pickAvoiding<T>(arr: T[], avoid: T | null): T {
+  if (arr.length <= 1 || avoid === null) return pick(arr);
+  let choice = pick(arr);
+  let safety = 0;
+  while (choice === avoid && safety < 8) {
+    choice = pick(arr);
+    safety++;
+  }
+  return choice;
+}
+
+function cap(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+type Category = "spread" | "drizzle" | "scatter" | "egg" | "discrete";
+
+function categoryFor(render: ToppingRender): Category {
+  switch (render) {
+    case "spread":
+      return "spread";
+    case "drizzle":
+      return "drizzle";
+    case "scatter":
+    case "banana":
+      return "scatter";
+    case "egg":
+      return "egg";
+    case "pickle":
+    case "hotdog":
+      return "discrete";
+  }
+}
 
 export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[] {
   const bread = getBread(breadId);
+  const isMystery = breadId === "mystery";
   const lines: string[] = [];
-  lines.push(`1. Start with one slice of ${bread.name.toLowerCase()}.`);
-  lines.push(`2. Toast it (~4 minutes, or until it looks right to you).`);
-  const seenCount = new Map<ToppingId, number>();
+
+  // 1. Bread intro
+  const breadLine = isMystery
+    ? pick(MYSTERY_BREAD_FRAMES)
+    : pick(REAL_BREAD_FRAMES).replace("{bread}", bread.name);
+  lines.push(`1. ${breadLine}`);
+
+  // 2. Toasting
+  const toastPool = isMystery ? [...TOAST_GENERAL, ...TOAST_MYSTERY_EXTRA] : TOAST_GENERAL;
+  lines.push(`2. ${pick(toastPool)}`);
+
+  // 3+. Topping application — avoid consecutive frame repeats within a category
+  const lastFrameByCategory: Record<Category, string | null> = {
+    spread: null,
+    drizzle: null,
+    scatter: null,
+    egg: null,
+    discrete: null,
+  };
+
   toppings.forEach((id, i) => {
     const t = getTopping(id);
     if (!t) return;
-    const prior = seenCount.get(id) ?? 0;
-    seenCount.set(id, prior + 1);
-    let sentence: string;
-    if (prior === 0) {
-      const verb =
-        t.render === "spread"
-          ? "Spread on the"
-          : t.render === "drizzle"
-            ? "Drizzle the"
-            : t.render === "scatter"
-              ? "Scatter the"
-              : t.render === "banana"
-                ? "Lay down slices of"
-                : t.render === "egg"
-                  ? "Slide on the"
-                  : t.render === "hotdog"
-                    ? "Place the"
-                    : t.render === "pickle"
-                      ? "Set down the"
-                      : "Crown it with the";
-      sentence = `${verb} ${t.name.toLowerCase()}.`;
-    } else {
-      const tpl = REPEAT_PHRASES[(prior - 1) % REPEAT_PHRASES.length];
-      sentence = tpl.replace("{x}", t.name.toLowerCase());
+    const cat = categoryFor(t.render);
+    const name = t.name.toLowerCase();
+    let sentence = "";
+
+    if (cat === "egg") {
+      sentence = pickAvoiding(EGG_LINES, lastFrameByCategory.egg);
+      lastFrameByCategory.egg = sentence;
+    } else if (cat === "discrete") {
+      const frame = pickAvoiding(DISCRETE_FRAMES, lastFrameByCategory.discrete);
+      lastFrameByCategory.discrete = frame;
+      sentence = frame.replace(/\{topping\}/g, name);
+    } else if (cat === "spread") {
+      const frame = pickAvoiding(SPREAD_FRAMES, lastFrameByCategory.spread);
+      lastFrameByCategory.spread = frame;
+      const verb = pick(SPREAD_VERBS);
+      const modifier = pick(SPREAD_MODIFIERS);
+      sentence = frame
+        .replace("{Verb}", cap(verb))
+        .replace("{verb}", verb)
+        .replace("{topping}", name)
+        .replace("{modifier}", modifier);
+    } else if (cat === "drizzle") {
+      const frame = pickAvoiding(DRIZZLE_FRAMES, lastFrameByCategory.drizzle);
+      lastFrameByCategory.drizzle = frame;
+      const verb = pick(DRIZZLE_VERBS);
+      sentence = frame
+        .replace("{Verb}", cap(verb))
+        .replace("{verb}", verb)
+        .replace("{topping}", name);
+    } else if (cat === "scatter") {
+      const frame = pickAvoiding(SCATTER_FRAMES, lastFrameByCategory.scatter);
+      lastFrameByCategory.scatter = frame;
+      const verb = pick(SCATTER_VERBS);
+      sentence = frame
+        .replace("{Verb}", cap(verb))
+        .replace("{verb}", verb)
+        .replace("{topping}", name);
     }
+
+    sentence = cap(sentence);
     lines.push(`${i + 3}. ${sentence}`);
   });
 
-  // Closing line varies only by COUNT, never judgment.
-  const n = toppings.length;
-  let closing: string;
-  if (n === 0) closing = "Eat it plain. That counts.";
-  else if (n === 1) closing = "One topping. Eat it.";
-  else if (n <= 3) closing = `${n} toppings. Eat it.`;
-  else if (n <= 6) closing = `${n} toppings. Eat it, slowly if you like.`;
-  else if (n <= 10) closing = `${n} toppings. Bring a plate.`;
-  else closing = `${n} toppings. This is a two-hands situation.`;
+  // Closing — tier selects pool; tier is never displayed
+  let weight = toppings.reduce((sum, id) => sum + (INTENSITY[id] ?? 0), 0);
+  if (isMystery) weight += 3;
+  const closingPool = weight <= 2 ? CLOSING_T1 : weight <= 5 ? CLOSING_T2 : CLOSING_T3;
+  lines.push(`${lines.length + 1}. ${pick(closingPool)}`);
 
-  lines.push(`${lines.length + 1}. ${closing}`);
   return lines;
 }
