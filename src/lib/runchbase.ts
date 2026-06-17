@@ -176,7 +176,7 @@ function toppingStep(topping: Topping, repeatIndex: number): string {
 }
 
 function closingStep(): string {
-  return "Enjoy!\u00a0";
+  return "Enjoy!";
 }
 
 export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[] {
@@ -195,7 +195,7 @@ export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[
   });
 
   if (toppings.length === 0) {
-    lines.push(`${n++}. Eat it plain.`);
+    lines.push(`${n++}. ${closingStep()}`);
   } else {
     lines.push(`${n++}. ${closingStep()}`);
   }
