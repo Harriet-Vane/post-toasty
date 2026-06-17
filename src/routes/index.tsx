@@ -36,20 +36,25 @@ export const Route = createFileRoute("/")({
 
 type Phase = "input" | "reveal" | "builder" | "share";
 
+const INCHES_PER_TOAST = 5;
+
 function RunchBase() {
   const [phase, setPhase] = useState<Phase>("input");
-  const [minutes, setMinutes] = useState<string>("");
-  const [committedMinutes, setCommittedMinutes] = useState<number>(0);
+  const [distance, setDistance] = useState<string>("");
+  const [committedDistance, setCommittedDistance] = useState<number>(0);
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
   const [toppings, setToppings] = useState<ToppingId[]>([]);
 
-  const toastCount = useMemo(() => toastsForMinutes(committedMinutes || 0), [committedMinutes]);
+  const toastCount = useMemo(
+    () => Math.max(0, Math.floor((committedDistance || 0) / INCHES_PER_TOAST)),
+    [committedDistance]
+  );
 
   function reset() {
     setPhase("input");
-    setMinutes("");
-    setCommittedMinutes(0);
+    setDistance("");
+    setCommittedDistance(0);
     setBreadId("white");
     setBreadStep(true);
     setToppings([]);
