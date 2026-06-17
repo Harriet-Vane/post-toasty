@@ -69,7 +69,7 @@ function RunchBase() {
           </div>
           {phase !== "input" && (
             <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
-              ↺ Start over
+              Start over
             </button>
           )}
         </div>
@@ -171,7 +171,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
             </p>
             <div className="flex justify-center">
               <button onClick={onContinue} className="pixel-btn-primary">
-                <span className="text-2xl leading-none align-middle mr-1" aria-hidden="true">🍞</span>
+                
                 <span className="align-middle">Time for toast</span>
               </button>
             </div>
@@ -548,9 +548,9 @@ function ShareScreen({
       </article>
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
-        <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">↗ Share</button>
-        <button onClick={copyLink} className="pixel-btn">⧉ Copy link</button>
-        <button onClick={emailIt} className="pixel-btn">✉ Email</button>
+        <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">Share</button>
+        <button onClick={copyLink} className="pixel-btn">Copy link</button>
+        <button onClick={emailIt} className="pixel-btn">Email</button>
         <button onClick={onBuildAgain} className="pixel-btn-ghost">TWEAK YOUR TOAST</button>
       </div>
 
@@ -593,7 +593,7 @@ function ShareScreen({
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
                 >
-                  <span aria-hidden>{s.emoji}</span>
+                  
                   <span>{s.label}</span>
                 </a>
               ))}
@@ -606,7 +606,7 @@ function ShareScreen({
                 }}
                 className="pixel-btn-ghost"
               >
-                ⧉ Copy text + link
+                Copy text + link
               </button>
               {typeof navigator !== "undefined" && (navigator as Navigator).share && (
                 <button
@@ -624,7 +624,7 @@ function ShareScreen({
                   }}
                   className="pixel-btn-ghost"
                 >
-                  📱 System share
+                  System share
                 </button>
               )}
             </div>
