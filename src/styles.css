@@ -146,7 +146,7 @@
   font-size: 0.85rem;
   line-height: 1;
   padding: 1rem 1.4rem;
-  background: var(--tomato);
+  background: var(--avocado);
   color: oklch(0.98 0.02 85);
   border: 3px solid var(--ink);
   box-shadow: 5px 5px 0 0 var(--ink);
