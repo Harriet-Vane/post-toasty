@@ -38,6 +38,7 @@
   --color-tomato: var(--tomato);
   --color-turquoise: var(--turquoise);
   --color-ink: var(--ink);
+  --color-toast-pink: var(--toast-pink);
   --font-pixel: var(--font-pixel);
   --font-body: var(--font-body);
 }
@@ -59,6 +60,7 @@
   --avocado: oklch(0.72 0.13 140);
   --tomato: oklch(0.62 0.22 28);
   --turquoise: oklch(0.72 0.14 195);
+  --toast-pink: oklch(0.92 0.08 355);
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -370,3 +372,31 @@
   max-width: 420px; width: 100%;
   padding: 1.25rem;
 }
+
+/* Selection toast */
+.selection-toast {
+  position: absolute;
+  left: 50%;
+  top: -0.75rem;
+  animation: selection-toast 5s ease forwards;
+}
+
+@keyframes selection-toast {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  8% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+}
+
