@@ -214,8 +214,8 @@ function ToppingLayer({
           <g
             fill="none"
             stroke={topping.accent ?? topping.color}
-            strokeOpacity="0.45"
-            strokeWidth="2.5"
+            strokeOpacity="0.55"
+            strokeWidth="6"
             strokeLinecap="round"
           >
             <path d="M45 75 Q100 55 155 80" />
@@ -224,8 +224,8 @@ function ToppingLayer({
           <g
             fill="none"
             stroke="#ffffff"
-            strokeOpacity="0.25"
-            strokeWidth="2"
+            strokeOpacity="0.35"
+            strokeWidth="4"
             strokeLinecap="round"
           >
             <path d="M55 95 Q100 80 145 100" />
@@ -258,27 +258,27 @@ function ToppingLayer({
             d={path}
             fill="none"
             stroke={topping.color}
-            strokeWidth="6"
+            strokeWidth="11"
             strokeLinecap="round"
             strokeLinejoin="round"
-            opacity="0.92"
+            opacity="0.95"
           />
           <path
             d={path}
             fill="none"
             stroke="#ffffff"
-            strokeOpacity="0.35"
-            strokeWidth="1.8"
+            strokeOpacity="0.4"
+            strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
-            transform="translate(-1 -1)"
+            transform="translate(-2 -2)"
           />
         </g>
       );
     }
     case "scatter": {
       const count =
-        topping.id === "sprinkles" || topping.id === "cinnamon" ? 40 : topping.id === "tomato" ? 7 : 12;
+        topping.id === "sprinkles" ? 55 : topping.id === "cinnamon" ? 60 : topping.id === "tomato" ? 7 : 14;
       const pts = scatterPositions(count, seedKey);
       return (
         <g>
@@ -289,12 +289,14 @@ function ToppingLayer({
               return (
                 <rect
                   key={i}
-                  x={p.x - 2}
-                  y={p.y - 0.7}
-                  width="4"
-                  height="1.6"
-                  rx="0.8"
+                  x={p.x - 4}
+                  y={p.y - 1.4}
+                  width="8"
+                  height="2.8"
+                  rx="1.4"
                   fill={color}
+                  stroke="#222"
+                  strokeWidth="0.4"
                   transform={`rotate(${p.r} ${p.x} ${p.y})`}
                 />
               );
@@ -305,19 +307,19 @@ function ToppingLayer({
                   key={i}
                   cx={p.x}
                   cy={p.y}
-                  r={0.9 + (i % 3) * 0.4}
+                  r={1.8 + (i % 3) * 0.8}
                   fill={i % 4 === 0 ? topping.accent : topping.color}
-                  opacity="0.85"
+                  opacity="0.95"
                 />
               );
             }
             if (topping.id === "tomato") {
               return (
                 <g key={i} transform={`translate(${p.x} ${p.y})`}>
-                  <circle r="9" fill={topping.color} stroke={topping.accent} strokeWidth="1.5" />
-                  <circle r="2.6" fill="#ffc9b8" opacity="0.7" cx="-2" cy="-2" />
-                  <circle r="1.4" fill="#fff4d8" cx="3" cy="0" />
-                  <circle r="1.4" fill="#fff4d8" cx="-1" cy="3" />
+                  <circle r="14" fill={topping.color} stroke={topping.accent} strokeWidth="2.5" />
+                  <circle r="4" fill="#ffc9b8" opacity="0.7" cx="-3" cy="-3" />
+                  <circle r="2.2" fill="#fff4d8" cx="4" cy="0" />
+                  <circle r="2.2" fill="#fff4d8" cx="-1" cy="4" />
                 </g>
               );
             }
@@ -326,45 +328,45 @@ function ToppingLayer({
               const color = colors[(i + hash(seedKey)) % colors.length];
               return (
                 <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r})`}>
-                  <ellipse rx="4.5" ry="5.5" fill={color} stroke="#222" strokeWidth="0.7" />
-                  <circle cx="-1.5" cy="-2.5" r="0.6" fill="#222" />
-                  <circle cx="1.5" cy="-2.5" r="0.6" fill="#222" />
+                  <ellipse rx="7.5" ry="9" fill={color} stroke="#222" strokeWidth="1.2" />
+                  <circle cx="-2.4" cy="-4" r="1.1" fill="#222" />
+                  <circle cx="2.4" cy="-4" r="1.1" fill="#222" />
                 </g>
               );
             }
             if (topping.id === "sardines") {
               return (
                 <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r})`}>
-                  <ellipse rx="8" ry="2.4" fill={topping.color} stroke={topping.accent} strokeWidth="0.8" />
-                  <polygon points="8,0 12,-3 12,3" fill={topping.color} stroke={topping.accent} strokeWidth="0.8" />
-                  <circle cx="-5" cy="-0.5" r="0.7" fill={topping.accent} />
+                  <ellipse rx="13" ry="4" fill={topping.color} stroke={topping.accent} strokeWidth="1.4" />
+                  <polygon points="13,0 19,-5 19,5" fill={topping.color} stroke={topping.accent} strokeWidth="1.4" />
+                  <circle cx="-8" cy="-0.8" r="1.2" fill={topping.accent} />
                 </g>
               );
             }
             if (topping.id === "cereal") {
               return (
                 <g key={i} transform={`translate(${p.x} ${p.y})`}>
-                  <circle r="4" fill={topping.color} stroke={topping.accent} strokeWidth="1" />
-                  <circle r="1.4" fill="var(--paper)" />
+                  <circle r="7" fill={topping.color} stroke={topping.accent} strokeWidth="1.8" />
+                  <circle r="2.4" fill="var(--paper)" />
                 </g>
               );
             }
-            return <circle key={i} cx={p.x} cy={p.y} r="3" fill={topping.color} />;
+            return <circle key={i} cx={p.x} cy={p.y} r="5" fill={topping.color} stroke="#222" strokeWidth="0.6" />;
           })}
         </g>
       );
     }
     case "banana": {
-      const pts = scatterPositions(9, seedKey);
+      const pts = scatterPositions(7, seedKey);
       return (
         <g>
           {pts.map((p, i) => (
             <g key={i} transform={`translate(${p.x} ${p.y})`}>
-              <circle r="8" fill={topping.color} stroke={topping.accent} strokeWidth="1.4" />
-              <g stroke={topping.accent} strokeWidth="0.6" fill="none" opacity="0.6">
-                <circle r="2.2" />
-                <line x1="-1" y1="-1" x2="1" y2="1" />
-                <line x1="1" y1="-1" x2="-1" y2="1" />
+              <circle r="18" fill={topping.color} stroke={topping.accent} strokeWidth="2.6" />
+              <g stroke={topping.accent} strokeWidth="1.4" fill="none" opacity="0.7">
+                <circle r="5" />
+                <line x1="-2.5" y1="-2.5" x2="2.5" y2="2.5" />
+                <line x1="2.5" y1="-2.5" x2="-2.5" y2="2.5" />
               </g>
             </g>
           ))}

@@ -501,27 +501,15 @@ function ShareScreen({
   const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const shareText = `${name} — a ${bread.name} toast for my ${toastCount}-toast run. Built on RunchBase.`;
   const shareUrl = typeof window !== "undefined" ? window.location.origin : "https://runchbase.app";
 
-  async function nativeShare() {
-    const data = { title: "RunchBase", text: shareText, url: shareUrl };
-    try {
-      if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
-        await (navigator as Navigator).share(data);
-      } else {
-        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-        sonnerToast.success("Copied to clipboard — share away.");
-      }
-    } catch {
-      /* dismissed */
-    }
-  }
   async function copyLink() {
     try {
-      await navigator.clipboard.writeText(shareUrl);
-      sonnerToast.success("Link copied.");
+      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+      sonnerToast.success("Copied to clipboard — share away.");
     } catch {
       sonnerToast.error("Couldn't copy link.");
     }
@@ -531,6 +519,40 @@ function ShareScreen({
     const body = encodeURIComponent(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`);
     window.location.href = `mailto:?subject=${subj}&body=${body}`;
   }
+
+  const enc = encodeURIComponent;
+  const socialLinks: { label: string; emoji: string; href: string }[] = [
+    {
+      label: "Twitter / X",
+      emoji: "🐦",
+      href: `https://twitter.com/intent/tweet?text=${enc(shareText)}&url=${enc(shareUrl)}`,
+    },
+    {
+      label: "Facebook",
+      emoji: "📘",
+      href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}`,
+    },
+    {
+      label: "Reddit",
+      emoji: "👽",
+      href: `https://www.reddit.com/submit?url=${enc(shareUrl)}&title=${enc(shareText)}`,
+    },
+    {
+      label: "LinkedIn",
+      emoji: "💼",
+      href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}`,
+    },
+    {
+      label: "WhatsApp",
+      emoji: "💬",
+      href: `https://wa.me/?text=${enc(`${shareText} ${shareUrl}`)}`,
+    },
+    {
+      label: "Threads",
+      emoji: "🧵",
+      href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}`,
+    },
+  ];
 
   return (
     <div className="pt-12 pb-2">
@@ -557,11 +579,22 @@ function ShareScreen({
           <ToastsHUD count={toastCount} />
         </header>
 
+        {/* Dazzling MySpace-era stage around the toast */}
         <div
-          className="flex items-center justify-center bg-[var(--paper)] py-3 my-2"
-          style={{ border: "3px solid var(--ink)" }}
+          className="dazzle-stage flex items-center justify-center py-6 my-2"
+          style={{ border: "3px solid var(--ink)", minHeight: 320 }}
         >
-          <BreadCanvas breadId={breadId} toppings={toppings} size={280} />
+          <div className="dazzle-rays" aria-hidden />
+          <div className="dazzle-stars" aria-hidden />
+          <span className="dazzle-corner" style={{ top: 8, left: 10 }} aria-hidden>
+            ★ TOAST ★
+          </span>
+          <span className="dazzle-corner" style={{ bottom: 8, right: 10 }} aria-hidden>
+            ✦ WOW ✦
+          </span>
+          <div className="dazzle-toast">
+            <BreadCanvas breadId={breadId} toppings={toppings} size={260} />
+          </div>
         </div>
 
         <div className="mt-3">
@@ -590,11 +623,89 @@ function ShareScreen({
       </article>
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
-        <button onClick={nativeShare} className="pixel-btn-primary">↗ Share</button>
+        <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">↗ Share</button>
         <button onClick={copyLink} className="pixel-btn">⧉ Copy link</button>
         <button onClick={emailIt} className="pixel-btn">✉ Email</button>
         <button onClick={onBuildAgain} className="pixel-btn-ghost">↺ Tweak the toast</button>
       </div>
+
+      {shareOpen && (
+        <div
+          className="share-modal-backdrop"
+          onClick={() => setShareOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Share on social"
+        >
+          <div className="share-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <p className="font-pixel text-[9px]" style={{ color: "var(--toast-crust)" }}>
+                  ★ SHARE THE TOAST ★
+                </p>
+                <h4 className="font-pixel text-[13px] mt-2 text-[var(--ink)]">
+                  POST YOUR {toastCount}-TOAST RUN
+                </h4>
+              </div>
+              <button
+                onClick={() => setShareOpen(false)}
+                className="pixel-btn-ghost"
+                aria-label="Close share dialog"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="font-body text-sm text-[var(--ink)] opacity-80 mb-3">
+              Pick a place to brag (gently).
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pixel-btn"
+                  style={{ justifyContent: "flex-start" }}
+                >
+                  <span aria-hidden>{s.emoji}</span>
+                  <span>{s.label}</span>
+                </a>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <button
+                onClick={async () => {
+                  await copyLink();
+                  setShareOpen(false);
+                }}
+                className="pixel-btn-ghost"
+              >
+                ⧉ Copy text + link
+              </button>
+              {typeof navigator !== "undefined" && (navigator as Navigator).share && (
+                <button
+                  onClick={async () => {
+                    try {
+                      await (navigator as Navigator).share({
+                        title: "RunchBase",
+                        text: shareText,
+                        url: shareUrl,
+                      });
+                      setShareOpen(false);
+                    } catch {
+                      /* dismissed */
+                    }
+                  }}
+                  className="pixel-btn-ghost"
+                >
+                  📱 System share
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
