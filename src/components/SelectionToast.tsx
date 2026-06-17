@@ -43,8 +43,8 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   sprinkles: "You’re a mermaid unicorn!",
 };
 
-export function getSelectionMessage(id: string): string | undefined {
-  return SELECTION_MESSAGES[id];
+export function getSelectionMessage(id: string): string {
+  return SELECTION_MESSAGES[id] ?? "Nice choice.";
 }
 
 export function SelectionToast({ message }: { message: string }) {
