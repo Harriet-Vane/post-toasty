@@ -134,7 +134,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
           ★ POST-RUN TREATS DEPARTMENT ★
         </p>
         <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] whitespace-nowrap">
-          DID YOU GO FOR A RUN?
+          DID YOU GO FOR A RUN TODAY?
         </h2>
       </div>
 
