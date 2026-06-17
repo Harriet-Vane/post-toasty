@@ -5,7 +5,7 @@ export type BreadId =
   | "rye"
   | "englishmuffin"
   | "bagel"
-  | "glutenfree"
+  | "scone"
   | "mystery";
 
 export const BREADS: { id: BreadId; name: string }[] = [
@@ -15,7 +15,7 @@ export const BREADS: { id: BreadId; name: string }[] = [
   { id: "rye", name: "Rye" },
   { id: "englishmuffin", name: "English Muffin" },
   { id: "bagel", name: "Bagel" },
-  { id: "glutenfree", name: "Gluten-Free" },
+  { id: "scone", name: "Scone" },
   { id: "mystery", name: "Mystery Freezer Bread" },
 ];
 
