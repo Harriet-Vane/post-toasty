@@ -72,7 +72,7 @@ export const TOPPINGS: Topping[] = [
   { id: "pineapple", name: "Pineapple", side: "extra", render: "scatter", color: "#f6d04a", emoji: "🍍" },
   { id: "whip", name: "Whipped Cream", side: "extra", render: "spread", color: "#ffffff", accent: "#e6e6e6", emoji: "🍦" },
   { id: "frosting", name: "Cake Frosting", side: "extra", render: "spread", color: "#ff9ed1", accent: "#c45a96", emoji: "🎂" },
-  { id: "ghost", name: "Ghost Pepper Sauce", side: "extra", render: "drizzle", color: "#b8281a", emoji: "🌶️" },
+  { id: "ghost", name: "Hot Sauce", side: "extra", render: "drizzle", color: "#b8281a", emoji: "🌶️" },
   { id: "sprinkles", name: "Rainbow Sprinkles", side: "extra", render: "scatter", color: "#ff5fb4", accent: "#2db6ff", emoji: "🌈" },
 ];
 
