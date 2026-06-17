@@ -88,6 +88,43 @@ export function toastsForMinutes(min: number): number {
   return Math.max(1, Math.round(min / 4));
 }
 
+const ONES = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+const TEENS = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+
+function wordsBelow1000(n: number): string {
+  let out = "";
+  if (n >= 100) {
+    out += ONES[Math.floor(n / 100)] + " hundred";
+    n %= 100;
+    if (n > 0) out += " ";
+  }
+  if (n >= 20) {
+    out += TENS[Math.floor(n / 10)];
+    n %= 10;
+    if (n > 0) out += "-" + ONES[n];
+  } else if (n >= 10) {
+    out += TEENS[n - 10];
+  } else if (n > 0) {
+    out += ONES[n];
+  }
+  return out;
+}
+
+function firstWordOfNumber(n: number): string {
+  if (!Number.isFinite(n) || n <= 0) return String(n);
+  if (n < 1000) return wordsBelow1000(n).split(/[\s-]/)[0];
+  const thousands = Math.floor(n / 1000);
+  return wordsBelow1000(thousands).split(/[\s-]/)[0] + " thousand";
+}
+
+export function articleForCount(count: number): string {
+  const first = firstWordOfNumber(count).toLowerCase();
+  // "one" starts with a vowel letter but a consonant sound: "a one-toast run".
+  if (first === "one") return "a";
+  return /^[aeiou]/i.test(first) ? "an" : "a";
+}
+
 /* ---------------- Recipe & Name generation ---------------- */
 
 const NAME_TEMPLATES = [
