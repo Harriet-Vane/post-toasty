@@ -222,7 +222,7 @@ function RevealScreen({
       <h2 className="font-pixel text-[20px] sm:text-[28px] leading-[1.4] text-[var(--ink)]">
         YOU RAN {article.toUpperCase()}
         <br />
-        <span style={{ color: "var(--avocado)" }}>{count}-TOAST</span> RUN!
+        <span style={{ color: "var(--tomato)" }}>{count}-TOAST</span> RUN!
       </h2>
 
       <div className="mt-6 flex flex-wrap items-center justify-center gap-1 max-w-[420px]">
