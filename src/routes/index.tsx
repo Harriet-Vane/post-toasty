@@ -511,10 +511,16 @@ function ShareScreen({
           <div className="dazzle-rays" aria-hidden />
           <div className="dazzle-stars" aria-hidden />
           <span className="dazzle-corner" style={{ top: 8, left: 10 }} aria-hidden>
-            ★ TOAST ★
+            RUN
+          </span>
+          <span className="dazzle-corner" style={{ top: 8, right: 10 }} aria-hidden>
+            TOAST
+          </span>
+          <span className="dazzle-corner" style={{ bottom: 8, left: 10 }} aria-hidden>
+            WOW
           </span>
           <span className="dazzle-corner" style={{ bottom: 8, right: 10 }} aria-hidden>
-            ✦ WOW ✦
+            YES
           </span>
           <div className="dazzle-toast">
             <BreadCanvas breadId={breadId} toppings={toppings} size={260} />
