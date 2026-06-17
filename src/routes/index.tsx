@@ -243,16 +243,13 @@ function RevealScreen({
             THE MATH
           </p>
           <p className="font-body">
-            You ran <strong>{minutes} minutes</strong>. It takes <strong>~4 minutes to make a perfect slice of toast</strong>. That's just science. Pure facts.&nbsp;
+            You ran <strong>{minutes} minutes</strong>.&nbsp;
+            <br />
+            It takes <strong>~4 minutes to make a perfect slice of toast</strong>.
           </p>
           <p className="font-body mt-1">
             {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
             <br />
-            <br />
-            <br />
-            Not that you should eat that many pieces of toast.
-            <br />
-            But you could.
           </p>
         </div>
       </div>
