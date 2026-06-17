@@ -8,15 +8,14 @@ import { ToastsHUD } from "@/components/ToastsHUD";
 import {
   BREADS,
   TOPPINGS,
-  articleForCount,
   generateName,
   generateRecipe,
   getBread,
   getTopping,
-  toastsForMinutes,
   type BreadId,
   type ToppingId,
 } from "@/lib/runchbase";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,22 +33,18 @@ export const Route = createFileRoute("/")({
   component: RunchBase,
 });
 
-type Phase = "input" | "reveal" | "builder" | "share";
+type Phase = "input" | "builder" | "share";
 
 function RunchBase() {
   const [phase, setPhase] = useState<Phase>("input");
-  const [minutes, setMinutes] = useState<string>("");
-  const [committedMinutes, setCommittedMinutes] = useState<number>(0);
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
   const [toppings, setToppings] = useState<ToppingId[]>([]);
 
-  const toastCount = useMemo(() => toastsForMinutes(committedMinutes || 0), [committedMinutes]);
+  const toastCount = 1;
 
   function reset() {
     setPhase("input");
-    setMinutes("");
-    setCommittedMinutes(0);
     setBreadId("white");
     setBreadStep(true);
     setToppings([]);
@@ -74,7 +69,7 @@ function RunchBase() {
           </div>
           {phase !== "input" && (
             <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
-              ↺ New Run
+              ↺ Start over
             </button>
           )}
         </div>
@@ -82,29 +77,14 @@ function RunchBase() {
         {/* Screen */}
         <div className="relative arcade-screen crt p-4 sm:p-8 min-h-[520px]">
           {/* HUD top-left appears in builder & later */}
-          {(phase === "builder" || phase === "share" || phase === "reveal") && (
+          {(phase === "builder" || phase === "share") && (
             <div className="absolute top-3 left-3 z-10">
               <ToastsHUD count={toastCount} />
             </div>
           )}
 
           {phase === "input" && (
-            <InputScreen
-              minutes={minutes}
-              setMinutes={setMinutes}
-              onSubmit={(m) => {
-                setCommittedMinutes(m);
-                setPhase("reveal");
-              }}
-            />
-          )}
-
-          {phase === "reveal" && (
-            <RevealScreen
-              minutes={committedMinutes}
-              count={toastCount}
-              onContinue={() => setPhase("builder")}
-            />
+            <InputScreen onContinue={() => setPhase("builder")} />
           )}
 
           {phase === "builder" && (
@@ -139,129 +119,73 @@ function RunchBase() {
   );
 }
 
+
 /* -------------------- Input -------------------- */
 
-function InputScreen({
-  minutes,
-  setMinutes,
-  onSubmit,
-}: {
-  minutes: string;
-  setMinutes: (v: string) => void;
-  onSubmit: (m: number) => void;
-}) {
-  function submit(e?: React.FormEvent) {
-    e?.preventDefault();
-    const m = parseInt(minutes, 10);
-    if (!Number.isFinite(m) || m <= 0) {
-      sonnerToast("How long were you out there? (in minutes)");
-      return;
-    }
-    onSubmit(m);
-  }
+function InputScreen({ onContinue }: { onContinue: () => void }) {
+  const [modal, setModal] = useState<null | "yes" | "not-yet">(null);
+
+  const modalCopy =
+    modal === "yes"
+      ? "You rock! Let's eat some toast."
+      : modal === "not-yet"
+        ? "Awesome! Rest is an important part of recovery. But then, so is toast."
+        : "";
+
   return (
     <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8">
       <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-3">
         ★ POST-RUN TREATS DEPARTMENT ★
       </p>
       <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
-        HOW LONG WERE YOU
+        DID YOU GO
         <br />
-        OUT THERE?
+        FOR A RUN?
       </h2>
-      <p className="font-body mt-4 text-[var(--ink)] opacity-80">
-        Just minutes. No distance. No pace.{"\n\n"}
-      </p>
 
-      <form onSubmit={submit} className="mt-8 w-full max-w-sm">
-        <div className="relative">
-          <input
-            inputMode="numeric"
-            pattern="[0-9]*"
-            placeholder="32"
-            value={minutes}
-            onChange={(e) => setMinutes(e.target.value.replace(/[^0-9]/g, ""))}
-            className="pixel-input"
-            aria-label="Run length in minutes"
-            autoFocus
-          />
-          <span
-            className="absolute right-4 top-1/2 -translate-y-1/2 font-pixel text-[10px]"
-            style={{ color: "var(--toast-crust)" }}
-          >
-            MIN
-          </span>
-        </div>
-        <button type="submit" className="pixel-btn-primary mt-6 mx-auto">
-          <span className="text-2xl leading-none align-middle mr-1" aria-hidden="true">🍞</span>
-          <span className="align-middle">Toast me</span>
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+        <button onClick={() => setModal("yes")} className="pixel-btn-primary">
+          Yes
         </button>
-      </form>
+        <button onClick={() => setModal("not-yet")} className="pixel-btn">
+          Not yet
+        </button>
+      </div>
 
       <p className="font-body text-xs opacity-60 mt-10 max-w-xs">
         May all your runs end with toast
       </p>
-    </div>
-  );
-}
 
-/* -------------------- Reveal -------------------- */
-
-function RevealScreen({
-  minutes,
-  count,
-  onContinue,
-}: {
-  minutes: number;
-  count: number;
-  onContinue: () => void;
-}) {
-  const article = articleForCount(count);
-  return (
-    <div className="h-full flex flex-col items-center justify-center text-center py-12 pt-20">
-      <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-3">★ RESULT ★</p>
-      <h2 className="font-pixel text-[20px] sm:text-[28px] leading-[1.4] text-[var(--ink)]">
-        YOU RAN {article.toUpperCase()}
-        <br />
-        <span style={{ color: "var(--tomato)" }}>{count}-TOAST</span> RUN!
-      </h2>
-
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-1 max-w-[420px]">
-        {Array.from({ length: Math.min(count, 24) }).map((_, i) => (
-          <ToastSprite key={i} size={26} />
-        ))}
-        {count > 24 && (
-          <span className="font-pixel text-xs ml-2" style={{ color: "var(--toast-crust)" }}>
-            +{count - 24}
-          </span>
-        )}
-      </div>
-
-      <div className="mt-8 relative max-w-lg mx-auto p-8" style={{ minWidth: 360 }}>
-        <div className="relative text-[var(--ink)]">
-          <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
-            THE MATH
-          </p>
-          <p className="font-body">
-            You ran <strong>{minutes} minutes</strong>.&nbsp;
-            <br />
-            It takes <strong>~4 minutes to make a perfect slice of toast</strong>.
-          </p>
-          <p className="font-body mt-1">
-            {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
-            <br />
-          </p>
+      {modal && (
+        <div
+          className="share-modal-backdrop"
+          onClick={() => setModal(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Toast time"
+        >
+          <div className="share-modal text-center" onClick={(e) => e.stopPropagation()}>
+            <p className="font-pixel text-[9px] mb-3" style={{ color: "var(--toast-crust)" }}>
+              ★ TOAST TIME ★
+            </p>
+            <p className="font-body text-base text-[var(--ink)] leading-snug mb-5">
+              {modalCopy}
+            </p>
+            <div className="flex justify-center">
+              <button onClick={onContinue} className="pixel-btn-primary">
+                <span className="text-2xl leading-none align-middle mr-1" aria-hidden="true">🍞</span>
+                <span className="align-middle">Time for toast</span>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <button onClick={onContinue} className="pixel-btn-primary mt-8 text-sm uppercase tracking-wider">
-        MAKE YOUR TOAST
-      </button>
+      )}
     </div>
   );
 }
 
 /* -------------------- Builder -------------------- */
+
 
 function BuilderScreen({
   breadId,
