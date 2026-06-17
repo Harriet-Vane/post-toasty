@@ -237,10 +237,7 @@ function RevealScreen({
         )}
       </div>
 
-      <div
-        className="mt-8 border-[3px] bg-[var(--card)] px-5 py-4 max-w-md"
-        style={{ borderColor: "var(--ink)", boxShadow: "4px 4px 0 0 var(--ink)" }}
-      >
+      <div className="mt-8 toast-box px-5 py-4 max-w-md">
         <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
           THE MATH
         </p>
