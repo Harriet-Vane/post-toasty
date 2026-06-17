@@ -161,7 +161,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         >
           <div className="share-modal text-center" onClick={(e) => e.stopPropagation()}>
             <p className="font-pixel text-[9px] mb-3" style={{ color: "var(--toast-crust)" }}>
-              ★ TOAST TIME ★
+              TOAST TIME
             </p>
             <p className="font-body text-base text-[var(--ink)] leading-snug mb-5">
               {modalCopy}
@@ -518,7 +518,7 @@ function ShareScreen({
         <header className="mb-3">
           <div className="w-full">
             <p className="font-pixel text-[9px]" style={{ color: "var(--toast-crust)" }}>
-              ★ PostToast ★
+              PostToast
             </p>
             <h3 className="font-pixel text-[14px] sm:text-[16px] mt-2 leading-tight text-[var(--ink)]">
               {name.toUpperCase()}
