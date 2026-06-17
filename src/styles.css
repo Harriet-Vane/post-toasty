@@ -319,6 +319,7 @@
   padding: 14px;
   background: transparent url("./assets/plate.png") center/contain no-repeat;
   border: none;
+  border-radius: 50%;
   box-shadow:
     0 0 24px 6px #ff5fb4,
     0 0 48px 8px #2db6ff;
