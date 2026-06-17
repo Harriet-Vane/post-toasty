@@ -50,7 +50,7 @@ export function getSelectionMessage(id: string): string {
 export function SelectionToast({ message }: { message: string }) {
   return (
     <div
-      className="selection-toast z-20 px-4 py-2 border-2 border-[var(--ink)] rounded-sm bg-[var(--toast-pink)] shadow-[3px_3px_0_0_var(--ink)]"
+      className="selection-toast z-20 px-4 py-2 border-2 border-[var(--ink)] rounded-sm bg-[var(--toast-pink)] shadow-[3px_3px_0_0_var(--ink)] pointer-events-none"
       role="status"
       aria-live="polite"
     >
