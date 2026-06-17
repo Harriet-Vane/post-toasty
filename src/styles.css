@@ -61,6 +61,7 @@
   --tomato: oklch(0.62 0.22 28);
   --turquoise: oklch(0.72 0.14 195);
   --toast-pink: oklch(0.92 0.08 355);
+  --plate-fill: #e2e1df;
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -319,7 +320,11 @@
   z-index: 2;
   display: inline-block;
   padding: 14px;
-  background: transparent url("./assets/plate.png") center/contain no-repeat;
+  background-color: var(--plate-fill);
+  background-image: url("./assets/plate.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
   border: none;
   border-radius: 50%;
   box-shadow:
