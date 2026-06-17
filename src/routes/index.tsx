@@ -213,11 +213,11 @@ function InputScreen({
 /* -------------------- Reveal -------------------- */
 
 function RevealScreen({
-  minutes,
+  distance,
   count,
   onContinue,
 }: {
-  minutes: number;
+  distance: number;
   count: number;
   onContinue: () => void;
 }) {
@@ -248,10 +248,10 @@ function RevealScreen({
             THE MATH
           </p>
           <p className="font-body">
-            You ran <strong>{minutes} minutes</strong>. It takes <strong>~4 minutes to make a perfect slice of toast</strong>. That's just science. Pure facts.&nbsp;
+            You ran <strong>{distance} inches</strong>. A perfect slice of toast is <strong>exactly 5 inches</strong> wide. That's just science. Pure facts.&nbsp;
           </p>
           <p className="font-body mt-1">
-            {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
+            {distance} ÷ 5 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
             <br />
             <br />
             <br />
