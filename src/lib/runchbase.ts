@@ -150,11 +150,21 @@ export function generateName(breadId: BreadId, toppings: ToppingId[]): string {
 
 /* ---------------- Recipe generation (simple) ---------------- */
 
+function indefiniteArticle(phrase: string): string {
+  const firstWord = phrase.trim().toLowerCase().split(/\s+/)[0];
+  if (/^(hour|honest|honor|heir)/.test(firstWord)) return "an";
+  return /^[aeiou]/.test(firstWord) ? "an" : "a";
+}
+
 function breadStep(breadId: BreadId): string {
   if (breadId === "mystery") {
     return "Take a slice of mystery freezer bread.";
   }
-  return `Take a slice of ${getBread(breadId).name.toLowerCase()}.`;
+  const name = getBread(breadId).name.toLowerCase();
+  if (breadId === "scone" || breadId === "bagel" || breadId === "englishmuffin") {
+    return `Take ${indefiniteArticle(name)} ${name}.`;
+  }
+  return `Take a slice of ${name}.`;
 }
 
 function toastStep(breadId: BreadId): string {
