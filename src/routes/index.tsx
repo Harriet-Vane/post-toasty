@@ -147,22 +147,22 @@ function RunchBase() {
 /* -------------------- Input -------------------- */
 
 function InputScreen({
-  minutes,
-  setMinutes,
+  distance,
+  setDistance,
   onSubmit,
 }: {
-  minutes: string;
-  setMinutes: (v: string) => void;
-  onSubmit: (m: number) => void;
+  distance: string;
+  setDistance: (v: string) => void;
+  onSubmit: (d: number) => void;
 }) {
   function submit(e?: React.FormEvent) {
     e?.preventDefault();
-    const m = parseInt(minutes, 10);
-    if (!Number.isFinite(m) || m <= 0) {
-      sonnerToast("How long were you out there? (in minutes)");
+    const d = parseInt(distance, 10);
+    if (!Number.isFinite(d) || d <= 0) {
+      sonnerToast("How far did you go? (in inches)");
       return;
     }
-    onSubmit(m);
+    onSubmit(d);
   }
   return (
     <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8">
@@ -170,12 +170,12 @@ function InputScreen({
         ★ POST-RUN TREATS DEPARTMENT ★
       </p>
       <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
-        HOW LONG WERE YOU
+        HOW FAR DID YOU
         <br />
-        OUT THERE?
+        GO?
       </h2>
       <p className="font-body mt-4 text-[var(--ink)] opacity-80">
-        Just minutes. No distance. No pace.{"\n\n"}
+        Just inches. No time. No pace.{"\n\n"}
       </p>
 
       <form onSubmit={submit} className="mt-8 w-full max-w-sm">
@@ -183,18 +183,18 @@ function InputScreen({
           <input
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="32"
-            value={minutes}
-            onChange={(e) => setMinutes(e.target.value.replace(/[^0-9]/g, ""))}
+            placeholder="160"
+            value={distance}
+            onChange={(e) => setDistance(e.target.value.replace(/[^0-9]/g, ""))}
             className="pixel-input"
-            aria-label="Run length in minutes"
+            aria-label="Run distance in inches"
             autoFocus
           />
           <span
             className="absolute right-4 top-1/2 -translate-y-1/2 font-pixel text-[10px]"
             style={{ color: "var(--toast-crust)" }}
           >
-            MIN
+            IN
           </span>
         </div>
         <button type="submit" className="pixel-btn-primary mt-6 mx-auto">
