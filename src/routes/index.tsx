@@ -4,7 +4,7 @@ import { toast as sonnerToast } from "sonner";
 
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { ToastSprite } from "@/components/ToastSprite";
-import { ToastsHUD } from "@/components/ToastsHUD";
+
 import {
   BREADS,
   TOPPINGS,
@@ -76,12 +76,6 @@ function RunchBase() {
 
         {/* Screen */}
         <div className="relative arcade-screen crt p-4 sm:p-8 min-h-[520px] flex flex-col">
-          {/* HUD top-left appears in builder & later */}
-          {(phase === "builder" || phase === "share") && (
-            <div className="absolute top-3 left-3 z-10">
-              <ToastsHUD count={toastCount} />
-            </div>
-          )}
 
           {phase === "input" && (
             <InputScreen onContinue={() => setPhase("builder")} />
