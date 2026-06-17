@@ -193,7 +193,8 @@ function InputScreen({
           </span>
         </div>
         <button type="submit" className="pixel-btn-primary mt-6 mx-auto">
-          🍞 Toast me
+          <span className="text-2xl leading-none align-middle mr-1" aria-hidden="true">🍞</span>
+          <span className="align-middle">Toast me</span>
         </button>
       </form>
 
