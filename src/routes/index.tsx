@@ -34,22 +34,18 @@ export const Route = createFileRoute("/")({
   component: RunchBase,
 });
 
-type Phase = "input" | "reveal" | "builder" | "share";
+type Phase = "input" | "builder" | "share";
 
 function RunchBase() {
   const [phase, setPhase] = useState<Phase>("input");
-  const [minutes, setMinutes] = useState<string>("");
-  const [committedMinutes, setCommittedMinutes] = useState<number>(0);
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
   const [toppings, setToppings] = useState<ToppingId[]>([]);
 
-  const toastCount = useMemo(() => toastsForMinutes(committedMinutes || 0), [committedMinutes]);
+  const toastCount = 1;
 
   function reset() {
     setPhase("input");
-    setMinutes("");
-    setCommittedMinutes(0);
     setBreadId("white");
     setBreadStep(true);
     setToppings([]);
@@ -74,7 +70,7 @@ function RunchBase() {
           </div>
           {phase !== "input" && (
             <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
-              ↺ New Run
+              ↺ Start over
             </button>
           )}
         </div>
@@ -82,29 +78,14 @@ function RunchBase() {
         {/* Screen */}
         <div className="relative arcade-screen crt p-4 sm:p-8 min-h-[520px]">
           {/* HUD top-left appears in builder & later */}
-          {(phase === "builder" || phase === "share" || phase === "reveal") && (
+          {(phase === "builder" || phase === "share") && (
             <div className="absolute top-3 left-3 z-10">
               <ToastsHUD count={toastCount} />
             </div>
           )}
 
           {phase === "input" && (
-            <InputScreen
-              minutes={minutes}
-              setMinutes={setMinutes}
-              onSubmit={(m) => {
-                setCommittedMinutes(m);
-                setPhase("reveal");
-              }}
-            />
-          )}
-
-          {phase === "reveal" && (
-            <RevealScreen
-              minutes={committedMinutes}
-              count={toastCount}
-              onContinue={() => setPhase("builder")}
-            />
+            <InputScreen onContinue={() => setPhase("builder")} />
           )}
 
           {phase === "builder" && (
@@ -138,6 +119,7 @@ function RunchBase() {
     </main>
   );
 }
+
 
 /* -------------------- Input -------------------- */
 
