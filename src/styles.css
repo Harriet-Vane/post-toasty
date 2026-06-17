@@ -58,6 +58,7 @@
   --butter: oklch(0.92 0.16 95);
   --avocado: oklch(0.72 0.13 140);
   --tomato: oklch(0.62 0.22 28);
+  --turquoise: oklch(0.72 0.14 195);
 
   --background: var(--paper);
   --foreground: var(--ink);
