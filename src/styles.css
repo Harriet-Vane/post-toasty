@@ -378,7 +378,7 @@
   position: absolute;
   left: 50%;
   top: -0.75rem;
-  animation: selection-toast 5s ease forwards;
+  animation: selection-toast 3s ease forwards;
 }
 
 @keyframes selection-toast {

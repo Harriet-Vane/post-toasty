@@ -203,7 +203,7 @@ function BuilderScreen({
 
   useEffect(() => {
     if (!selectionToast) return;
-    const t = setTimeout(() => setSelectionToast(null), 5000);
+    const t = setTimeout(() => setSelectionToast(null), 3000);
     return () => clearTimeout(t);
   }, [selectionToast]);
 
