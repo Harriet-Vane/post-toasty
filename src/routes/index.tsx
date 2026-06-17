@@ -551,7 +551,7 @@ function ShareScreen({
         <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">↗ Share</button>
         <button onClick={copyLink} className="pixel-btn">⧉ Copy link</button>
         <button onClick={emailIt} className="pixel-btn">✉ Email</button>
-        <button onClick={onBuildAgain} className="pixel-btn-ghost">↺ Tweak the toast</button>
+        <button onClick={onBuildAgain} className="pixel-btn-ghost">↺ TWEAK YOUR TOAST</button>
       </div>
 
       {shareOpen && (
