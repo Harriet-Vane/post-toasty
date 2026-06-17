@@ -245,7 +245,7 @@ function BuilderScreen({
         </div>
         <div className="flex justify-center mt-8">
           <button onClick={() => setBreadStep(false)} className="pixel-btn-primary">
-            Next: Toppings <span className="text-2xl leading-none">→</span>
+            Next: Toppings
           </button>
         </div>
       </div>
