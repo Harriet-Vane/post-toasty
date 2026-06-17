@@ -8,6 +8,7 @@ import { ToastsHUD } from "@/components/ToastsHUD";
 import {
   BREADS,
   TOPPINGS,
+  articleForCount,
   generateName,
   generateRecipe,
   getBread,
@@ -214,13 +215,14 @@ function RevealScreen({
   count: number;
   onContinue: () => void;
 }) {
+  const article = articleForCount(count);
   return (
     <div className="h-full flex flex-col items-center justify-center text-center py-12 pt-20">
       <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-3">★ RESULT ★</p>
       <h2 className="font-pixel text-[20px] sm:text-[28px] leading-[1.4] text-[var(--ink)]">
-        YOU RAN AN
+        YOU RAN {article.toUpperCase()}
         <br />
-        <span style={{ color: "var(--tomato)" }}>{count}-TOAST</span> RUN!
+        <span style={{ color: "var(--avocado)" }}>{count}-TOAST</span> RUN!
       </h2>
 
       <div className="mt-6 flex flex-wrap items-center justify-center gap-1 max-w-[420px]">
@@ -250,7 +252,7 @@ function RevealScreen({
       </div>
 
       <button onClick={onContinue} className="pixel-btn-primary mt-8">
-        Let&apos;s celebrate →
+        Let us celebrate with toast
       </button>
     </div>
   );
