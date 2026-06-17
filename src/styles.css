@@ -317,12 +317,34 @@
   z-index: 2;
   display: inline-block;
   padding: 14px;
-  background: url("./assets/plate.png") center/cover no-repeat;
-  border: 4px solid var(--ink);
+  background: transparent url("./assets/plate.png") center/contain no-repeat;
+  border: none;
   box-shadow:
     0 0 0 4px #ffd23f,
     0 0 24px 6px #ff5fb4,
     0 0 48px 8px #2db6ff;
+}
+.dazzle-stage .dazzle-toast::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(2px 2px at 50% 0%, #fff, transparent 70%),
+    radial-gradient(2px 2px at 100% 50%, #fff, transparent 70%),
+    radial-gradient(2px 2px at 50% 100%, #fff, transparent 70%),
+    radial-gradient(2px 2px at 0% 50%, #fff, transparent 70%),
+    radial-gradient(2px 2px at 85% 15%, #fff, transparent 70%),
+    radial-gradient(2px 2px at 85% 85%, #fff, transparent 70%),
+    radial-gradient(2px 2px at 15% 85%, #fff, transparent 70%),
+    radial-gradient(2px 2px at 15% 15%, #fff, transparent 70%);
+  animation: sparkle-twinkle 1.4s ease-in-out infinite alternate;
+}
+@keyframes sparkle-twinkle {
+  0% { opacity: 0.35; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1.05); }
 }
 
 .dazzle-stage .dazzle-corner {
