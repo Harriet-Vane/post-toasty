@@ -237,7 +237,7 @@ function RevealScreen({
         )}
       </div>
 
-      <div className="mt-8 relative max-w-md mx-auto p-5" style={{ minWidth: 280 }}>
+      <div className="mt-8 relative max-w-lg mx-auto p-8" style={{ minWidth: 360 }}>
         {/* Toast outline background matching the marquee icon */}
         <svg
           className="absolute inset-0 w-full h-full pixelated"
