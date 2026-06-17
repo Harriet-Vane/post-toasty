@@ -106,7 +106,7 @@ function RunToast() {
         {/* Cabinet footer */}
         <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
           <span className="font-pixel text-[9px]">© RunToast</span>
-          <span className="font-body text-xs">toast is the unit, the process, the goal</span>
+          <span className="font-body text-xs">toast is the vibe, the process, the goal</span>
         </div>
       </div>
     </main>
