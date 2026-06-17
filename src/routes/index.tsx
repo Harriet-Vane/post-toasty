@@ -472,9 +472,11 @@ function ToppingColumn({
           >
             <span
               aria-hidden
-              className="inline-block w-3 h-3 rounded-full flex-shrink-0"
+              className="topping-chip-emoji"
               style={{ background: t.color, border: `1.5px solid ${t.accent ?? "var(--ink)"}` }}
-            />
+            >
+              {t.emoji}
+            </span>
             <span className="leading-tight">{t.name}</span>
           </div>
         ))}

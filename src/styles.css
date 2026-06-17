@@ -230,3 +230,18 @@
   user-select: none;
 }
 .topping-chip:active { cursor: grabbing; transform: translate(1px, 1px); box-shadow: 1px 1px 0 0 var(--ink); }
+
+.topping-chip-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+  border-radius: 2px;
+  image-rendering: pixelated;
+  font-family: var(--font-pixel), monospace;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+}
