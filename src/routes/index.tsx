@@ -302,7 +302,7 @@ function BuilderScreen({
             className="pixel-btn-ghost mt-3"
             style={{ color: "var(--ink)" }}
           >
-            ← Change bread
+            Change bread
           </button>
 
           {/* Stack list */}
