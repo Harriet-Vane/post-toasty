@@ -1,50 +1,43 @@
 /**
- * A blocky 8x8 bitmap pixel-art toast sprite, rendered as inline SVG rects.
- * 0 = empty, 1 = crust outline, 2 = golden fill, 3 = highlight.
+ * A chunky toast-shaped logo icon for the RunchBase marquee.
+ * Rounded top, flat bottom with a crust outline, drawn with the same
+ * palette used throughout the app.
  */
-const SPRITE: number[][] = [
-  [0, 1, 1, 1, 1, 1, 1, 0],
-  [1, 2, 2, 2, 2, 2, 2, 1],
-  [1, 2, 3, 2, 2, 2, 2, 1],
-  [1, 2, 2, 2, 2, 2, 2, 1],
-  [1, 2, 2, 2, 2, 2, 2, 1],
-  [1, 2, 2, 2, 2, 2, 3, 1],
-  [1, 2, 2, 2, 2, 2, 2, 1],
-  [0, 1, 1, 1, 1, 1, 1, 0],
-];
-
-const PALETTE: Record<number, string> = {
-  1: "var(--toast-crust)",
-  2: "var(--toast-gold)",
-  3: "oklch(0.95 0.08 90)",
-};
-
-export function ToastSprite({ size = 24 }: { size?: number }) {
-  const px = size / 8;
+export function ToastSprite({ size = 28 }: { size?: number }) {
+  const width = size;
+  const height = Math.round((size * 26) / 32); // preserve 32:26 ratio
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox="0 0 8 8"
+      width={width}
+      height={height}
+      viewBox="0 0 32 26"
       className="pixelated"
       aria-hidden="true"
+      fill="none"
     >
-      {SPRITE.map((row, y) =>
-        row.map((cell, x) =>
-          cell === 0 ? null : (
-            <rect
-              key={`${x}-${y}`}
-              x={x}
-              y={y}
-              width={1}
-              height={1}
-              fill={PALETTE[cell]}
-            />
-          ),
-        ),
-      )}
-      {/* prevent unused var warning */}
-      <desc data-px={px} />
+      {/* crust shadow / thickness */}
+      <path
+        d="M4 20 V12 Q4 4 12 4 H20 Q28 4 28 12 V20 Q28 23 25 23 H7 Q4 23 4 20 Z"
+        fill="var(--toast-crust)"
+      />
+      {/* golden bread face */}
+      <path
+        d="M6 20 V12 Q6 6 12 6 H20 Q26 6 26 12 V20 Q26 21 25 21 H7 Q6 21 6 20 Z"
+        fill="var(--toast-gold)"
+      />
+      {/* highlight */}
+      <path
+        d="M8 10 Q12 8 16 8"
+        stroke="oklch(0.95 0.08 90)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20 10 Q22 9 23 10"
+        stroke="oklch(0.95 0.08 90)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
