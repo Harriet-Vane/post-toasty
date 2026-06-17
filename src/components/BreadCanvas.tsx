@@ -158,7 +158,7 @@ function breadFillColor(breadId: BreadId): { fill: string; accent: string } {
     case "wholewheat":
       return { fill: "oklch(0.7 0.1 60)", accent: "var(--toast-crust)" };
     case "scone":
-      return { fill: "oklch(0.84 0.07 75)", accent: "oklch(0.55 0.09 60)" };
+      return { fill: "var(--toast-gold)", accent: "var(--toast-crust)" };
     case "mystery":
       return { fill: "oklch(0.78 0.05 70)", accent: "var(--toast-crust)" };
     default:
