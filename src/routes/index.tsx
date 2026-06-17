@@ -42,6 +42,7 @@ function RunchBase() {
   const [phase, setPhase] = useState<Phase>("input");
   const [distance, setDistance] = useState<string>("");
   const [committedDistance, setCommittedDistance] = useState<number>(0);
+  const [unit, setUnit] = useState<"mi" | "km">("mi");
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
   const [toppings, setToppings] = useState<ToppingId[]>([]);
@@ -97,6 +98,8 @@ function RunchBase() {
             <InputScreen
               distance={distance}
               setDistance={setDistance}
+              unit={unit}
+              setUnit={setUnit}
               onSubmit={(d) => {
                 setCommittedDistance(d);
                 setPhase("reveal");
@@ -107,6 +110,7 @@ function RunchBase() {
           {phase === "reveal" && (
             <RevealScreen
               distance={committedDistance}
+              unit={unit}
               count={toastCount}
               onContinue={() => setPhase("builder")}
             />
@@ -149,20 +153,25 @@ function RunchBase() {
 function InputScreen({
   distance,
   setDistance,
+  unit,
+  setUnit,
   onSubmit,
 }: {
   distance: string;
   setDistance: (v: string) => void;
+  unit: "mi" | "km";
+  setUnit: (u: "mi" | "km") => void;
   onSubmit: (d: number) => void;
 }) {
   function submit(e?: React.FormEvent) {
     e?.preventDefault();
     const d = parseInt(distance, 10);
     if (!Number.isFinite(d) || d <= 0) {
-      sonnerToast("How far did you go? (in inches)");
+      sonnerToast("How far did you run?");
       return;
     }
-    onSubmit(d);
+    const inches = unit === "mi" ? d * 63360 : d * 39370.0787;
+    onSubmit(inches);
   }
   return (
     <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8">
@@ -181,19 +190,22 @@ function InputScreen({
           <input
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="160"
+            placeholder="3"
             value={distance}
             onChange={(e) => setDistance(e.target.value.replace(/[^0-9]/g, ""))}
             className="pixel-input"
-            aria-label="Run distance in inches"
+            aria-label={`Run distance in ${unit === "mi" ? "miles" : "kilometers"}`}
             autoFocus
           />
-          <span
-            className="absolute right-4 top-1/2 -translate-y-1/2 font-pixel text-[10px]"
-            style={{ color: "var(--toast-crust)" }}
+          <button
+            type="button"
+            onClick={() => setUnit(unit === "mi" ? "km" : "mi")}
+            className="absolute right-4 top-1/2 -translate-y-1/2 font-pixel text-[10px] px-1.5 py-0.5"
+            style={{ color: "var(--toast-crust)", border: "2px solid var(--toast-crust)" }}
+            aria-label="Toggle distance unit"
           >
-            MILE
-          </span>
+            {unit === "mi" ? "MILE" : "KM"}
+          </button>
         </div>
         <button type="submit" className="pixel-btn-primary mt-6 mx-auto">
           <span className="text-2xl leading-none align-middle mr-1" aria-hidden="true">🍞</span>
@@ -212,13 +224,17 @@ function InputScreen({
 
 function RevealScreen({
   distance,
+  unit,
   count,
   onContinue,
 }: {
   distance: number;
+  unit: "mi" | "km";
   count: number;
   onContinue: () => void;
 }) {
+  const displayValue = Math.round(distance / (unit === "mi" ? 63360 : 39370.0787));
+  const unitLabel = unit === "mi" ? "miles" : "km";
   const article = articleForCount(count);
   return (
     <div className="h-full flex flex-col items-center justify-center text-center py-12 pt-20">
@@ -246,7 +262,7 @@ function RevealScreen({
             THE MATH
           </p>
           <p className="font-body">
-            You ran <strong>{distance} inches</strong>. A perfect slice of toast is <strong>exactly 5 inches</strong> wide. That's just science. Pure facts.&nbsp;
+            You ran <strong>{displayValue} {unitLabel}</strong>. A perfect slice of toast is <strong>exactly 5 inches</strong> wide. That's just science. Pure facts.&nbsp;
           </p>
           <p className="font-body mt-1">
             {distance} ÷ 5 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
