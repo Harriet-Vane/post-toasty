@@ -176,7 +176,7 @@ function toppingStep(topping: Topping, repeatIndex: number): string {
 }
 
 function closingStep(): string {
-  return "Enjoy your toast.";
+  return "Enjoy!\u00a0";
 }
 
 export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[] {
