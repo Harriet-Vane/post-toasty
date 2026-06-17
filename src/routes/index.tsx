@@ -175,7 +175,7 @@ function InputScreen({
         RUN?
       </h2>
       <p className="font-body mt-4 text-[var(--ink)] opacity-80 whitespace-pre-line">
-        It's not the journey, it's the destination.{"\n"}And the destination is toast.
+        Every run has a purpose.{"\n"}Sometimes that purpose is toast.
       </p>
 
       <form onSubmit={submit} className="mt-8 w-full max-w-sm">
