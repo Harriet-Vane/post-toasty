@@ -26,8 +26,7 @@ export type ToppingRender =
   | "banana"
   | "egg"
   | "hotdog"
-  | "pickle"
-  | "secondtoast";
+  | "pickle";
 
 export type ToppingId = string;
 
@@ -40,40 +39,41 @@ export interface Topping {
   color: string;
   /** Optional accent color (e.g. crust, yolk, swirl). */
   accent?: string;
+  /** Emoji shown as the ingredient's 8-bit-style avatar in the chip list. */
+  emoji: string;
 }
 
 export const TOPPINGS: Topping[] = [
   // Spreads & Bases
-  { id: "butter", name: "Butter", side: "spread", render: "spread", color: "#f6d97a" },
-  { id: "plantbutter", name: "Plant Butter", side: "spread", render: "spread", color: "#f3e08a" },
-  { id: "peanutbutter", name: "Peanut Butter", side: "spread", render: "spread", color: "#b87a3d", accent: "#8a5424" },
-  { id: "almondbutter", name: "Almond Butter", side: "spread", render: "spread", color: "#c79a6b", accent: "#8e6a3e" },
-  { id: "hummus", name: "Hummus", side: "spread", render: "spread", color: "#e3cf94", accent: "#a98a4a" },
-  { id: "creamcheese", name: "Cream Cheese", side: "spread", render: "spread", color: "#fdf6e0", accent: "#d7c896" },
-  { id: "jam", name: "Jam", side: "spread", render: "spread", color: "#c33a4d", accent: "#7a1d2b" },
-  { id: "honey", name: "Honey", side: "spread", render: "drizzle", color: "#e3a82a" },
-  { id: "oliveoil", name: "Olive Oil + Salt", side: "spread", render: "drizzle", color: "#c9c163" },
-  { id: "ranch", name: "Ranch Dressing", side: "spread", render: "drizzle", color: "#f4ecd0" },
-  { id: "fluff", name: "Marshmallow Fluff", side: "spread", render: "spread", color: "#fffdf2", accent: "#e6dfc0" },
-  { id: "ketchup", name: "Ketchup", side: "spread", render: "drizzle", color: "#c5263b" },
-  { id: "mayo", name: "Mayo", side: "spread", render: "drizzle", color: "#fbf3d2" },
+  { id: "butter", name: "Butter", side: "spread", render: "spread", color: "#f6d97a", emoji: "🧈" },
+  { id: "plantbutter", name: "Plant Butter", side: "spread", render: "spread", color: "#f3e08a", emoji: "🌱" },
+  { id: "peanutbutter", name: "Peanut Butter", side: "spread", render: "spread", color: "#b87a3d", accent: "#8a5424", emoji: "🥜" },
+  { id: "almondbutter", name: "Almond Butter", side: "spread", render: "spread", color: "#c79a6b", accent: "#8e6a3e", emoji: "🌰" },
+  { id: "hummus", name: "Hummus", side: "spread", render: "spread", color: "#e3cf94", accent: "#a98a4a", emoji: "🧆" },
+  { id: "creamcheese", name: "Cream Cheese", side: "spread", render: "spread", color: "#fdf6e0", accent: "#d7c896", emoji: "🧀" },
+  { id: "jam", name: "Jam", side: "spread", render: "spread", color: "#c33a4d", accent: "#7a1d2b", emoji: "🍓" },
+  { id: "honey", name: "Honey", side: "spread", render: "drizzle", color: "#e3a82a", emoji: "🍯" },
+  { id: "oliveoil", name: "Olive Oil + Salt", side: "spread", render: "drizzle", color: "#c9c163", emoji: "🫒" },
+  { id: "ranch", name: "Ranch Dressing", side: "spread", render: "drizzle", color: "#f4ecd0", emoji: "🥛" },
+  { id: "fluff", name: "Marshmallow Fluff", side: "spread", render: "spread", color: "#fffdf2", accent: "#e6dfc0", emoji: "☁️" },
+  { id: "ketchup", name: "Ketchup", side: "spread", render: "drizzle", color: "#c5263b", emoji: "🍅" },
+  { id: "mayo", name: "Mayo", side: "spread", render: "drizzle", color: "#fbf3d2", emoji: "🥚" },
 
   // Toppings & Extras
-  { id: "avocado", name: "Avocado", side: "extra", render: "spread", color: "#9bbf6a", accent: "#5e7c3a" },
-  { id: "banana", name: "Banana", side: "extra", render: "banana", color: "#f6e8a8", accent: "#cdb46a" },
-  { id: "tomato", name: "Tomato", side: "extra", render: "scatter", color: "#d63a2e", accent: "#7c1b15" },
-  { id: "egg", name: "Fried Egg", side: "extra", render: "egg", color: "#fffaf0", accent: "#f1b800" },
-  { id: "cinnamon", name: "Cinnamon Sugar", side: "extra", render: "scatter", color: "#a45e2b", accent: "#f3e3b9" },
-  { id: "gummy", name: "Gummy Bears", side: "extra", render: "scatter", color: "#f04e8a", accent: "#34a85a" },
-  { id: "pickle", name: "A Whole Pickle", side: "extra", render: "pickle", color: "#7ea53a", accent: "#3c5a18" },
-  { id: "hotdog", name: "A Literal Hot Dog", side: "extra", render: "hotdog", color: "#d57a5a", accent: "#7a3819" },
-  { id: "sardines", name: "Sardines", side: "extra", render: "scatter", color: "#a9b2bd", accent: "#4f5560" },
-  { id: "whip", name: "Whipped Cream", side: "extra", render: "spread", color: "#ffffff", accent: "#e6e6e6" },
-  { id: "cereal", name: "Dry Cereal", side: "extra", render: "scatter", color: "#e6a64a", accent: "#8a5a1a" },
-  { id: "frosting", name: "Birthday Frosting", side: "extra", render: "spread", color: "#ff9ed1", accent: "#c45a96" },
-  { id: "ghost", name: "Ghost Pepper Sauce", side: "extra", render: "drizzle", color: "#b8281a" },
-  { id: "sprinkles", name: "Rainbow Sprinkles", side: "extra", render: "scatter", color: "#ff5fb4", accent: "#2db6ff" },
-  { id: "secondtoast", name: "A Second Smaller Toast On Top", side: "extra", render: "secondtoast", color: "#e8b14b", accent: "#7a4514" },
+  { id: "avocado", name: "Avocado", side: "extra", render: "spread", color: "#9bbf6a", accent: "#5e7c3a", emoji: "🥑" },
+  { id: "banana", name: "Banana", side: "extra", render: "banana", color: "#f6e8a8", accent: "#cdb46a", emoji: "🍌" },
+  { id: "tomato", name: "Tomato", side: "extra", render: "scatter", color: "#d63a2e", accent: "#7c1b15", emoji: "🍅" },
+  { id: "egg", name: "Fried Egg", side: "extra", render: "egg", color: "#fffaf0", accent: "#f1b800", emoji: "🍳" },
+  { id: "cinnamon", name: "Cinnamon Sugar", side: "extra", render: "scatter", color: "#a45e2b", accent: "#f3e3b9", emoji: "🍂" },
+  { id: "gummy", name: "Gummy Bears", side: "extra", render: "scatter", color: "#f04e8a", accent: "#34a85a", emoji: "🐻" },
+  { id: "pickle", name: "A Whole Pickle", side: "extra", render: "pickle", color: "#7ea53a", accent: "#3c5a18", emoji: "🥒" },
+  { id: "hotdog", name: "A Literal Hot Dog", side: "extra", render: "hotdog", color: "#d57a5a", accent: "#7a3819", emoji: "🌭" },
+  { id: "sardines", name: "Sardines", side: "extra", render: "scatter", color: "#a9b2bd", accent: "#4f5560", emoji: "🐟" },
+  { id: "whip", name: "Whipped Cream", side: "extra", render: "spread", color: "#ffffff", accent: "#e6e6e6", emoji: "🍦" },
+  { id: "cereal", name: "Dry Cereal", side: "extra", render: "scatter", color: "#e6a64a", accent: "#8a5a1a", emoji: "🥣" },
+  { id: "frosting", name: "Birthday Frosting", side: "extra", render: "spread", color: "#ff9ed1", accent: "#c45a96", emoji: "🎂" },
+  { id: "ghost", name: "Ghost Pepper Sauce", side: "extra", render: "drizzle", color: "#b8281a", emoji: "🌶️" },
+  { id: "sprinkles", name: "Rainbow Sprinkles", side: "extra", render: "scatter", color: "#ff5fb4", accent: "#2db6ff", emoji: "🌈" },
 ];
 
 export function getTopping(id: ToppingId): Topping | undefined {
