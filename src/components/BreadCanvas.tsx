@@ -409,19 +409,6 @@ function ToppingLayer({
         </g>
       );
     }
-    case "secondtoast": {
-      return (
-        <g transform="translate(100 100) scale(0.55) translate(-100 -100) rotate(-8 100 100)">
-          <path
-            d={BREAD_PATH_STANDARD}
-            fill="var(--toast-gold)"
-            stroke="var(--toast-crust)"
-            strokeWidth="6"
-          />
-          <path d="M55 70 Q100 55 145 75" fill="none" stroke="var(--toast-crust)" strokeOpacity="0.5" strokeWidth="3" />
-        </g>
-      );
-    }
   }
 }
 
