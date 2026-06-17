@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
 import { BreadCanvas } from "@/components/BreadCanvas";
+import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { ToastSprite } from "@/components/ToastSprite";
 
 import {
@@ -198,9 +199,29 @@ function BuilderScreen({
   onLock: () => void;
 }) {
   const [isOver, setIsOver] = useState(false);
+  const [selectionToast, setSelectionToast] = useState<{ message: string; id: number } | null>(null);
+
+  useEffect(() => {
+    if (!selectionToast) return;
+    const t = setTimeout(() => setSelectionToast(null), 5000);
+    return () => clearTimeout(t);
+  }, [selectionToast]);
+
+  function showToast(id: string) {
+    const message = getSelectionMessage(id);
+    if (message) {
+      setSelectionToast({ message, id: Date.now() });
+    }
+  }
+
+  function selectBread(id: BreadId) {
+    setBreadId(id);
+    showToast(id);
+  }
 
   function addTopping(id: ToppingId) {
     setToppings([...toppings, id]);
+    showToast(id);
   }
   function removeAt(i: number) {
     setToppings(toppings.filter((_, idx) => idx !== i));
@@ -215,28 +236,33 @@ function BuilderScreen({
             CHOOSE YOUR BREAD
           </h2>
         </header>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
-          {BREADS.map((b) => {
-            const selected = b.id === breadId;
-            return (
-              <button
-                key={b.id}
-                onClick={() => setBreadId(b.id)}
-                className="flex flex-col items-center p-2 bg-[var(--card)]"
-                style={{
-                  border: `3px solid ${selected ? "var(--turquoise)" : "var(--ink)"}`,
-                  boxShadow: selected ? "4px 4px 0 0 var(--turquoise)" : "3px 3px 0 0 var(--ink)",
-                  cursor: "pointer",
-                }}
-                aria-pressed={selected}
-              >
-                <BreadCanvas breadId={b.id} toppings={[]} size={110} />
-                <span className="font-pixel text-[9px] mt-2 text-center text-[var(--ink)]">
-                  {b.name.toUpperCase()}
-                </span>
-              </button>
-            );
-          })}
+        <div className="relative max-w-3xl mx-auto">
+          {selectionToast && (
+            <SelectionToast key={selectionToast.id} message={selectionToast.message} />
+          )}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            {BREADS.map((b) => {
+              const selected = b.id === breadId;
+              return (
+                <button
+                  key={b.id}
+                  onClick={() => selectBread(b.id)}
+                  className="flex flex-col items-center p-2 bg-[var(--card)]"
+                  style={{
+                    border: `3px solid ${selected ? "var(--turquoise)" : "var(--ink)"}`,
+                    boxShadow: selected ? "4px 4px 0 0 var(--turquoise)" : "3px 3px 0 0 var(--ink)",
+                    cursor: "pointer",
+                  }}
+                  aria-pressed={selected}
+                >
+                  <BreadCanvas breadId={b.id} toppings={[]} size={110} />
+                  <span className="font-pixel text-[9px] mt-2 text-center text-[var(--ink)]">
+                    {b.name.toUpperCase()}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
         <div className="flex justify-center mt-8">
           <button onClick={() => setBreadStep(false)} className="pixel-btn-primary">
@@ -262,86 +288,91 @@ function BuilderScreen({
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-4 items-start">
-        {/* Left: Spreads & Bases */}
-        <ToppingColumn
-          title="SPREADS & BASES"
-          items={spreads}
-          onAdd={addTopping}
-        />
+      <div className="relative">
+        {selectionToast && (
+          <SelectionToast key={selectionToast.id} message={selectionToast.message} />
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-4 items-start">
+          {/* Left: Spreads & Bases */}
+          <ToppingColumn
+            title="SPREADS & BASES"
+            items={spreads}
+            onAdd={addTopping}
+          />
 
-        {/* Center: canvas */}
-        <div className="flex flex-col items-center">
-          <div
-            className={`drop-target bg-[var(--paper)] p-3 ${isOver ? "is-over" : ""}`}
-            style={{
-              border: "3px dashed var(--toast-crust)",
-            }}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsOver(true);
-            }}
-            onDragLeave={() => setIsOver(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsOver(false);
-              const id = e.dataTransfer.getData("text/topping");
-              if (id) addTopping(id);
-            }}
-            aria-label="Toast canvas"
-          >
-            <BreadCanvas breadId={breadId} toppings={toppings} size={300} />
-          </div>
-          <button
-            onClick={() => setBreadStep(true)}
-            className="pixel-btn-ghost mt-3"
-            style={{ color: "var(--ink)" }}
-          >
-            Change bread
-          </button>
-
-          {/* Stack list */}
-          {toppings.length > 0 && (
+          {/* Center: canvas */}
+          <div className="flex flex-col items-center">
             <div
-              className="mt-3 w-full max-w-[300px] bg-[var(--card)] p-2"
-              style={{ border: "2px solid var(--ink)" }}
+              className={`drop-target bg-[var(--paper)] p-3 ${isOver ? "is-over" : ""}`}
+              style={{
+                border: "3px dashed var(--toast-crust)",
+              }}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsOver(true);
+              }}
+              onDragLeave={() => setIsOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsOver(false);
+                const id = e.dataTransfer.getData("text/topping");
+                if (id) addTopping(id);
+              }}
+              aria-label="Toast canvas"
             >
-              <p className="font-pixel text-[8px] mb-1" style={{ color: "var(--toast-crust)" }}>
-                STACK ({toppings.length})
-              </p>
-              <ol className="flex flex-wrap gap-1">
-                {toppings.map((id, i) => {
-                  const t = getTopping(id);
-                  if (!t) return null;
-                  return (
-                    <li key={`${id}-${i}`}>
-                      <button
-                        onClick={() => removeAt(i)}
-                        className="font-body text-[11px] px-1.5 py-0.5"
-                        style={{
-                          background: "var(--paper)",
-                          border: "1.5px solid var(--ink)",
-                          cursor: "pointer",
-                        }}
-                        aria-label={`Remove ${t.name}`}
-                        title="Remove"
-                      >
-                        {t.name} ×
-                      </button>
-                    </li>
-                  );
-                })}
-              </ol>
+              <BreadCanvas breadId={breadId} toppings={toppings} size={300} />
             </div>
-          )}
-        </div>
+            <button
+              onClick={() => setBreadStep(true)}
+              className="pixel-btn-ghost mt-3"
+              style={{ color: "var(--ink)" }}
+            >
+              Change bread
+            </button>
 
-        {/* Right: Toppings & Extras */}
-        <ToppingColumn
-          title="TOPPINGS & EXTRAS"
-          items={extras}
-          onAdd={addTopping}
-        />
+            {/* Stack list */}
+            {toppings.length > 0 && (
+              <div
+                className="mt-3 w-full max-w-[300px] bg-[var(--card)] p-2"
+                style={{ border: "2px solid var(--ink)" }}
+              >
+                <p className="font-pixel text-[8px] mb-1" style={{ color: "var(--toast-crust)" }}>
+                  STACK ({toppings.length})
+                </p>
+                <ol className="flex flex-wrap gap-1">
+                  {toppings.map((id, i) => {
+                    const t = getTopping(id);
+                    if (!t) return null;
+                    return (
+                      <li key={`${id}-${i}`}>
+                        <button
+                          onClick={() => removeAt(i)}
+                          className="font-body text-[11px] px-1.5 py-0.5"
+                          style={{
+                            background: "var(--paper)",
+                            border: "1.5px solid var(--ink)",
+                            cursor: "pointer",
+                          }}
+                          aria-label={`Remove ${t.name}`}
+                          title="Remove"
+                        >
+                          {t.name} ×
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            )}
+          </div>
+
+          {/* Right: Toppings & Extras */}
+          <ToppingColumn
+            title="TOPPINGS & EXTRAS"
+            items={extras}
+            onAdd={addTopping}
+          />
+        </div>
       </div>
 
       <div className="flex justify-center mt-6">
