@@ -148,31 +148,52 @@ export function generateName(breadId: BreadId, toppings: ToppingId[]): string {
   return tpl.replace("{hero}", hero).replace("{time}", time);
 }
 
+const REPEAT_PHRASES = [
+  "Add more {x}.",
+  "Keep the {x} coming.",
+  "Don't hold back on the {x}.",
+  "You know what this needs? More {x}.",
+  "Another round of {x}.",
+  "Why stop? More {x}.",
+  "Yes, even more {x}.",
+  "Lay it on — more {x}.",
+];
+
 export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[] {
   const bread = getBread(breadId);
   const lines: string[] = [];
   lines.push(`1. Start with one slice of ${bread.name.toLowerCase()}.`);
   lines.push(`2. Toast it (~4 minutes, or until it looks right to you).`);
+  const seenCount = new Map<ToppingId, number>();
   toppings.forEach((id, i) => {
     const t = getTopping(id);
     if (!t) return;
-    const verb =
-      t.render === "spread"
-        ? "Spread on the"
-        : t.render === "drizzle"
-          ? "Drizzle the"
-          : t.render === "scatter"
-            ? "Scatter the"
-            : t.render === "banana"
-              ? "Lay down slices of"
-              : t.render === "egg"
-                ? "Slide on the"
-                : t.render === "hotdog"
-                  ? "Place the"
-                  : t.render === "pickle"
-                    ? "Set down the"
-                    : "Crown it with the";
-    lines.push(`${i + 3}. ${verb} ${t.name.toLowerCase()}.`);
+    const prior = seenCount.get(id) ?? 0;
+    seenCount.set(id, prior + 1);
+    let sentence: string;
+    if (prior === 0) {
+      const verb =
+        t.render === "spread"
+          ? "Spread on the"
+          : t.render === "drizzle"
+            ? "Drizzle the"
+            : t.render === "scatter"
+              ? "Scatter the"
+              : t.render === "banana"
+                ? "Lay down slices of"
+                : t.render === "egg"
+                  ? "Slide on the"
+                  : t.render === "hotdog"
+                    ? "Place the"
+                    : t.render === "pickle"
+                      ? "Set down the"
+                      : "Crown it with the";
+      sentence = `${verb} ${t.name.toLowerCase()}.`;
+    } else {
+      const tpl = REPEAT_PHRASES[(prior - 1) % REPEAT_PHRASES.length];
+      sentence = tpl.replace("{x}", t.name.toLowerCase());
+    }
+    lines.push(`${i + 3}. ${sentence}`);
   });
 
   // Closing line varies only by COUNT, never judgment.
