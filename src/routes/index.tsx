@@ -282,8 +282,8 @@ function RevealScreen({
         </div>
       </div>
 
-      <button onClick={onContinue} className="pixel-btn-primary mt-8">
-        Let us celebrate with toast
+      <button onClick={onContinue} className="pixel-btn-primary mt-8 text-sm uppercase tracking-wider">
+        THIS CALLS FOR A TOAST
       </button>
     </div>
   );
