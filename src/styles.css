@@ -4,28 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -45,100 +28,205 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-cabinet: var(--cabinet);
+  --color-cabinet-rim: var(--cabinet-rim);
+  --color-paper: var(--paper);
+  --color-toast-gold: var(--toast-gold);
+  --color-toast-crust: var(--toast-crust);
+  --color-butter: var(--butter);
+  --color-avocado: var(--avocado);
+  --color-tomato: var(--tomato);
+  --color-ink: var(--ink);
+  --font-pixel: var(--font-pixel);
+  --font-body: var(--font-body);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-}
+  --radius: 0.5rem;
 
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  /* Arcade cabinet — deep plum/black */
+  --cabinet: oklch(0.22 0.04 30);
+  --cabinet-rim: oklch(0.32 0.06 28);
+  /* Warm cream "screen" */
+  --paper: oklch(0.96 0.04 85);
+  --ink: oklch(0.22 0.04 40);
+
+  /* Toast palette */
+  --toast-gold: oklch(0.82 0.14 75);
+  --toast-crust: oklch(0.5 0.13 50);
+  --butter: oklch(0.92 0.16 95);
+  --avocado: oklch(0.72 0.13 140);
+  --tomato: oklch(0.62 0.22 28);
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: oklch(0.99 0.02 85);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--toast-crust);
+  --primary-foreground: oklch(0.98 0.02 85);
+  --secondary: oklch(0.9 0.06 80);
+  --secondary-foreground: var(--ink);
+  --muted: oklch(0.92 0.04 80);
+  --muted-foreground: oklch(0.45 0.04 45);
+  --accent: var(--toast-gold);
+  --accent-foreground: var(--ink);
+  --destructive: var(--tomato);
+  --destructive-foreground: oklch(0.98 0.02 85);
+  --border: oklch(0.78 0.06 60);
+  --input: oklch(0.78 0.06 60);
+  --ring: var(--toast-crust);
+
+  --font-pixel: "Press Start 2P", "Courier New", monospace;
+  --font-body: "Nunito", system-ui, sans-serif;
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
+  * { border-color: var(--color-border); }
+  html, body { background: var(--cabinet); }
   body {
-    background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-body);
   }
 }
+
+@utility font-pixel { font-family: var(--font-pixel); letter-spacing: 0.02em; }
+@utility font-body { font-family: var(--font-body); }
+
+/* Arcade cabinet outer frame */
+@utility arcade-cabinet {
+  background:
+    radial-gradient(circle at 20% 0%, oklch(0.32 0.05 28) 0%, transparent 50%),
+    radial-gradient(circle at 80% 100%, oklch(0.18 0.04 30) 0%, transparent 60%),
+    var(--cabinet);
+  border: 6px solid var(--cabinet-rim);
+  box-shadow:
+    inset 0 0 0 2px oklch(0.12 0.03 30),
+    inset 0 0 40px oklch(0 0 0 / 0.6),
+    0 20px 60px oklch(0 0 0 / 0.5);
+  border-radius: 18px;
+}
+
+@utility arcade-screen {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      oklch(0 0 0 / 0.03) 0px,
+      oklch(0 0 0 / 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    var(--paper);
+  border: 4px solid oklch(0.12 0.03 30);
+  box-shadow:
+    inset 0 0 0 2px var(--toast-crust),
+    inset 0 0 30px oklch(0.5 0.13 50 / 0.15);
+  border-radius: 8px;
+}
+
+@utility pixel-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0.85rem 1.1rem;
+  background: var(--toast-gold);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 0 var(--ink);
+  transition: transform 80ms ease, box-shadow 80ms ease;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+@utility pixel-btn-primary {
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 1rem 1.4rem;
+  background: var(--tomato);
+  color: oklch(0.98 0.02 85);
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 0 var(--ink);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+@utility pixel-btn-ghost {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  padding: 0.6rem 0.8rem;
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.pixel-btn:hover, .pixel-btn-primary:hover {
+  transform: translate(-1px, -1px);
+}
+.pixel-btn:active, .pixel-btn-primary:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 0 var(--ink);
+}
+
+/* Crisp pixel rendering for SVG sprites */
+.pixelated { image-rendering: pixelated; image-rendering: crisp-edges; shape-rendering: crispEdges; }
+
+/* Pixel input */
+@utility pixel-input {
+  font-family: var(--font-pixel);
+  font-size: 1.6rem;
+  padding: 1rem 1.2rem;
+  background: oklch(0.99 0.02 85);
+  border: 3px solid var(--ink);
+  box-shadow: inset 3px 3px 0 oklch(0 0 0 / 0.08);
+  color: var(--ink);
+  text-align: center;
+  width: 100%;
+  outline: none;
+}
+.pixel-input:focus { border-color: var(--tomato); }
+
+/* CRT scanline overlay */
+.crt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    oklch(0 0 0 / 0.06) 0px,
+    oklch(0 0 0 / 0.06) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  border-radius: 8px;
+  mix-blend-mode: multiply;
+}
+
+/* Drag/drop target */
+.drop-target { transition: outline-color 120ms ease, transform 120ms ease; }
+.drop-target.is-over { outline: 3px dashed var(--tomato); outline-offset: 4px; }
+
+.topping-chip {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 0.45rem 0.6rem;
+  background: oklch(0.99 0.02 85);
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 0 var(--ink);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  user-select: none;
+}
+.topping-chip:active { cursor: grabbing; transform: translate(1px, 1px); box-shadow: 1px 1px 0 0 var(--ink); }
