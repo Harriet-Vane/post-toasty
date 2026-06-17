@@ -174,8 +174,8 @@ function InputScreen({
         <br />
         GO?
       </h2>
-      <p className="font-body mt-4 text-[var(--ink)] opacity-80">
-        Just inches. No time. No pace.{"\n\n"}
+      <p className="font-body mt-4 text-[var(--ink)] opacity-80 whitespace-pre-line">
+        It's not the journey, it's the destination.{"\n"}And the destination is toast.
       </p>
 
       <form onSubmit={submit} className="mt-8 w-full max-w-sm">
