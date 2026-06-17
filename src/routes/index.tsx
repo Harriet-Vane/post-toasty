@@ -70,7 +70,7 @@ function RunchBase() {
             </h1>
           </div>
           <div className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block">
-            insert run · receive toast
+            run · toast · repeat
           </div>
           {phase !== "input" && (
             <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
