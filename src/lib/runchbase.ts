@@ -131,7 +131,6 @@ const NAME_TEMPLATES = [
   "The {time} {hero} Situation",
   "A Quiet {hero} Moment",
   "The {hero} Affair",
-  "The Honest {hero} Stack",
   "{hero}, Considered",
   "The {time} {hero} Report",
   "A {hero} Sort Of Day",
