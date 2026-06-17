@@ -6,6 +6,9 @@ import { getTopping } from "@/lib/runchbase";
 const BREAD_PATH_STANDARD =
   "M30 55 Q30 25 75 25 H125 Q170 25 170 55 V160 Q170 175 155 175 H45 Q30 175 30 160 Z";
 
+const SCONE_PATH =
+  "M100 35 C70 35 52 70 45 130 Q100 168 155 130 C148 70 130 35 100 35 Z";
+
 const BAGEL_RING_PATH =
   // outer circle + inner hole using even-odd
   "M100 25 A75 75 0 1 0 100 175 A75 75 0 1 0 100 25 Z " +
@@ -40,6 +43,10 @@ function breadShape(breadId: BreadId, fill: string, accent: string) {
           />
         </>
       );
+    case "scone":
+      return (
+        <path d={SCONE_PATH} fill={fill} stroke={accent} strokeWidth="4" />
+      );
     default:
       return (
         <path d={BREAD_PATH_STANDARD} fill={fill} stroke={accent} strokeWidth="4" />
@@ -54,6 +61,8 @@ function breadClipPath(breadId: BreadId) {
     case "bagel":
       // annulus via evenodd
       return <path d={BAGEL_RING_PATH} fillRule="evenodd" />;
+    case "scone":
+      return <path d={SCONE_PATH} />;
     default:
       return <path d={BREAD_PATH_STANDARD} />;
   }
@@ -148,8 +157,8 @@ function breadFillColor(breadId: BreadId): { fill: string; accent: string } {
       return { fill: "oklch(0.55 0.07 55)", accent: "oklch(0.3 0.05 40)" };
     case "wholewheat":
       return { fill: "oklch(0.7 0.1 60)", accent: "var(--toast-crust)" };
-    case "glutenfree":
-      return { fill: "oklch(0.88 0.06 80)", accent: "var(--toast-crust)" };
+    case "scone":
+      return { fill: "oklch(0.84 0.07 75)", accent: "oklch(0.55 0.09 60)" };
     case "mystery":
       return { fill: "oklch(0.78 0.05 70)", accent: "var(--toast-crust)" };
     default:
