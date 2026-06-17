@@ -250,7 +250,7 @@ const SPREAD_VERBS = ["Smear on the", "Slather on the", "Spread the", "Layer on 
 const SPREAD_MODS = ["don't hold back", "like you mean it", "generously", "with conviction", "no half measures"];
 const DRIZZLE_VERBS_CALM = ["Drizzle the", "Stripe on the", "Go back and forth with the"];
 const DRIZZLE_VERBS_WILD = ["Zigzag the", "Lash the", "Go reckless with the"];
-const SCATTER_VERBS = ["Scatter the", "Shower the", "Rain down the", "Fling on the"];
+const SCATTER_VERBS = ["Scatter the", "Shower the", "Fling on the"];
 
 function applicationBeat(
   topping: Topping,
