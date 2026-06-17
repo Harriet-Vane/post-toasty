@@ -490,8 +490,8 @@ function ShareScreen({
           boxShadow: "6px 6px 0 0 var(--ink)",
         }}
       >
-        <header className="flex items-start justify-between gap-3 mb-3">
-          <div>
+        <header className="mb-3">
+          <div className="w-full">
             <p className="font-pixel text-[9px]" style={{ color: "var(--toast-crust)" }}>
               ★ RUNCHBASE ★
             </p>
@@ -502,7 +502,6 @@ function ShareScreen({
               You ran today!&nbsp;This calls for a toast.
             </p>
           </div>
-          <ToastsHUD count={toastCount} />
         </header>
 
         {/* Dazzling MySpace-era stage around the toast */}
