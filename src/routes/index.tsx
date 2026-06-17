@@ -238,21 +238,6 @@ function RevealScreen({
       </div>
 
       <div className="mt-8 relative max-w-lg mx-auto p-8" style={{ minWidth: 360 }}>
-        {/* Toast outline background matching the marquee icon */}
-        <svg
-          className="absolute inset-0 w-full h-full pixelated"
-          viewBox="0 0 32 26"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M4 20 V12 Q4 4 12 4 H20 Q28 4 28 12 V20 Q28 23 25 23 H7 Q4 23 4 20 Z"
-            fill="none"
-            stroke="var(--toast-crust)"
-            strokeWidth="2"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
         <div className="relative text-[var(--ink)]">
           <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
             THE MATH
