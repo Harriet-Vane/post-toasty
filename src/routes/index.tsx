@@ -95,10 +95,10 @@ function RunchBase() {
 
           {phase === "input" && (
             <InputScreen
-              minutes={minutes}
-              setMinutes={setMinutes}
-              onSubmit={(m) => {
-                setCommittedMinutes(m);
+              distance={distance}
+              setDistance={setDistance}
+              onSubmit={(d) => {
+                setCommittedDistance(d);
                 setPhase("reveal");
               }}
             />
@@ -106,7 +106,7 @@ function RunchBase() {
 
           {phase === "reveal" && (
             <RevealScreen
-              minutes={committedMinutes}
+              distance={committedDistance}
               count={toastCount}
               onContinue={() => setPhase("builder")}
             />
