@@ -248,6 +248,8 @@ function RevealScreen({
           <p className="font-body mt-1">
             {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
             <br />
+            <br />
+            <br />
             Not that you should eat that many pieces of toast.
             <br />
             But you could.
