@@ -137,10 +137,8 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
       <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-3">
         ★ POST-RUN TREATS DEPARTMENT ★
       </p>
-      <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
-        DID YOU GO
-        <br />
-        FOR A RUN?
+      <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] whitespace-nowrap">
+        DID YOU GO FOR A RUN?
       </h2>
 
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
