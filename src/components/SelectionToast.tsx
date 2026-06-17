@@ -23,6 +23,8 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   honey: "Finger-licking good.",
   oliveoil: "Fat equals flavor!",
   fluff: "A classic for a reason.",
+  ketchup: "Bring the tang.",
+  marmite: "You maverick, you!",
 
   // Toppings & extras
   avocado: "So green.",
