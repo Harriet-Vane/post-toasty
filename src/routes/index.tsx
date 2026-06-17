@@ -237,16 +237,49 @@ function RevealScreen({
         )}
       </div>
 
-      <div className="mt-8 toast-box px-5 py-4 max-w-md">
-        <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
-          THE MATH
-        </p>
-        <p className="font-body text-[var(--ink)]">
-          You ran <strong>{minutes} minutes</strong>. It takes <strong>~4 minutes to make a perfect slice of toast</strong>. That's just science.&nbsp;
-        </p>
-        <p className="font-body mt-1 text-[var(--ink)]">
-          {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
-        </p>
+      <div className="mt-8 relative max-w-md mx-auto" style={{ minWidth: 260 }}>
+        {/* Toast-shaped background matching the marquee icon */}
+        <svg
+          className="absolute inset-0 w-full h-full pixelated"
+          viewBox="0 0 32 26"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {/* crust */}
+          <path
+            d="M4 20 V12 Q4 4 12 4 H20 Q28 4 28 12 V20 Q28 23 25 23 H7 Q4 23 4 20 Z"
+            fill="var(--toast-crust)"
+          />
+          {/* golden face */}
+          <path
+            d="M6 20 V12 Q6 6 12 6 H20 Q26 6 26 12 V20 Q26 21 25 21 H7 Q6 21 6 20 Z"
+            fill="var(--toast-gold)"
+          />
+          {/* highlights */}
+          <path
+            d="M8 10 Q12 8 16 8"
+            stroke="oklch(0.95 0.08 90)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M20 10 Q22 9 23 10"
+            stroke="oklch(0.95 0.08 90)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+        <div className="relative px-5 py-4 text-[var(--ink)]">
+          <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
+            THE MATH
+          </p>
+          <p className="font-body">
+            You ran <strong>{minutes} minutes</strong>. It takes <strong>~4 minutes to make a perfect slice of toast</strong>. That's just science.&nbsp;
+          </p>
+          <p className="font-body mt-1">
+            {minutes} ÷ 4 ≈ <strong>{count}</strong>&nbsp;piece{count === 1 ? "" : "s"} of toast.
+          </p>
+        </div>
       </div>
 
       <button onClick={onContinue} className="pixel-btn-primary mt-8">
