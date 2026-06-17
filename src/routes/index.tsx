@@ -497,7 +497,7 @@ function ShareScreen({
               {name.toUpperCase()}
             </h3>
             <p className="font-body text-sm opacity-80 mt-1">
-              You ran a <strong>{toastCount}-toast run</strong>. Here&apos;s what you built to celebrate.
+              You ran today!&nbsp;That calls for a toast.
             </p>
           </div>
           <ToastsHUD count={toastCount} />
