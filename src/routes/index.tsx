@@ -133,15 +133,17 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         : "";
 
   return (
-    <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8">
-      <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-3">
-        ★ POST-RUN TREATS DEPARTMENT ★
-      </p>
-      <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] whitespace-nowrap">
-        DID YOU GO FOR A RUN?
-      </h2>
+    <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8 gap-8">
+      <div className="flex flex-col items-center">
+        <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-5">
+          ★ POST-RUN TREATS DEPARTMENT ★
+        </p>
+        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] whitespace-nowrap">
+          DID YOU GO FOR A RUN?
+        </h2>
+      </div>
 
-      <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
         <button onClick={() => setModal("yes")} className="pixel-btn-primary">
           Yes
         </button>
@@ -150,7 +152,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         </button>
       </div>
 
-      <p className="font-body text-xs opacity-60 mt-10 max-w-xs">
+      <p className="font-body text-xs opacity-60 max-w-xs">
         May all your runs end with toast
       </p>
 
