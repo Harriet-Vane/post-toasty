@@ -199,7 +199,7 @@ function InputScreen({
       </form>
 
       <p className="font-body text-xs opacity-60 mt-10 max-w-xs">
-        Tagline: <em>Celebrate your runs with toast, the champion of post-run treats.</em>
+        May all your runs end with toast
       </p>
     </div>
   );
