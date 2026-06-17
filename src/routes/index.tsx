@@ -194,7 +194,7 @@ function InputScreen({
             className="absolute right-4 top-1/2 -translate-y-1/2 font-pixel text-[10px]"
             style={{ color: "var(--toast-crust)" }}
           >
-            IN
+            MILE
           </span>
         </div>
         <button type="submit" className="pixel-btn-primary mt-6 mx-auto">
