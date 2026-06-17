@@ -1,5 +1,5 @@
 /**
- * A chunky toast-shaped logo icon for the RunToast marquee.
+ * A chunky toast-shaped logo icon for the PostToast marquee.
  * Rounded top, flat bottom with a crust outline, drawn with the same
  * palette used throughout the app.
  */
