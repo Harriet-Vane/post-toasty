@@ -70,7 +70,7 @@ function RecipePage() {
   const bread = getBread(breadId);
 
   const variant = useMemo(() => {
-    const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-rainbow", "variant-glitter"];
+    const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-rainbow", "variant-glitter", "variant-myspace", "variant-skulls"];
     return variants[Math.floor(Math.random() * variants.length)];
   }, []);
 
