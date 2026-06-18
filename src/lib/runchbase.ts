@@ -201,7 +201,7 @@ const NAME_TEMPLATES = [
   "The {time} {hero} Report",
   "A {hero} Sort Of Day",
 ];
-const TIMES = ["Late-Night", "Tuesday", "Pre-Dawn", "Mid-Morning", "Post-Run", "Afternoon"];
+const TIMES = ["Late-Night", "Tuesday", "Pre-Dawn", "Mid-Morning", "Weekend", "Afternoon"];
 
 const UNHINGED_TEMPLATES = [
   "The Unhinged {hero} Catastrophe",
