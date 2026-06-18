@@ -218,57 +218,10 @@ const UNHINGED_TEMPLATES = [
   "A {hero} Travesty",
 ];
 
-const SWEET_TOPPINGS = new Set([
-  "jam",
-  "clottedcream",
-  "marmalade",
-  "lemoncurd",
-  "honey",
-  "fluff",
-  "gummy",
-  "whip",
-  "frosting",
-  "sprinkles",
-  "banana",
-  "cinnamon",
-  "pineapple",
-]);
-
-const SAVORY_TOPPINGS = new Set([
-  "butter",
-  "plantbutter",
-  "peanutbutter",
-  "almondbutter",
-  "hummus",
-  "creamcheese",
-  "oliveoil",
-  "ketchup",
-  "avocado",
-  "tomato",
-  "egg",
-  "pickle",
-  "hotdog",
-  "pumpkinseeds",
-  "ghost",
-]);
-
 function isUnhinged(toppings: ToppingId[]): boolean {
   if (toppings.length === 0) return false;
-
-  // Classic chaos ingredients
-  const chaosIds = new Set(["hotdog", "pickle", "ketchup"]);
-  if (toppings.some((id) => chaosIds.has(id))) return true;
-
-  // Savory + sweet collision
-  let hasSweet = false;
-  let hasSavory = false;
-  for (const id of toppings) {
-    if (SWEET_TOPPINGS.has(id)) hasSweet = true;
-    if (SAVORY_TOPPINGS.has(id)) hasSavory = true;
-    if (hasSweet && hasSavory) return true;
-  }
-
-  return false;
+  const chaosIds = new Set(["hotdog", "marmite", "pickle"]);
+  return toppings.some((id) => chaosIds.has(id));
 }
 
 export function generateName(breadId: BreadId, toppings: ToppingId[]): string {
