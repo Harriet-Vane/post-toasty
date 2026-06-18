@@ -599,7 +599,7 @@ function ShareScreen({
           <span className="dazzle-corner" style={{ bottom: 8, right: 10 }} aria-hidden>
             YES
           </span>
-          <div className="dazzle-toast">
+          <div className={`dazzle-toast ${plate}`}>
             <BreadCanvas breadId={breadId} toppings={toppings} size={260} />
           </div>
         </div>
