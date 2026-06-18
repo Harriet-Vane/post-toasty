@@ -120,7 +120,7 @@ function PostToast() {
 function InputScreen({ onContinue }: { onContinue: () => void }) {
   const [modal, setModal] = useState<null | "yes" | "not-yet">(null);
 
-  const fullText = "DO YOU WANT TOAST?";
+  const fullText = "DO YOU WANT TO MAKE SOME TOAST?";
   const line1 = fullText;
 
   const [displayed, setDisplayed] = useState("");
