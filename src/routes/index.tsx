@@ -134,7 +134,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
           DELICIOUS TREATS DEPARTMENT
         </p>
         <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] whitespace-nowrap">
-          DO YOU WANT TOAST?
+          WOULD YOU LIKE TO EAT SOME TOAST?
         </h2>
       </div>
 
