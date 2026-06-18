@@ -430,10 +430,12 @@ function ToppingColumn({
   title,
   items,
   onAdd,
+  onShowToast,
 }: {
   title: string;
   items: typeof TOPPINGS;
   onAdd: (id: ToppingId) => void;
+  onShowToast?: (id: string) => void;
 }) {
   return (
     <div
@@ -454,6 +456,7 @@ function ToppingColumn({
               e.dataTransfer.effectAllowed = "copy";
             }}
             onClick={() => onAdd(t.id)}
+            onMouseEnter={() => onShowToast?.(t.id)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
