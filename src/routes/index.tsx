@@ -21,14 +21,14 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PostToast — Celebrate your runs with toast" },
+      { title: "PostToast — Build your perfect toast" },
       {
         name: "description",
         content:
-          "Enter your run time. Get a toast count. Build the toast. Toast is the unit of measurement for the run itself.",
+          "Pick a bread. Pile on toppings. Get a one-of-a-kind toast recipe to share.",
       },
       { property: "og:title", content: "PostToast" },
-      { property: "og:description", content: "Toast, the champion of post-run treats." },
+      { property: "og:description", content: "Toast, the champion of treats." },
     ],
   }),
   component: PostToast,
