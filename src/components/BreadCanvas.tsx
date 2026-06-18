@@ -232,7 +232,7 @@ function scatterPositions(count: number, key: string, area = { x: 25, y: 30, w: 
 
 /** Does this topping render large enough to extend past the bread edges? */
 function isOverflowTopping(id: ToppingId): boolean {
-  return id === "pineapple" || id === "banana";
+  return id === "pineapple" || id === "banana" || id === "pickle";
 }
 
 function ToppingLayer({
