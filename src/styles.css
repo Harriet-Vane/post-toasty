@@ -493,6 +493,26 @@
   animation: disco-twinkle 0.9s ease-in-out infinite;
 }
 
+.dazzle-stage.variant-myspace { background: #000; }
+.dazzle-stage.variant-myspace .dazzle-rays { display: none; }
+.dazzle-stage.variant-myspace .dazzle-stars {
+  background-image: url("/__l5e/assets-v1/f3de8ad0-667c-4f9d-b584-0ac7e534c4ee/myspace_hearts.jpg");
+  background-size: 120px 120px;
+  background-repeat: repeat;
+  animation: toasters-fly 24s linear infinite;
+}
+
+.dazzle-stage.variant-skulls { background: #000; }
+.dazzle-stage.variant-skulls .dazzle-rays { display: none; }
+.dazzle-stage.variant-skulls .dazzle-stars {
+  background-image: url("/__l5e/assets-v1/e9d7ba41-27af-4399-a724-bdbc0d15639a/skulls_hearts.png");
+  background-size: 240px 240px;
+  background-repeat: repeat;
+  animation: toasters-fly 28s linear infinite;
+}
+
+
+
 
 /* Modal */
 .share-modal-backdrop {
