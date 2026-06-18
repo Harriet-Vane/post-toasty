@@ -71,8 +71,14 @@ function RecipePage() {
 
   const variant = useMemo(() => {
     const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-glitter", "variant-myspace", "variant-skulls"];
-    return variants[Math.floor(Math.random() * variants.length)];
-  }, []);
+    const seed = (breadId + "|" + toppings.join(",")).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    return variants[seed % variants.length];
+  }, [breadId, toppings]);
+  const plate = useMemo(() => {
+    const seed = (breadId + "/" + toppings.join(",")).split("").reduce((a, c) => a * 31 + c.charCodeAt(0), 7);
+    return `plate-${1 + (Math.abs(seed) % 5)}`;
+  }, [breadId, toppings]);
+
 
   return (
     <main className="min-h-screen w-full flex items-center justify-center p-3 sm:p-6">
