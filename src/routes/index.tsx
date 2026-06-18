@@ -199,11 +199,11 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
           onClick={() => setModal(null)}
           role="dialog"
           aria-modal="true"
-          aria-label="Toast time"
+          aria-label="It's toasty time"
         >
           <div className="share-modal text-center" onClick={(e) => e.stopPropagation()}>
             <p className="font-pixel text-[9px] mb-3" style={{ color: "var(--toast-crust)" }}>
-              TOAST TIME
+              IT'S TOASTY TIME
             </p>
             <p className="font-body text-base text-[var(--ink)] leading-snug mb-5">
               {modalCopy}
