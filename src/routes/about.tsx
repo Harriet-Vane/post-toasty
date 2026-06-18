@@ -1,7 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { ToastSprite } from "@/components/ToastSprite";
-
 export const Route = createFileRoute("/about")({
   component: AboutPage,
 });
@@ -12,7 +10,7 @@ function AboutPage() {
       <div className="w-full max-w-[720px] arcade-cabinet p-3 sm:p-6">
         <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4 px-2">
           <Link to="/" className="flex items-center gap-2 sm:gap-3">
-            <ToastSprite size={28} />
+            <span className="font-pixel text-[var(--paper)] text-lg">🍞</span>
             <h1
               className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
               style={{ textShadow: "2px 2px 0 var(--tomato)" }}
