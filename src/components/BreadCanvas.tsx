@@ -655,9 +655,10 @@ export function BreadCanvas({
         </g>
 
         {/* Spread drips: rendered OUTSIDE the top-surface clip so they hang
-            down over the bread's side face. Each spread gets its own drips. */}
+            down over the bread's side face. Each spread gets its own drips.
+            Spiral (drizzle) toppings do not drip. */}
         {resolved.map(({ tid, t, i }) => {
-          if (t.render !== "spread" && t.render !== "drizzle") return null;
+          if (t.render !== "spread") return null;
           const sIdx = spreadIndexFor[i] ?? 0;
           return (
             <SpreadDrips
