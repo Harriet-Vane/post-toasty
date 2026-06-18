@@ -454,7 +454,11 @@ function ShareScreen({
   const [shareOpen, setShareOpen] = useState(false);
 
   const shareText = `${name} — a ${bread.name} toast for my ${toastCount}-toast run. Built on PostToast.`;
-  const shareUrl = typeof window !== "undefined" ? window.location.origin : "https://posttoast.app";
+  const shareUrl = useMemo(() => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://posttoast.app";
+    const params = new URLSearchParams({ b: breadId, t: toppings.join(",") });
+    return `${origin}/r?${params.toString()}`;
+  }, [breadId, toppings]);
 
   async function copyLink() {
     try {
