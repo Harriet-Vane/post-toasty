@@ -609,17 +609,21 @@ function ShareScreen({
           </ol>
         </div>
 
-        <footer className="flex items-center justify-between mt-4 pt-3" style={{ borderTop: "2px dashed var(--ink)" }}>
-          <span className="font-pixel text-[8px]" style={{ color: "var(--toast-crust)" }}>
-            BUILT ON PostToast
+        <footer
+          className="flex flex-col items-center justify-center mt-4 pt-3 gap-2"
+          style={{ borderTop: "2px dashed var(--ink)" }}
+        >
+          <span className="font-body text-xs text-[var(--ink)] opacity-80">
+            Everyone deserves a good toast.
           </span>
-          <a
-            href={shareUrl}
-            className="font-body text-xs underline"
-            style={{ color: "var(--ink)" }}
-          >
-            {shareUrl.replace(/^https?:\/\//, "")}
-          </a>
+          <img
+            src={angelToast}
+            alt="Angel toast"
+            width={48}
+            height={48}
+            className="opacity-80"
+            loading="lazy"
+          />
         </footer>
       </article>
 
