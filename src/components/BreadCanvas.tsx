@@ -493,16 +493,22 @@ function ToppingLayer({
       );
     }
     case "pickle": {
+      const pts = scatterPositions(7, seedKey, { x: 12, y: 12, w: 176, h: 176 });
       return (
-        <g transform="translate(100 100) rotate(-25) translate(-100 -100)">
-          <ellipse cx="100" cy="100" rx="55" ry="16" fill={topping.color} stroke={topping.accent} strokeWidth="2.2" />
-          {[-40, -20, 0, 20, 40].map((dx, i) => (
-            <ellipse key={i} cx={100 + dx} cy="92" rx="6" ry="3" fill={topping.accent} opacity="0.45" />
+        <g>
+          {pts.map((p, i) => (
+            <g key={i} transform={`translate(${p.x} ${p.y})`}>
+              <circle r="16" fill={topping.color} stroke={topping.accent} strokeWidth="2.4" />
+              <circle r="11" fill="none" stroke={topping.accent} strokeWidth="1.2" opacity="0.6" />
+              {[0, 60, 120, 180, 240, 300].map((deg, j) => {
+                const rad = (deg * Math.PI) / 180;
+                const cx = Math.cos(rad) * 6;
+                const cy = Math.sin(rad) * 6;
+                return <ellipse key={j} cx={cx} cy={cy} rx="1.6" ry="1.1" fill={topping.accent} opacity="0.7" />;
+              })}
+              <ellipse cx="-4" cy="-4" rx="3" ry="1.4" fill="#ffffff" opacity="0.35" />
+            </g>
           ))}
-          {[-30, -10, 10, 30].map((dx, i) => (
-            <ellipse key={`b${i}`} cx={100 + dx} cy="108" rx="5" ry="2.5" fill={topping.accent} opacity="0.45" />
-          ))}
-          <ellipse cx="80" cy="96" rx="6" ry="2" fill="#ffffff" opacity="0.35" />
         </g>
       );
     }
