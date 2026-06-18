@@ -81,12 +81,14 @@ function RecipePage() {
     <main className="min-h-screen w-full flex items-center justify-center p-3 sm:p-6">
       <div className="w-full max-w-[720px] arcade-cabinet p-3 sm:p-6">
         <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4 px-2">
-          <h1
-            className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
-            style={{ textShadow: "2px 2px 0 var(--tomato)" }}
-          >
-            PostToast
-          </h1>
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 cursor-pointer">
+            <h1
+              className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
+              style={{ textShadow: "2px 2px 0 var(--tomato)" }}
+            >
+              PostToast
+            </h1>
+          </Link>
           <span className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm">
             toast is for sharing
           </span>
