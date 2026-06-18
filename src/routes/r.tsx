@@ -152,7 +152,7 @@ function RecipePage() {
               Make your own toast
             </Link>
             <p className="font-body text-xs text-[var(--ink)] opacity-70">
-              Free, weird, and slightly chaotic.
+              Free, fun, and always delicious.
             </p>
           </div>
         </div>
