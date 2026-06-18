@@ -259,8 +259,30 @@ function toppingStep(topping: Topping, repeatIndex: number): string {
   return `Add ${name}.`;
 }
 
-function closingStep(): string {
-  return "Enjoy!";
+function closingStep(breadId: BreadId, toppings: ToppingId[]): string {
+  const seed = breadId.length + toppings.join("").length;
+  const unhinged = isUnhinged(toppings);
+
+  const candidates = [
+    getBread(breadId).name,
+    ...toppings.map((id) => getTopping(id)?.name ?? ""),
+  ].filter(Boolean);
+
+  for (let i = 0; i < candidates.length; i++) {
+    const word = candidates[i].replace(/^(A|An)\s+/i, "").trim();
+    const letter = word.charAt(0).toLowerCase();
+    const list = ADJECTIVES[letter];
+    if (list) {
+      const adj = list[(seed + i * 13) % list.length];
+      return `Enjoy, you ${adj} ${unhinged ? "disasterpiece" : "masterpiece"}!`;
+    }
+  }
+
+  const fallback = unhinged
+    ? ["Enjoy, you unhinged legend!", "Enjoy, you beautiful chaos agent!", "Enjoy, you fearless flavor rebel!", "Enjoy, you absolute catastrophe!", "Enjoy, you sweet, sweet disaster!", "Enjoy, you mad genius!", "Enjoy, you beautiful monster!", "Enjoy, you delicious mistake!", "Enjoy, you brave, brave soul!", "Enjoy, you unstoppable force of nature!"]
+    : ["Enjoy, you glorious masterpiece!", "Enjoy, you radiant being!", "Enjoy, you perfect human!", "Enjoy, you beautiful soul!", "Enjoy, you spectacular creation!", "Enjoy, you wonderful wonder!", "Enjoy, you marvelous marvel!", "Enjoy, you heavenly delight!", "Enjoy, you magnificent treasure!", "Enjoy, you splendid superstar!"];
+
+  return fallback[seed % fallback.length];
 }
 
 export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[] {
@@ -278,10 +300,6 @@ export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[
     lines.push(`${n++}. ${toppingStep(t, prior)}`);
   });
 
-  if (toppings.length === 0) {
-    lines.push(`${n++}. ${closingStep()}`);
-  } else {
-    lines.push(`${n++}. ${closingStep()}`);
-  }
+  lines.push(`${n++}. ${closingStep(breadId, toppings)}`);
   return lines;
 }
