@@ -143,12 +143,12 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
           Yes
         </button>
         <button onClick={() => setModal("not-yet")} className="pixel-btn">
-          Not yet
+          I&apos;m not sure
         </button>
       </div>
 
       <p className="font-body text-xs opacity-60 max-w-xs">
-        May all your runs end with toast
+        May all your days end with toast
       </p>
 
       {modal && (
