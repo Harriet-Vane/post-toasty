@@ -185,8 +185,8 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
       <img
         src={angelToast}
         alt="Angel toast"
-        width={64}
-        height={64}
+        width={96}
+        height={96}
         className="opacity-80"
         loading="lazy"
       />
