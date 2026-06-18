@@ -224,6 +224,35 @@ export function generateName(breadId: BreadId, toppings: ToppingId[]): string {
 
 /* ---------------- Recipe generation (simple) ---------------- */
 
+const ADJECTIVES: Record<string, string[]> = {
+  a: ["amazing", "adorable", "artistic", "astonishing", "awesome", "all-star"],
+  b: ["beautiful", "brilliant", "bold", "breathtaking", "bedazzling"],
+  c: ["creative", "clever", "colorful", "cosmic", "captivating", "charming"],
+  d: ["dazzling", "delightful", "dreamy", "delicious", "daring", "divine"],
+  e: ["excellent", "epic", "elegant", "extraordinary", "enchanting"],
+  f: ["fantastic", "flawless", "fabulous", "fierce", "fearless"],
+  g: ["glorious", "gorgeous", "glowing", "gourmet", "giggly", "gutsy", "graceful"],
+  h: ["heavenly", "heroic", "hilarious", "happy", "honeyed"],
+  i: ["incredible", "inspired", "impeccable", "iconic", "irresistible"],
+  j: ["joyful", "jubilant", "jazzy", "jewel-like"],
+  k: ["kind", "kooky", "knockout", "kitchen-legend"],
+  l: ["lovely", "luminous", "legendary", "lively", "luscious"],
+  m: ["magical", "marvelous", "magnificent", "mysterious", "majestic", "masterful"],
+  n: ["noble", "nifty", "nurturing", "noteworthy"],
+  o: ["outstanding", "original", "opulent", "one-of-a-kind"],
+  p: ["perfect", "precious", "phenomenal", "playful", "peerless", "plucky"],
+  q: ["quirky", "queenly", "quintessential"],
+  r: ["radiant", "remarkable", "ravishing", "royal", "resplendent"],
+  s: ["spectacular", "splendid", "stellar", "scrumptious", "sunshine-y", "sweet", "sassy"],
+  t: ["tremendous", "terrific", "tasty", "toasty", "transcendent", "tenacious"],
+  u: ["unique", "unforgettable", "unstoppable", "unhinged", "unapologetic", "unparalleled"],
+  v: ["vibrant", "victorious", "velvety", "vivacious"],
+  w: ["wonderful", "whimsical", "wild", "warm", "winning", "world-class"],
+  x: ["xtraordinary", "xenial"],
+  y: ["yummy", "youthful", "yearning", "yippee-worthy"],
+  z: ["zesty", "zippy", "zen-like", "zealous"],
+};
+
 function indefiniteArticle(phrase: string): string {
   const firstWord = phrase.trim().toLowerCase().split(/\s+/)[0];
   if (/^(hour|honest|honor|heir)/.test(firstWord)) return "an";
@@ -259,8 +288,30 @@ function toppingStep(topping: Topping, repeatIndex: number): string {
   return `Add ${name}.`;
 }
 
-function closingStep(): string {
-  return "Enjoy!";
+function closingStep(breadId: BreadId, toppings: ToppingId[]): string {
+  const seed = breadId.length + toppings.join("").length;
+  const unhinged = isUnhinged(toppings);
+
+  const candidates = [
+    getBread(breadId).name,
+    ...toppings.map((id) => getTopping(id)?.name ?? ""),
+  ].filter(Boolean);
+
+  for (let i = 0; i < candidates.length; i++) {
+    const word = candidates[i].replace(/^(A|An)\s+/i, "").trim();
+    const letter = word.charAt(0).toLowerCase();
+    const list = ADJECTIVES[letter];
+    if (list) {
+      const adj = list[(seed + i * 13) % list.length];
+      return `Enjoy, you ${adj} ${unhinged ? "disasterpiece" : "masterpiece"}!`;
+    }
+  }
+
+  const fallback = unhinged
+    ? ["Enjoy, you unhinged legend!", "Enjoy, you beautiful chaos agent!", "Enjoy, you fearless flavor rebel!", "Enjoy, you absolute catastrophe!", "Enjoy, you sweet, sweet disaster!", "Enjoy, you mad genius!", "Enjoy, you beautiful monster!", "Enjoy, you delicious mistake!", "Enjoy, you brave, brave soul!", "Enjoy, you unstoppable force of nature!"]
+    : ["Enjoy, you glorious masterpiece!", "Enjoy, you radiant being!", "Enjoy, you perfect human!", "Enjoy, you beautiful soul!", "Enjoy, you spectacular creation!", "Enjoy, you wonderful wonder!", "Enjoy, you marvelous marvel!", "Enjoy, you heavenly delight!", "Enjoy, you magnificent treasure!", "Enjoy, you splendid superstar!"];
+
+  return fallback[seed % fallback.length];
 }
 
 export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[] {
@@ -278,10 +329,6 @@ export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[
     lines.push(`${n++}. ${toppingStep(t, prior)}`);
   });
 
-  if (toppings.length === 0) {
-    lines.push(`${n++}. ${closingStep()}`);
-  } else {
-    lines.push(`${n++}. ${closingStep()}`);
-  }
+  lines.push(`${n++}. ${closingStep(breadId, toppings)}`);
   return lines;
 }
