@@ -38,9 +38,9 @@ function AboutPage() {
         <div className="relative arcade-screen crt p-6 sm:p-10 min-h-[420px] flex flex-col">
           <header className="text-center mb-6">
             <p className="font-pixel text-[10px] text-[var(--toast-crust)]">ABOUT</p>
-            <h2 className="font-pixel text-[18px] sm:text-[24px] mt-3 text-[var(--ink)]">
-              ABOUT POSTTOAST
-            </h2>
+          <h2 className="font-pixel text-[18px] sm:text-[24px] mt-3 text-[var(--ink)]">
+            What's all this then?
+          </h2>
           </header>
 
           <div className="font-body text-base text-[var(--ink)] max-w-xl mx-auto opacity-80 leading-relaxed text-center">
