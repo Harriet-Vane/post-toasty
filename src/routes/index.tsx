@@ -57,7 +57,7 @@ function PostToast() {
       <div className="w-full max-w-[1080px] arcade-cabinet p-3 sm:p-6">
         {/* Cabinet marquee */}
         <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4 px-2">
-          <div className="flex items-center gap-2 sm:gap-3">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 cursor-pointer">
             <ToastSprite size={28} />
             <h1
               className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
@@ -65,7 +65,7 @@ function PostToast() {
             >
               PostToast
             </h1>
-          </div>
+          </Link>
           <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
             About
           </Link>
