@@ -603,7 +603,7 @@ function ShareScreen({
                   ★ SHARE THE TOAST ★
                 </p>
                 <h4 className="font-pixel text-[13px] mt-2 text-[var(--ink)]">
-                  POST YOUR {toastCount}-TOAST RUN
+                  SHARE YOUR TOAST
                 </h4>
               </div>
               <button
