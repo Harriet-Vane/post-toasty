@@ -181,6 +181,14 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
       <p className="font-body text-xs opacity-60 max-w-xs">
         In toast we trust
       </p>
+      <img
+        src={angelToast}
+        alt="Angel toast"
+        width={64}
+        height={64}
+        className="opacity-80"
+        loading="lazy"
+      />
 
       {modal && (
         <div
