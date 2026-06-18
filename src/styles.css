@@ -427,33 +427,6 @@
   opacity: 1;
 }
 
-/* ===== Variant: Rainbow Clouds ===== */
-@keyframes clouds-pan {
-  from { background-position: 0 30%, 40px 70%; }
-  to   { background-position: 400px 30%, 440px 70%; }
-}
-.dazzle-stage.variant-rainbow {
-  background:
-    linear-gradient(180deg,
-      #ff5fb4 0%, #ff5fb4 16%,
-      #ff7a3a 16%, #ff7a3a 33%,
-      #ffd23f 33%, #ffd23f 50%,
-      #56e07a 50%, #56e07a 66%,
-      #2db6ff 66%, #2db6ff 83%,
-      #a96bff 83%, #a96bff 100%);
-}
-.dazzle-stage.variant-rainbow .dazzle-rays { display: none; }
-.dazzle-stage.variant-rainbow .dazzle-stars {
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='40' viewBox='0 0 90 40'><ellipse cx='30' cy='24' rx='22' ry='10' fill='%23fff' stroke='%23222' stroke-width='1.5'/><ellipse cx='18' cy='20' rx='10' ry='8' fill='%23fff' stroke='%23222' stroke-width='1.5'/><ellipse cx='42' cy='18' rx='12' ry='9' fill='%23fff' stroke='%23222' stroke-width='1.5'/></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='70' height='34' viewBox='0 0 70 34'><ellipse cx='24' cy='20' rx='18' ry='8' fill='%23fff' stroke='%23222' stroke-width='1.5'/><ellipse cx='14' cy='16' rx='8' ry='6' fill='%23fff' stroke='%23222' stroke-width='1.5'/></svg>");
-  background-repeat: repeat-x, repeat-x;
-  background-size: 220px 80px, 180px 70px;
-  background-position: 0 30%, 40px 70%;
-  animation: clouds-pan 22s linear infinite;
-  opacity: 0.95;
-}
-
 /* ===== Variant: Glitter Checker ===== */
 @keyframes glitter-shimmer {
   0%, 100% { filter: hue-rotate(0deg) brightness(1); }
