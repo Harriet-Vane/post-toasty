@@ -192,7 +192,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
             </p>
             <div className="flex justify-center">
               <button onClick={onContinue} className="pixel-btn-primary">
-                <span className="align-middle">DO YOU WANT SOME TOAST?</span>
+                <span className="align-middle">LET'S TOAST</span>
               </button>
             </div>
           </div>
