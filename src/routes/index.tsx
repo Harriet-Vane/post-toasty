@@ -323,7 +323,7 @@ function BuilderScreen({
       <header className="text-center mb-2">
         <p className="font-pixel text-[10px] text-[var(--toast-crust)]">STEP 2 OF 2</p>
         <h2 className="font-pixel text-[14px] sm:text-[18px] mt-2 text-[var(--ink)]">
-          BUILD YOUR TOAST
+          TOP OFF YOUR TOAST
         </h2>
         <p className="font-body text-xs opacity-70 mt-1">
           Drag or tap to add. No limits. No shade.
