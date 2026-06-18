@@ -258,10 +258,12 @@ function BuilderScreen({
 
   function selectBread(id: BreadId) {
     setBreadId(id);
+    showToast(id);
   }
 
   function addTopping(id: ToppingId) {
     setToppings([...toppings, id]);
+    showToast(id);
   }
   function removeAt(i: number) {
     setToppings(toppings.filter((_, idx) => idx !== i));
@@ -287,7 +289,6 @@ function BuilderScreen({
                 <button
                   key={b.id}
                   onClick={() => selectBread(b.id)}
-                  onMouseEnter={() => showToast(b.id)}
                   className="flex flex-col items-center p-2 bg-[var(--card)]"
                   style={{
                     border: `3px solid ${selected ? "var(--turquoise)" : "var(--ink)"}`,
@@ -340,7 +341,6 @@ function BuilderScreen({
               title="SPREADS & BASES"
               items={spreads}
               onAdd={addTopping}
-              onShowToast={showToast}
             />
 
             {/* Stack list */}
@@ -418,7 +418,6 @@ function BuilderScreen({
             title="TOPPINGS & EXTRAS"
             items={extras}
             onAdd={addTopping}
-            onShowToast={showToast}
           />
         </div>
       </div>
@@ -430,12 +429,10 @@ function ToppingColumn({
   title,
   items,
   onAdd,
-  onShowToast,
 }: {
   title: string;
   items: typeof TOPPINGS;
   onAdd: (id: ToppingId) => void;
-  onShowToast?: (id: string) => void;
 }) {
   return (
     <div
@@ -456,7 +453,6 @@ function ToppingColumn({
               e.dataTransfer.effectAllowed = "copy";
             }}
             onClick={() => onAdd(t.id)}
-            onMouseEnter={() => onShowToast?.(t.id)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
