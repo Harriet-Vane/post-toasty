@@ -122,7 +122,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
 
   const modalCopy =
     modal === "yes"
-      ? "Excellent choice. Let's build it."
+      ? "Excellent choice. Let's do this."
       : modal === "not-yet"
         ? "I'll make it easy for you. You totally do!"
         : "";
