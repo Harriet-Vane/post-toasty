@@ -30,6 +30,8 @@ export type ToppingRender =
 
 export type ToppingId = string;
 
+export type Sound = "B" | "P" | "A" | "H" | "C" | "R" | "M" | "L" | "O" | "S" | "T" | "F" | "G" | "W";
+
 export interface Topping {
   id: ToppingId;
   name: string;
@@ -41,41 +43,104 @@ export interface Topping {
   accent?: string;
   /** Emoji shown as the ingredient's 8-bit-style avatar in the chip list. */
   emoji: string;
+  /** How this topping reads inside a compliment sentence. */
+  complimentName: string;
+  /** Alliteration sound tag for picking adjective + noun pools. */
+  sound: Sound;
 }
 
 export const TOPPINGS: Topping[] = [
   // Spreads & Bases
-  { id: "butter", name: "Butter", side: "spread", render: "spread", color: "#f6d97a", emoji: "🧈" },
-  { id: "plantbutter", name: "Plant Butter", side: "spread", render: "spread", color: "#f3e08a", emoji: "🌱" },
-  { id: "peanutbutter", name: "Peanut Butter", side: "spread", render: "spread", color: "#b87a3d", accent: "#8a5424", emoji: "🥜" },
-  { id: "almondbutter", name: "Almond Butter", side: "spread", render: "spread", color: "#c79a6b", accent: "#8e6a3e", emoji: "🌰" },
-  { id: "hummus", name: "Hummus", side: "spread", render: "spread", color: "#e3cf94", accent: "#a98a4a", emoji: "🧆" },
-  { id: "creamcheese", name: "Cream Cheese", side: "spread", render: "spread", color: "#fdf6e0", accent: "#d7c896", emoji: "🧀" },
-  { id: "jam", name: "Raspberry Jam", side: "spread", render: "spread", color: "#c33a4d", accent: "#7a1d2b", emoji: "🍓" },
-  { id: "clottedcream", name: "Clotted Cream", side: "spread", render: "spread", color: "#fdf6e0", emoji: "🍶" },
-  { id: "marmalade", name: "Marmalade", side: "spread", render: "spread", color: "#e38a2a", emoji: "🍊" },
-  { id: "lemoncurd", name: "Lemon Curd", side: "spread", render: "spread", color: "#f4e04a", emoji: "🍋" },
-  { id: "honey", name: "Honey", side: "spread", render: "drizzle", color: "#e3a82a", emoji: "🍯" },
-  { id: "oliveoil", name: "Olive Oil + Salt", side: "spread", render: "drizzle", color: "#c9c163", emoji: "🫒" },
-  { id: "fluff", name: "Marshmallow Fluff", side: "spread", render: "spread", color: "#fffdf2", accent: "#e6dfc0", emoji: "☁️" },
-  { id: "ketchup", name: "Ketchup", side: "spread", render: "drizzle", color: "#c5263b", emoji: "🍅" },
+  { id: "butter", name: "Butter", side: "spread", render: "spread", color: "#f6d97a", emoji: "🧈", complimentName: "butter", sound: "B" },
+  { id: "plantbutter", name: "Plant Butter", side: "spread", render: "spread", color: "#f3e08a", emoji: "🌱", complimentName: "plant butter", sound: "P" },
+  { id: "peanutbutter", name: "Peanut Butter", side: "spread", render: "spread", color: "#b87a3d", accent: "#8a5424", emoji: "🥜", complimentName: "peanut butter", sound: "P" },
+  { id: "almondbutter", name: "Almond Butter", side: "spread", render: "spread", color: "#c79a6b", accent: "#8e6a3e", emoji: "🌰", complimentName: "almond butter", sound: "A" },
+  { id: "hummus", name: "Hummus", side: "spread", render: "spread", color: "#e3cf94", accent: "#a98a4a", emoji: "🧆", complimentName: "hummus", sound: "H" },
+  { id: "creamcheese", name: "Cream Cheese", side: "spread", render: "spread", color: "#fdf6e0", accent: "#d7c896", emoji: "🧀", complimentName: "cream cheese", sound: "C" },
+  { id: "jam", name: "Raspberry Jam", side: "spread", render: "spread", color: "#c33a4d", accent: "#7a1d2b", emoji: "🍓", complimentName: "raspberry jam", sound: "R" },
+  { id: "clottedcream", name: "Clotted Cream", side: "spread", render: "spread", color: "#fdf6e0", emoji: "🍶", complimentName: "clotted cream", sound: "C" },
+  { id: "marmalade", name: "Marmalade", side: "spread", render: "spread", color: "#e38a2a", emoji: "🍊", complimentName: "marmalade", sound: "M" },
+  { id: "lemoncurd", name: "Lemon Curd", side: "spread", render: "spread", color: "#f4e04a", emoji: "🍋", complimentName: "lemon curd", sound: "L" },
+  { id: "honey", name: "Honey", side: "spread", render: "drizzle", color: "#e3a82a", emoji: "🍯", complimentName: "honey", sound: "H" },
+  { id: "oliveoil", name: "Olive Oil + Salt", side: "spread", render: "drizzle", color: "#c9c163", emoji: "🫒", complimentName: "olive oil", sound: "O" },
+  { id: "fluff", name: "Marshmallow Fluff", side: "spread", render: "spread", color: "#fffdf2", accent: "#e6dfc0", emoji: "☁️", complimentName: "marshmallow fluff", sound: "M" },
+  { id: "ketchup", name: "Ketchup", side: "spread", render: "drizzle", color: "#c5263b", emoji: "🍅", complimentName: "ketchup", sound: "C" },
 
   // Toppings & Extras
-  { id: "avocado", name: "Avocado", side: "extra", render: "spread", color: "#9bbf6a", accent: "#5e7c3a", emoji: "🥑" },
-  { id: "banana", name: "Banana", side: "extra", render: "banana", color: "#f6e8a8", accent: "#cdb46a", emoji: "🍌" },
-  { id: "tomato", name: "Tomato", side: "extra", render: "scatter", color: "#d63a2e", accent: "#7c1b15", emoji: "🍅" },
-  { id: "egg", name: "Fried Egg", side: "extra", render: "egg", color: "#fffaf0", accent: "#f1b800", emoji: "🍳" },
-  { id: "cinnamon", name: "Cinnamon Sugar", side: "extra", render: "scatter", color: "#a45e2b", accent: "#f3e3b9", emoji: "🍂" },
-  { id: "gummy", name: "Gummy Bears", side: "extra", render: "scatter", color: "#f04e8a", accent: "#34a85a", emoji: "🐻" },
-  { id: "pickle", name: "A Whole Pickle", side: "extra", render: "pickle", color: "#7ea53a", accent: "#3c5a18", emoji: "🥒" },
-  { id: "hotdog", name: "A Literal Hot Dog", side: "extra", render: "hotdog", color: "#d57a5a", accent: "#7a3819", emoji: "🌭" },
-  { id: "pumpkinseeds", name: "Pumpkin Seeds", side: "extra", render: "scatter", color: "#c4a35a", emoji: "🎃" },
-  { id: "pineapple", name: "Pineapple", side: "extra", render: "scatter", color: "#f6d04a", accent: "#d4a81a", emoji: "🍍" },
-  { id: "whip", name: "Whipped Cream", side: "extra", render: "spread", color: "#ffffff", accent: "#e6e6e6", emoji: "🍦" },
-  { id: "frosting", name: "Cake Frosting", side: "extra", render: "spread", color: "#ff9ed1", accent: "#c45a96", emoji: "🎂" },
-  { id: "ghost", name: "Hot Sauce", side: "extra", render: "drizzle", color: "#b8281a", emoji: "🌶️" },
-  { id: "sprinkles", name: "Rainbow Sprinkles", side: "extra", render: "scatter", color: "#ff5fb4", accent: "#2db6ff", emoji: "🌈" },
+  { id: "avocado", name: "Avocado", side: "extra", render: "spread", color: "#9bbf6a", accent: "#5e7c3a", emoji: "🥑", complimentName: "avocado", sound: "A" },
+  { id: "banana", name: "Banana", side: "extra", render: "banana", color: "#f6e8a8", accent: "#cdb46a", emoji: "🍌", complimentName: "banana", sound: "B" },
+  { id: "tomato", name: "Tomato", side: "extra", render: "scatter", color: "#d63a2e", accent: "#7c1b15", emoji: "🍅", complimentName: "tomato", sound: "T" },
+  { id: "egg", name: "Fried Egg", side: "extra", render: "egg", color: "#fffaf0", accent: "#f1b800", emoji: "🍳", complimentName: "fried egg", sound: "F" },
+  { id: "cinnamon", name: "Cinnamon Sugar", side: "extra", render: "scatter", color: "#a45e2b", accent: "#f3e3b9", emoji: "🍂", complimentName: "cinnamon sugar", sound: "S" },
+  { id: "gummy", name: "Gummy Bears", side: "extra", render: "scatter", color: "#f04e8a", accent: "#34a85a", emoji: "🐻", complimentName: "gummy bear", sound: "G" },
+  { id: "pickle", name: "A Whole Pickle", side: "extra", render: "pickle", color: "#7ea53a", accent: "#3c5a18", emoji: "🥒", complimentName: "pickle", sound: "P" },
+  { id: "hotdog", name: "A Literal Hot Dog", side: "extra", render: "hotdog", color: "#d57a5a", accent: "#7a3819", emoji: "🌭", complimentName: "hot dog", sound: "H" },
+  { id: "pumpkinseeds", name: "Pumpkin Seeds", side: "extra", render: "scatter", color: "#c4a35a", emoji: "🎃", complimentName: "pumpkin seed", sound: "P" },
+  { id: "pineapple", name: "Pineapple", side: "extra", render: "scatter", color: "#f6d04a", accent: "#d4a81a", emoji: "🍍", complimentName: "pineapple", sound: "P" },
+  { id: "whip", name: "Whipped Cream", side: "extra", render: "spread", color: "#ffffff", accent: "#e6e6e6", emoji: "🍦", complimentName: "whipped cream", sound: "W" },
+  { id: "frosting", name: "Cake Frosting", side: "extra", render: "spread", color: "#ff9ed1", accent: "#c45a96", emoji: "🎂", complimentName: "cake frosting", sound: "C" },
+  { id: "ghost", name: "Hot Sauce", side: "extra", render: "drizzle", color: "#b8281a", emoji: "🌶️", complimentName: "hot sauce", sound: "H" },
+  { id: "sprinkles", name: "Rainbow Sprinkles", side: "extra", render: "scatter", color: "#ff5fb4", accent: "#2db6ff", emoji: "🌈", complimentName: "rainbow sprinkles", sound: "R" },
 ];
+
+export const COMPLIMENT_POOLS: Record<Sound, { adjectives: string[]; nouns: string[] }> = {
+  B: {
+    adjectives: ["bodacious","brilliant","bold","beautiful","bountiful","breezy","brave"],
+    nouns:      ["baron","bard","beacon","boss","bigwig","beauty","bombshell"],
+  },
+  P: {
+    adjectives: ["peerless","phenomenal","perfect","posh","peppy","polished","plucky","proud"],
+    nouns:      ["paragon","pioneer","prince","princess","powerhouse","prodigy","pundit","professor","pal"],
+  },
+  A: {
+    adjectives: ["amazing","admirable","astounding","awesome","artful","ambitious"],
+    nouns:      ["ace","ally","aristocrat","ambassador","all-star","artist","aficionado"],
+  },
+  H: {
+    adjectives: ["hilarious","heavenly","heroic","hearty","handsome","happy"],
+    nouns:      ["hero","honcho","highness","hotshot","harbinger"],
+  },
+  C: {
+    adjectives: ["cultivated","classy","charming","captivating","clever","courageous","cool"],
+    nouns:      ["connoisseur","champion","captain","comrade","count","king","queen"],
+  },
+  R: {
+    adjectives: ["resplendent","radiant","ravishing","regal","remarkable","rad"],
+    nouns:      ["rockstar","royalty","ruler","rascal","renegade"],
+  },
+  M: {
+    adjectives: ["majestic","marvelous","magnificent","magical","mighty","merry"],
+    nouns:      ["maestro","monarch","marvel","mastermind","magnate","maven","maverick"],
+  },
+  L: {
+    adjectives: ["luscious","luminous","legendary","lovely","lively","leading"],
+    nouns:      ["legend","luminary","laureate","lord","lady","luchador"],
+  },
+  O: {
+    adjectives: ["oracular","outstanding","open-minded","original","optimistic","opulent"],
+    nouns:      ["oracle","optimist","orator","overlord","original"],
+  },
+  S: {
+    adjectives: ["sparkling","sophisticated","sensational","stellar","sunny","supreme","snazzy"],
+    nouns:      ["superstar","sage","sovereign","sweetheart","sensation","star"],
+  },
+  T: {
+    adjectives: ["terrific","tremendous","top-notch","tenacious","tasteful"],
+    nouns:      ["titan","trooper","trailblazer","treasure","tycoon","tastemaker"],
+  },
+  F: {
+    adjectives: ["fabulous","fantastic","fearless","fine","friendly","fierce"],
+    nouns:      ["fanatic","fellow","friend","force","firecracker"],
+  },
+  G: {
+    adjectives: ["glorious","gorgeous","grand","great","gallant","golden"],
+    nouns:      ["genius","guru","gem","guardian","giant","go-getter"],
+  },
+  W: {
+    adjectives: ["wonderful","whimsical","winsome","wise","witty","worthy"],
+    nouns:      ["wizard","wonder","winner","whiz","wunderkind"],
+  },
+};
 
 export function getTopping(id: ToppingId): Topping | undefined {
   return TOPPINGS.find((t) => t.id === id);
