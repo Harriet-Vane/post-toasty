@@ -325,31 +325,27 @@ function toppingStep(topping: Topping, repeatIndex: number): string {
   return `Add ${name}.`;
 }
 
-function closingStep(breadId: BreadId, toppings: ToppingId[]): string {
-  const seed = breadId.length + toppings.join("").length;
-  const unhinged = isUnhinged(toppings);
-
-  const candidates = [
-    getBread(breadId).name,
-    ...toppings.map((id) => getTopping(id)?.name ?? ""),
-  ].filter(Boolean);
-
-  for (let i = 0; i < candidates.length; i++) {
-    const word = candidates[i].replace(/^(A|An)\s+/i, "").trim();
-    const letter = word.charAt(0).toLowerCase();
-    const list = ADJECTIVES[letter];
-    if (list) {
-      const adj = list[(seed + i * 13) % list.length];
-      return `Enjoy, you ${adj} ${unhinged ? "disasterpiece" : "masterpiece"}!`;
-    }
+function closingStep(toppings: ToppingId[]): string {
+  if (toppings.length === 0) {
+    return "Add a topping first, you silly goose.";
   }
 
-  const fallback = unhinged
-    ? ["Enjoy, you unhinged legend!", "Enjoy, you beautiful chaos agent!", "Enjoy, you fearless flavor rebel!", "Enjoy, you absolute catastrophe!", "Enjoy, you sweet, sweet disaster!", "Enjoy, you mad genius!", "Enjoy, you beautiful monster!", "Enjoy, you delicious mistake!", "Enjoy, you brave, brave soul!", "Enjoy, you unstoppable force of nature!"]
-    : ["Enjoy, you glorious masterpiece!", "Enjoy, you radiant being!", "Enjoy, you perfect human!", "Enjoy, you beautiful soul!", "Enjoy, you spectacular creation!", "Enjoy, you wonderful wonder!", "Enjoy, you marvelous marvel!", "Enjoy, you heavenly delight!", "Enjoy, you magnificent treasure!", "Enjoy, you splendid superstar!"];
+  const valid = toppings
+    .map((id) => getTopping(id))
+    .filter((t): t is Topping => !!t);
 
-  return fallback[seed % fallback.length];
+  if (valid.length === 0) {
+    return "Add a topping first, you silly goose.";
+  }
+
+  const anchor = valid[Math.floor(Math.random() * valid.length)];
+  const pool = COMPLIMENT_POOLS[anchor.sound];
+  const adj = pool.adjectives[Math.floor(Math.random() * pool.adjectives.length)];
+  const noun = pool.nouns[Math.floor(Math.random() * pool.nouns.length)];
+
+  return `Enjoy, you ${adj} ${anchor.complimentName} ${noun}.`;
 }
+
 
 export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[] {
   const lines: string[] = [];
