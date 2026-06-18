@@ -486,7 +486,7 @@
 .dazzle-stage.variant-myspace .dazzle-rays { display: none; }
 .dazzle-stage.variant-myspace .dazzle-stars {
   background-image: url("/__l5e/assets-v1/f3de8ad0-667c-4f9d-b584-0ac7e534c4ee/myspace_hearts.jpg");
-  background-size: 120px 120px;
+  background-size: 200px 200px;
   background-repeat: repeat;
   animation: myspace-drift 8s linear infinite, bg-hue 6s linear infinite;
 }
