@@ -112,7 +112,7 @@ function RecipePage() {
             </header>
 
             <div
-              className="dazzle-stage flex items-center justify-center py-6 my-2"
+              className={`dazzle-stage ${variant} flex items-center justify-center py-6 my-2`}
               style={{ border: "3px solid var(--ink)", minHeight: 320 }}
             >
               <div className="dazzle-rays" aria-hidden />
