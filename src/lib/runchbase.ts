@@ -138,11 +138,85 @@ const NAME_TEMPLATES = [
 ];
 const TIMES = ["Late-Night", "Tuesday", "Pre-Dawn", "Mid-Morning", "Post-Run", "Afternoon"];
 
+const UNHINGED_TEMPLATES = [
+  "The Unhinged {hero} Catastrophe",
+  "A Rogue {hero} Disaster",
+  "The {hero} Mistake",
+  "An Unholy {hero} Creation",
+  "The {hero} Catastrophe",
+  "A {hero} Disasterpiece",
+  "The {hero} Incident",
+  "A Cursed {hero} Situation",
+  "The {hero} Abomination",
+  "A {hero} Nightmare",
+  "The {hero} Fiasco",
+  "A {hero} Travesty",
+];
+
+const SWEET_TOPPINGS = new Set([
+  "jam",
+  "clottedcream",
+  "marmalade",
+  "lemoncurd",
+  "honey",
+  "fluff",
+  "gummy",
+  "whip",
+  "frosting",
+  "sprinkles",
+  "banana",
+  "cinnamon",
+  "pineapple",
+]);
+
+const SAVORY_TOPPINGS = new Set([
+  "butter",
+  "plantbutter",
+  "peanutbutter",
+  "almondbutter",
+  "hummus",
+  "creamcheese",
+  "oliveoil",
+  "ketchup",
+  "avocado",
+  "tomato",
+  "egg",
+  "pickle",
+  "hotdog",
+  "pumpkinseeds",
+  "ghost",
+]);
+
+function isUnhinged(toppings: ToppingId[]): boolean {
+  if (toppings.length === 0) return false;
+
+  // Classic chaos ingredients
+  const chaosIds = new Set(["hotdog", "pickle", "ketchup"]);
+  if (toppings.some((id) => chaosIds.has(id))) return true;
+
+  // Savory + sweet collision
+  let hasSweet = false;
+  let hasSavory = false;
+  for (const id of toppings) {
+    if (SWEET_TOPPINGS.has(id)) hasSweet = true;
+    if (SAVORY_TOPPINGS.has(id)) hasSavory = true;
+    if (hasSweet && hasSavory) return true;
+  }
+
+  return false;
+}
+
 export function generateName(breadId: BreadId, toppings: ToppingId[]): string {
   const hero =
     (toppings.length > 0 && getTopping(toppings[toppings.length - 1])?.name) ||
     getBread(breadId).name;
   const seed = breadId.length + toppings.join("").length;
+
+  if (isUnhinged(toppings)) {
+    const tpl = UNHINGED_TEMPLATES[seed % UNHINGED_TEMPLATES.length];
+    return tpl.replace("{hero}", hero);
+  }
+
   const tpl = NAME_TEMPLATES[seed % NAME_TEMPLATES.length];
   const time = TIMES[(seed * 7) % TIMES.length];
   return tpl.replace("{hero}", hero).replace("{time}", time);
