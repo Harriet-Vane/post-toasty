@@ -498,6 +498,8 @@ function ShareScreen({
     const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-glitter", "variant-myspace", "variant-skulls"];
     return variants[Math.floor(Math.random() * variants.length)];
   }, []);
+  const plate = useMemo(() => `plate-${1 + Math.floor(Math.random() * 5)}`, []);
+
 
   const shareText = `${name} — a ${bread.name} toast. Built on PostToast.`;
   const shareUrl = useMemo(() => {
