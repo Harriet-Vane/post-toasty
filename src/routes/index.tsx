@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
+import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { ToastSprite } from "@/components/ToastSprite";
@@ -181,6 +182,14 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
       <p className="font-body text-xs opacity-60 max-w-xs">
         In toast we trust
       </p>
+      <img
+        src={angelToast}
+        alt="Angel toast"
+        width={64}
+        height={64}
+        className="opacity-80"
+        loading="lazy"
+      />
 
       {modal && (
         <div
