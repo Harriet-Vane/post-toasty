@@ -527,7 +527,7 @@ function ShareScreen({
               {name.toUpperCase()}
             </h3>
             <p className="font-body text-sm opacity-80 mt-1">
-              You ran today!&nbsp;This calls for a toast.
+              A toast worth celebrating.
             </p>
           </div>
         </header>
@@ -540,7 +540,7 @@ function ShareScreen({
           <div className="dazzle-rays" aria-hidden />
           <div className="dazzle-stars" aria-hidden />
           <span className="dazzle-corner" style={{ top: 8, left: 10 }} aria-hidden>
-            RUN
+            YUM
           </span>
           <span className="dazzle-corner" style={{ top: 8, right: 10 }} aria-hidden>
             TOAST
