@@ -143,7 +143,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
           Yes
         </button>
         <button onClick={() => setModal("not-yet")} className="pixel-btn">
-          I&apos;m not sure
+          CONVINCE ME
         </button>
       </div>
 
