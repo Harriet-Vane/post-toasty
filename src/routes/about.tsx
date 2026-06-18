@@ -11,7 +11,6 @@ export const Route = createFileRoute("/about")({
       { property: "og:description", content: "About PostToast — the toast-building arcade." },
       { property: "og:url", content: "https://post-toasty.lovable.app/about" },
     ],
-    links: [{ rel: "canonical", href: "https://post-toasty.lovable.app/about" }],
   }),
   component: AboutPage,
 });
