@@ -68,6 +68,14 @@ function RecipePage() {
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
 
+  const variant = useMemo(() => {
+    const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-rainbow", "variant-glitter"];
+    const key = `${breadId}|${toppings.join(",")}`;
+    let h = 0;
+    for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+    return variants[h % variants.length];
+  }, [breadId, toppings]);
+
   return (
     <main className="min-h-screen w-full flex items-center justify-center p-3 sm:p-6">
       <div className="w-full max-w-[720px] arcade-cabinet p-3 sm:p-6">
@@ -104,7 +112,7 @@ function RecipePage() {
             </header>
 
             <div
-              className="dazzle-stage flex items-center justify-center py-6 my-2"
+              className={`dazzle-stage ${variant} flex items-center justify-center py-6 my-2`}
               style={{ border: "3px solid var(--ink)", minHeight: 320 }}
             >
               <div className="dazzle-rays" aria-hidden />

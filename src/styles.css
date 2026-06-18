@@ -363,6 +363,141 @@
   text-shadow: 2px 2px 0 #ff5fb4, -1px -1px 0 #2db6ff;
 }
 
+/* ===== Variant: Twinkling Starfield ===== */
+.dazzle-stage.variant-starfield {
+  background:
+    radial-gradient(ellipse at 30% 20%, #1a0b3d 0%, #050018 60%, #000 100%);
+}
+.dazzle-stage.variant-starfield .dazzle-rays { display: none; }
+.dazzle-stage.variant-starfield .dazzle-stars {
+  background-image:
+    radial-gradient(2px 2px at 6% 12%, #fff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 14% 44%, #b9e3ff, transparent 60%),
+    radial-gradient(2.5px 2.5px at 22% 78%, #fff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 33% 28%, #fff, transparent 60%),
+    radial-gradient(2px 2px at 41% 60%, #fff3b0, transparent 60%),
+    radial-gradient(2.5px 2.5px at 52% 18%, #fff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 60% 88%, #fff, transparent 60%),
+    radial-gradient(2px 2px at 71% 38%, #b9e3ff, transparent 60%),
+    radial-gradient(2.5px 2.5px at 78% 70%, #fff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 86% 22%, #fff, transparent 60%),
+    radial-gradient(2px 2px at 93% 54%, #fff, transparent 60%),
+    radial-gradient(2.5px 2.5px at 47% 95%, #fff3b0, transparent 60%),
+    radial-gradient(1.5px 1.5px at 3% 80%, #fff, transparent 60%),
+    radial-gradient(2px 2px at 96% 90%, #fff, transparent 60%);
+  animation: disco-twinkle 1.2s ease-in-out infinite;
+}
+
+/* ===== Variant: Pink & Purple Hearts ===== */
+@keyframes hearts-drift {
+  from { background-position: 0 0, 40px 30px, 20px 60px; }
+  to   { background-position: 0 200px, 40px 230px, 20px 260px; }
+}
+.dazzle-stage.variant-hearts {
+  background: linear-gradient(135deg, #ffb3e6 0%, #d29bff 50%, #8e5cff 100%);
+}
+.dazzle-stage.variant-hearts .dazzle-rays { display: none; }
+.dazzle-stage.variant-hearts .dazzle-stars {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><path d='M20 32 L6 18 a7 7 0 0 1 10-10 l4 4 4-4 a7 7 0 0 1 10 10 z' fill='%23ff3ea5' stroke='%23fff' stroke-width='1.5'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 40 40'><path d='M20 32 L6 18 a7 7 0 0 1 10-10 l4 4 4-4 a7 7 0 0 1 10 10 z' fill='%23a64bff' stroke='%23fff' stroke-width='1.5'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 40 40'><path d='M20 32 L6 18 a7 7 0 0 1 10-10 l4 4 4-4 a7 7 0 0 1 10 10 z' fill='%23ffffff' stroke='%23ff3ea5' stroke-width='2'/></svg>");
+  background-repeat: repeat;
+  background-size: 90px 90px, 70px 70px, 50px 50px;
+  background-position: 0 0, 40px 30px, 20px 60px;
+  animation: hearts-drift 14s linear infinite;
+  opacity: 0.95;
+}
+
+/* ===== Variant: Flying Toasters (After Dark homage) ===== */
+@keyframes toasters-fly {
+  from { background-position: 0 0, 60px 40px, 30px 80px, 90px 20px; }
+  to   { background-position: -400px 200px, -340px 240px, -370px 280px, -310px 220px; }
+}
+.dazzle-stage.variant-toasters {
+  background: linear-gradient(180deg, #0a1a4a 0%, #1a3a7a 100%);
+}
+.dazzle-stage.variant-toasters .dazzle-rays { display: none; }
+.dazzle-stage.variant-toasters .dazzle-stars {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='40' viewBox='0 0 60 40'><g><rect x='14' y='14' width='28' height='18' rx='2' fill='%23c8c8d0' stroke='%23222' stroke-width='1.5'/><rect x='18' y='10' width='6' height='8' fill='%23d9a55a' stroke='%23222' stroke-width='1'/><rect x='26' y='10' width='6' height='8' fill='%23d9a55a' stroke='%23222' stroke-width='1'/><rect x='38' y='18' width='2' height='4' fill='%23222'/><path d='M2 22 q4 -4 8 0 q4 4 8 0' stroke='%23fff' stroke-width='1.5' fill='none'/><path d='M44 14 q4 -4 8 0 q4 4 8 0' stroke='%23fff' stroke-width='1.5' fill='none'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><rect x='4' y='6' width='20' height='16' rx='2' fill='%23d9a55a' stroke='%23222' stroke-width='1.5'/><rect x='6' y='8' width='16' height='12' fill='%23b87a3a'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><circle cx='4' cy='4' r='1.2' fill='%23fff'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><circle cx='4' cy='4' r='1' fill='%23ffd23f'/></svg>");
+  background-repeat: repeat;
+  background-size: 160px 120px, 120px 100px, 70px 70px, 110px 110px;
+  background-position: 0 0, 60px 40px, 30px 80px, 90px 20px;
+  animation: toasters-fly 18s linear infinite;
+  opacity: 1;
+}
+
+/* ===== Variant: Rainbow Clouds ===== */
+@keyframes clouds-pan {
+  from { background-position: 0 30%, 40px 70%; }
+  to   { background-position: 400px 30%, 440px 70%; }
+}
+.dazzle-stage.variant-rainbow {
+  background:
+    linear-gradient(180deg,
+      #ff5fb4 0%, #ff5fb4 16%,
+      #ff7a3a 16%, #ff7a3a 33%,
+      #ffd23f 33%, #ffd23f 50%,
+      #56e07a 50%, #56e07a 66%,
+      #2db6ff 66%, #2db6ff 83%,
+      #a96bff 83%, #a96bff 100%);
+}
+.dazzle-stage.variant-rainbow .dazzle-rays { display: none; }
+.dazzle-stage.variant-rainbow .dazzle-stars {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='40' viewBox='0 0 90 40'><ellipse cx='30' cy='24' rx='22' ry='10' fill='%23fff' stroke='%23222' stroke-width='1.5'/><ellipse cx='18' cy='20' rx='10' ry='8' fill='%23fff' stroke='%23222' stroke-width='1.5'/><ellipse cx='42' cy='18' rx='12' ry='9' fill='%23fff' stroke='%23222' stroke-width='1.5'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='70' height='34' viewBox='0 0 70 34'><ellipse cx='24' cy='20' rx='18' ry='8' fill='%23fff' stroke='%23222' stroke-width='1.5'/><ellipse cx='14' cy='16' rx='8' ry='6' fill='%23fff' stroke='%23222' stroke-width='1.5'/></svg>");
+  background-repeat: repeat-x, repeat-x;
+  background-size: 220px 80px, 180px 70px;
+  background-position: 0 30%, 40px 70%;
+  animation: clouds-pan 22s linear infinite;
+  opacity: 0.95;
+}
+
+/* ===== Variant: Glitter Checker ===== */
+@keyframes glitter-shimmer {
+  0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+  50%      { filter: hue-rotate(40deg) brightness(1.15); }
+}
+.dazzle-stage.variant-glitter {
+  background:
+    conic-gradient(from 45deg at 50% 50%,
+      #ff5fb4 0deg, #a96bff 90deg, #2db6ff 180deg, #ff5fb4 270deg, #a96bff 360deg);
+  animation: glitter-shimmer 4s ease-in-out infinite;
+}
+.dazzle-stage.variant-glitter .dazzle-rays {
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255,255,255,0.18) 0 10px,
+      transparent 10px 20px),
+    repeating-linear-gradient(-45deg,
+      rgba(255,255,255,0.12) 0 14px,
+      transparent 14px 28px);
+  animation: none;
+  filter: none;
+  mix-blend-mode: overlay;
+  opacity: 1;
+  inset: 0;
+}
+.dazzle-stage.variant-glitter .dazzle-stars {
+  background-image:
+    radial-gradient(3px 3px at 10% 20%, #fff, transparent 60%),
+    radial-gradient(2px 2px at 25% 65%, #fff3b0, transparent 60%),
+    radial-gradient(3px 3px at 40% 35%, #fff, transparent 60%),
+    radial-gradient(2.5px 2.5px at 55% 80%, #fff, transparent 60%),
+    radial-gradient(3px 3px at 70% 25%, #fff3b0, transparent 60%),
+    radial-gradient(2px 2px at 85% 60%, #fff, transparent 60%),
+    radial-gradient(3px 3px at 92% 15%, #fff, transparent 60%),
+    radial-gradient(2.5px 2.5px at 18% 90%, #fff, transparent 60%),
+    radial-gradient(2px 2px at 65% 50%, #fff3b0, transparent 60%);
+  animation: disco-twinkle 0.9s ease-in-out infinite;
+}
+
+
 /* Modal */
 .share-modal-backdrop {
   position: fixed; inset: 0; z-index: 50;
