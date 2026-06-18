@@ -121,9 +121,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
   const [modal, setModal] = useState<null | "yes" | "not-yet">(null);
 
   const fullText = "DO YOU WANT TOAST?";
-  const breakIndex = fullText.indexOf("TOAST");
-  const line1 = fullText.slice(0, breakIndex);
-  const line2 = fullText.slice(breakIndex);
+  const line1 = fullText;
 
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
@@ -137,12 +135,11 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         clearInterval(interval);
         setDone(true);
       }
-    }, 35);
+    }, 150);
     return () => clearInterval(interval);
   }, []);
 
-  const displayedLine1 = displayed.slice(0, line1.length);
-  const displayedLine2 = displayed.slice(line1.length);
+  const displayedLine1 = displayed;
 
   const modalCopy =
     modal === "yes"
@@ -157,14 +154,8 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-5">
           DELICIOUS TREATS DEPARTMENT
         </p>
-        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
+        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] whitespace-nowrap">
           {displayedLine1}
-          {displayed.length > line1.length && (
-            <>
-              <br />
-              {displayedLine2}
-            </>
-          )}
           {!done && (
             <span className="inline-block w-[0.5em] h-[1em] bg-[var(--ink)] ml-0.5 animate-pulse align-middle" />
           )}
