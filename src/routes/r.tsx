@@ -51,14 +51,16 @@ export const Route = createFileRoute("/r")({
 });
 
 function RecipePage() {
-  const { b: breadId, t } = Route.useSearch();
+  const search = Route.useSearch();
+  const breadId: BreadId = search.b;
+  const t: string = search.t;
 
   const toppings = useMemo<ToppingId[]>(
     () =>
       t
         .split(",")
-        .map((s) => s.trim())
-        .filter((s) => TOPPING_IDS.has(s)),
+        .map((s: string) => s.trim())
+        .filter((s: string) => TOPPING_IDS.has(s)),
     [t],
   );
 
