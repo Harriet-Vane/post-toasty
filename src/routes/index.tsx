@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
@@ -21,14 +21,14 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PostToast — Celebrate your runs with toast" },
+      { title: "PostToast — Build your perfect toast" },
       {
         name: "description",
         content:
-          "Enter your run time. Get a toast count. Build the toast. Toast is the unit of measurement for the run itself.",
+          "Pick a bread. Pile on toppings. Get a one-of-a-kind toast recipe to share.",
       },
       { property: "og:title", content: "PostToast" },
-      { property: "og:description", content: "Toast, the champion of post-run treats." },
+      { property: "og:description", content: "Toast, the champion of treats." },
     ],
   }),
   component: PostToast,
@@ -65,9 +65,9 @@ function PostToast() {
               PostToast
             </h1>
           </div>
-          <div className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block">
-            run · toast · repeat
-          </div>
+          <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
+            About
+          </Link>
           {phase !== "input" && (
             <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
               Start over
@@ -122,9 +122,9 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
 
   const modalCopy =
     modal === "yes"
-      ? "You rock! Let's eat some toast."
+      ? "Excellent choice. Let's build it."
       : modal === "not-yet"
-        ? "Awesome! Rest is an important part of recovery. But then, so is toast."
+        ? "That's okay. Toast has a way of changing minds."
         : "";
 
   return (
@@ -143,12 +143,12 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
           Yes
         </button>
         <button onClick={() => setModal("not-yet")} className="pixel-btn">
-          Not yet
+          I&apos;m not sure
         </button>
       </div>
 
       <p className="font-body text-xs opacity-60 max-w-xs">
-        May all your runs end with toast
+        May all your days end with toast
       </p>
 
       {modal && (
@@ -453,7 +453,7 @@ function ShareScreen({
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
 
-  const shareText = `${name} — a ${bread.name} toast for my ${toastCount}-toast run. Built on PostToast.`;
+  const shareText = `${name} — a ${bread.name} toast. Built on PostToast.`;
   const shareUrl = useMemo(() => {
     const origin = typeof window !== "undefined" ? window.location.origin : "https://posttoast.app";
     const params = new URLSearchParams({ b: breadId, t: toppings.join(",") });
@@ -469,7 +469,7 @@ function ShareScreen({
     }
   }
   function emailIt() {
-    const subj = encodeURIComponent(`${name} — a ${toastCount}-toast run`);
+    const subj = encodeURIComponent(`${name} — a toast`);
     const body = encodeURIComponent(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`);
     window.location.href = `mailto:?subject=${subj}&body=${body}`;
   }
@@ -527,7 +527,7 @@ function ShareScreen({
               {name.toUpperCase()}
             </h3>
             <p className="font-body text-sm opacity-80 mt-1">
-              You ran today!&nbsp;This calls for a toast.
+              A toast worth celebrating.
             </p>
           </div>
         </header>
@@ -540,7 +540,7 @@ function ShareScreen({
           <div className="dazzle-rays" aria-hidden />
           <div className="dazzle-stars" aria-hidden />
           <span className="dazzle-corner" style={{ top: 8, left: 10 }} aria-hidden>
-            RUN
+            YUM
           </span>
           <span className="dazzle-corner" style={{ top: 8, right: 10 }} aria-hidden>
             TOAST
@@ -603,7 +603,7 @@ function ShareScreen({
                   ★ SHARE THE TOAST ★
                 </p>
                 <h4 className="font-pixel text-[13px] mt-2 text-[var(--ink)]">
-                  POST YOUR {toastCount}-TOAST RUN
+                  SHARE YOUR TOAST
                 </h4>
               </div>
               <button

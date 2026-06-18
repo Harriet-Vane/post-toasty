@@ -79,7 +79,7 @@ function RecipePage() {
             PostToast
           </h1>
           <span className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm">
-            a toast for your run
+            a toast worth sharing
           </span>
         </div>
 
@@ -99,7 +99,7 @@ function RecipePage() {
                 {name.toUpperCase()}
               </h2>
               <p className="font-body text-sm opacity-80 mt-1">
-                A {bread.name} toast. Someone ran today.
+                A {bread.name} toast, built just so.
               </p>
             </header>
 
@@ -110,7 +110,7 @@ function RecipePage() {
               <div className="dazzle-rays" aria-hidden />
               <div className="dazzle-stars" aria-hidden />
               <span className="dazzle-corner" style={{ top: 8, left: 10 }} aria-hidden>
-                RUN
+                YUM
               </span>
               <span className="dazzle-corner" style={{ top: 8, right: 10 }} aria-hidden>
                 TOAST
