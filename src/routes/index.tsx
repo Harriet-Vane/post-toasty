@@ -120,6 +120,30 @@ function PostToast() {
 function InputScreen({ onContinue }: { onContinue: () => void }) {
   const [modal, setModal] = useState<null | "yes" | "not-yet">(null);
 
+  const fullText = "WOULD YOU LIKE TO EAT SOME TOAST?";
+  const breakIndex = fullText.indexOf("TO EAT");
+  const line1 = fullText.slice(0, breakIndex);
+  const line2 = fullText.slice(breakIndex);
+
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayed(fullText.slice(0, i));
+      if (i >= fullText.length) {
+        clearInterval(interval);
+        setDone(true);
+      }
+    }, 35);
+    return () => clearInterval(interval);
+  }, []);
+
+  const displayedLine1 = displayed.slice(0, line1.length);
+  const displayedLine2 = displayed.slice(line1.length);
+
   const modalCopy =
     modal === "yes"
       ? "Heck yeah you do!"
@@ -133,8 +157,17 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-5">
           DELICIOUS TREATS DEPARTMENT
         </p>
-        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] whitespace-nowrap">
-          WOULD YOU LIKE TO EAT SOME TOAST?
+        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
+          {displayedLine1}
+          {displayed.length > line1.length && (
+            <>
+              <br />
+              {displayedLine2}
+            </>
+          )}
+          {!done && (
+            <span className="inline-block w-[0.5em] h-[1em] bg-[var(--ink)] ml-0.5 animate-pulse align-middle" />
+          )}
         </h2>
       </div>
 
