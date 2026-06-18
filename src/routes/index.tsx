@@ -65,9 +65,9 @@ function PostToast() {
               PostToast
             </h1>
           </div>
-          <div className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block">
-            run · toast · repeat
-          </div>
+          <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
+            About
+          </Link>
           {phase !== "input" && (
             <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
               Start over
