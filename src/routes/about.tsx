@@ -51,7 +51,7 @@ function AboutPage() {
 
           <div className="flex justify-center mt-8">
             <Link to="/" className="pixel-btn-primary">
-              BRING TOASTY BACK
+              LET'S BRING TOASTY BACK
             </Link>
           </div>
         </div>
