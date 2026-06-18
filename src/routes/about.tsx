@@ -49,7 +49,7 @@ function AboutPage() {
 
           <div className="flex justify-center mt-8">
             <Link to="/" className="pixel-btn-primary">
-              BACK TO TOASTING
+              BRING TOASTY BACK
             </Link>
           </div>
         </div>
