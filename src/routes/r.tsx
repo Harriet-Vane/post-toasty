@@ -79,7 +79,7 @@ function RecipePage() {
             PostToast
           </h1>
           <span className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm">
-            a toast worth sharing
+            toast is for sharing
           </span>
         </div>
 
