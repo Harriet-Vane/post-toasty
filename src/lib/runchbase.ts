@@ -362,6 +362,6 @@ export function generateRecipe(breadId: BreadId, toppings: ToppingId[]): string[
     lines.push(`${n++}. ${toppingStep(t, prior)}`);
   });
 
-  lines.push(`${n++}. ${closingStep(breadId, toppings)}`);
+  lines.push(`${n++}. ${closingStep(toppings)}`);
   return lines;
 }
