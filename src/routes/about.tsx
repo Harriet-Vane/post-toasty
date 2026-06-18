@@ -3,15 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ToastSprite } from "@/components/ToastSprite";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — PostToast" },
-      { name: "description", content: "About PostToast — the toast-building arcade." },
-      { property: "og:title", content: "About — PostToast" },
-      { property: "og:description", content: "About PostToast — the toast-building arcade." },
-      { property: "og:url", content: "https://post-toasty.lovable.app/about" },
-    ],
-  }),
   component: AboutPage,
 });
 
