@@ -371,20 +371,20 @@
 .dazzle-stage.variant-starfield .dazzle-rays { display: none; }
 .dazzle-stage.variant-starfield .dazzle-stars {
   background-image:
-    radial-gradient(2px 2px at 6% 12%, #fff, transparent 60%),
-    radial-gradient(1.5px 1.5px at 14% 44%, #b9e3ff, transparent 60%),
-    radial-gradient(2.5px 2.5px at 22% 78%, #fff, transparent 60%),
-    radial-gradient(1.5px 1.5px at 33% 28%, #fff, transparent 60%),
-    radial-gradient(2px 2px at 41% 60%, #fff3b0, transparent 60%),
-    radial-gradient(2.5px 2.5px at 52% 18%, #fff, transparent 60%),
-    radial-gradient(1.5px 1.5px at 60% 88%, #fff, transparent 60%),
-    radial-gradient(2px 2px at 71% 38%, #b9e3ff, transparent 60%),
-    radial-gradient(2.5px 2.5px at 78% 70%, #fff, transparent 60%),
-    radial-gradient(1.5px 1.5px at 86% 22%, #fff, transparent 60%),
-    radial-gradient(2px 2px at 93% 54%, #fff, transparent 60%),
-    radial-gradient(2.5px 2.5px at 47% 95%, #fff3b0, transparent 60%),
-    radial-gradient(1.5px 1.5px at 3% 80%, #fff, transparent 60%),
-    radial-gradient(2px 2px at 96% 90%, #fff, transparent 60%);
+    radial-gradient(4px 4px at 6% 12%, #fff, transparent 60%),
+    radial-gradient(3px 3px at 14% 44%, #b9e3ff, transparent 60%),
+    radial-gradient(5px 5px at 22% 78%, #fff, transparent 60%),
+    radial-gradient(3px 3px at 33% 28%, #fff, transparent 60%),
+    radial-gradient(4px 4px at 41% 60%, #fff3b0, transparent 60%),
+    radial-gradient(5px 5px at 52% 18%, #fff, transparent 60%),
+    radial-gradient(3px 3px at 60% 88%, #fff, transparent 60%),
+    radial-gradient(4px 4px at 71% 38%, #b9e3ff, transparent 60%),
+    radial-gradient(5px 5px at 78% 70%, #fff, transparent 60%),
+    radial-gradient(3px 3px at 86% 22%, #fff, transparent 60%),
+    radial-gradient(4px 4px at 93% 54%, #fff, transparent 60%),
+    radial-gradient(5px 5px at 47% 95%, #fff3b0, transparent 60%),
+    radial-gradient(3px 3px at 3% 80%, #fff, transparent 60%),
+    radial-gradient(4px 4px at 96% 90%, #fff, transparent 60%);
   animation: disco-twinkle 1.2s ease-in-out infinite;
 }
 
