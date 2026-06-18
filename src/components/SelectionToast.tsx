@@ -1,7 +1,7 @@
 export const SELECTION_MESSAGES: Record<string, string> = {
   // Breads
   white: "You rebel!",
-  sourdough: "I know how you spent your pandemic.",
+  sourdough: "Let's get this started...",
   wholewheat: "So healthy! So brown!",
   rye: "This is the kind with extra seeds. Be warned.",
   englishmuffin: "Nooks and crannies FTW!",
