@@ -10,18 +10,13 @@ const SCONE_PATH =
   "M100 35 C70 35 52 70 45 130 Q100 168 155 130 C148 70 130 35 100 35 Z";
 
 const BAGEL_RING_PATH =
-  // outer circle + inner hole using even-odd
   "M100 25 A75 75 0 1 0 100 175 A75 75 0 1 0 100 25 Z " +
   "M100 75 A25 25 0 1 1 100 125 A25 25 0 1 1 100 75 Z";
 
 function breadShape(breadId: BreadId, fill: string, accent: string) {
   switch (breadId) {
     case "englishmuffin":
-      return (
-        <>
-          <circle cx="100" cy="100" r="75" fill={fill} stroke={accent} strokeWidth="4" />
-        </>
-      );
+      return <circle cx="100" cy="100" r="75" fill={fill} stroke={accent} strokeWidth="4" />;
     case "bagel":
       return (
         <>
@@ -32,7 +27,6 @@ function breadShape(breadId: BreadId, fill: string, accent: string) {
             strokeWidth="4"
             fillRule="evenodd"
           />
-          {/* inner hole edge */}
           <circle
             cx="100"
             cy="100"
@@ -44,13 +38,9 @@ function breadShape(breadId: BreadId, fill: string, accent: string) {
         </>
       );
     case "scone":
-      return (
-        <path d={SCONE_PATH} fill={fill} stroke={accent} strokeWidth="4" />
-      );
+      return <path d={SCONE_PATH} fill={fill} stroke={accent} strokeWidth="4" />;
     default:
-      return (
-        <path d={BREAD_PATH_STANDARD} fill={fill} stroke={accent} strokeWidth="4" />
-      );
+      return <path d={BREAD_PATH_STANDARD} fill={fill} stroke={accent} strokeWidth="4" />;
   }
 }
 
@@ -59,12 +49,48 @@ function breadClipPath(breadId: BreadId) {
     case "englishmuffin":
       return <circle cx="100" cy="100" r="72" />;
     case "bagel":
-      // annulus via evenodd
       return <path d={BAGEL_RING_PATH} fillRule="evenodd" />;
     case "scone":
       return <path d={SCONE_PATH} />;
     default:
       return <path d={BREAD_PATH_STANDARD} />;
+  }
+}
+
+/** Approximate front-edge drip anchor points (x, y) in local 200x200 coords. */
+function frontEdgeAnchors(breadId: BreadId): { x: number; y: number }[] {
+  switch (breadId) {
+    case "englishmuffin":
+      // bottom arc of circle r=75 at cy=100
+      return [
+        { x: 55, y: 168 },
+        { x: 80, y: 174 },
+        { x: 105, y: 174 },
+        { x: 130, y: 170 },
+        { x: 150, y: 160 },
+      ];
+    case "bagel":
+      return [
+        { x: 50, y: 165 },
+        { x: 85, y: 174 },
+        { x: 120, y: 174 },
+        { x: 155, y: 165 },
+      ];
+    case "scone":
+      return [
+        { x: 55, y: 145 },
+        { x: 85, y: 158 },
+        { x: 115, y: 158 },
+        { x: 145, y: 145 },
+      ];
+    default:
+      return [
+        { x: 50, y: 175 },
+        { x: 78, y: 175 },
+        { x: 105, y: 175 },
+        { x: 132, y: 175 },
+        { x: 158, y: 175 },
+      ];
   }
 }
 
@@ -121,10 +147,7 @@ function breadTexture(breadId: BreadId) {
     case "mystery":
       return (
         <g>
-          {/* icicles hanging from top */}
-          {[
-            { x: 50 }, { x: 80 }, { x: 110 }, { x: 140 },
-          ].map((c, i) => (
+          {[{ x: 50 }, { x: 80 }, { x: 110 }, { x: 140 }].map((c, i) => (
             <polygon
               key={i}
               points={`${c.x - 4},25 ${c.x + 4},25 ${c.x},${36 + (i % 2) * 5}`}
@@ -182,10 +205,9 @@ function rand(seed: number, salt: number) {
   return x - Math.floor(x);
 }
 
-function scatterPositions(count: number, key: string, area = { x: 35, y: 35, w: 130, h: 130 }) {
+function scatterPositions(count: number, key: string, area = { x: 25, y: 30, w: 150, h: 145 }) {
   const seed = hash(key);
   const pts: { x: number; y: number; r: number }[] = [];
-  // poisson-ish jittered grid
   const cols = Math.ceil(Math.sqrt(count * (area.w / area.h)));
   const rows = Math.ceil(count / cols);
   const cellW = area.w / cols;
@@ -193,8 +215,8 @@ function scatterPositions(count: number, key: string, area = { x: 35, y: 35, w: 
   let i = 0;
   for (let r = 0; r < rows && i < count; r++) {
     for (let c = 0; c < cols && i < count; c++) {
-      const jx = (rand(seed, i * 2) - 0.5) * cellW * 0.7;
-      const jy = (rand(seed, i * 2 + 1) - 0.5) * cellH * 0.7;
+      const jx = (rand(seed, i * 2) - 0.5) * cellW * 0.85;
+      const jy = (rand(seed, i * 2 + 1) - 0.5) * cellH * 0.85;
       pts.push({
         x: area.x + cellW * (c + 0.5) + jx,
         y: area.y + cellH * (r + 0.5) + jy,
@@ -207,6 +229,11 @@ function scatterPositions(count: number, key: string, area = { x: 35, y: 35, w: 
 }
 
 /* ---------------- Topping renderers ---------------- */
+
+/** Does this topping render large enough to extend past the bread edges? */
+function isOverflowTopping(id: ToppingId): boolean {
+  return id === "pineapple";
+}
 
 function ToppingLayer({
   topping,
@@ -222,7 +249,6 @@ function ToppingLayer({
 
   switch (topping.render) {
     case "spread": {
-      // full coverage with gradient + knife swirl marks
       const gradId = `g-${key}`;
       return (
         <g>
@@ -233,7 +259,6 @@ function ToppingLayer({
             </radialGradient>
           </defs>
           <rect x="0" y="0" width="200" height="200" fill={`url(#${gradId})`} opacity="0.92" />
-          {/* knife swirl marks */}
           <g
             fill="none"
             stroke={topping.accent ?? topping.color}
@@ -257,7 +282,6 @@ function ToppingLayer({
       );
     }
     case "drizzle": {
-      // spiral squeeze pattern (like a squirt of honey/ketchup spinning down)
       const seed = hash(seedKey);
       const cx = 100 + (rand(seed, 1) - 0.5) * 18;
       const cy = 100 + (rand(seed, 2) - 0.5) * 18;
@@ -301,54 +325,58 @@ function ToppingLayer({
     }
     case "scatter": {
       const count =
-        topping.id === "sprinkles" ? 55 : topping.id === "cinnamon" ? 60 : topping.id === "tomato" ? 7 : 14;
+        topping.id === "sprinkles" ? 70 : topping.id === "cinnamon" ? 80 : topping.id === "tomato" ? 9 : 18;
       if (topping.id === "pineapple") {
-        const ringPath =
-          "M100 22 A78 78 0 1 0 100 178 A78 78 0 1 0 100 22 Z " +
-          "M100 76 A24 24 0 1 1 100 124 A24 24 0 1 1 100 76 Z";
-        const segments = [];
-        for (let i = 0; i < 16; i++) {
-          const angle = (i / 16) * Math.PI * 2;
-          const x1 = 100 + Math.cos(angle) * 28;
-          const y1 = 100 + Math.sin(angle) * 28;
-          const x2 = 100 + Math.cos(angle) * 74;
-          const y2 = 100 + Math.sin(angle) * 74;
-          segments.push(
-            <line
-              key={i}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={topping.accent}
-              strokeWidth="2"
-              opacity="0.6"
-            />
-          );
-        }
-        const eyes = [];
-        for (let i = 0; i < 12; i++) {
-          const angle = (i / 12) * Math.PI * 2 + 0.3;
-          const r = 42 + (i % 3) * 12;
-          const x = 100 + Math.cos(angle) * r;
-          const y = 100 + Math.sin(angle) * r;
-          eyes.push(<circle key={i} cx={x} cy={y} r="3" fill={topping.accent} opacity="0.5" />);
-        }
+        // Rings extend past the bread edges (rendered outside the bread clip).
+        const seed = hash(seedKey);
+        const rings = [
+          { cx: 60, cy: 60, r: 38 },
+          { cx: 145, cy: 70, r: 36 },
+          { cx: 70, cy: 145, r: 34 },
+          { cx: 150, cy: 150, r: 38 },
+          { cx: 105, cy: 105, r: 32 },
+        ];
         return (
           <g>
-            <path
-              d={ringPath}
-              fill={topping.color}
-              stroke={topping.accent}
-              strokeWidth="3"
-              fillRule="evenodd"
-            />
-            {segments}
-            {eyes}
+            {rings.map((ring, idx) => {
+              const inner = ring.r * 0.32;
+              const ringPath =
+                `M${ring.cx} ${ring.cy - ring.r} A${ring.r} ${ring.r} 0 1 0 ${ring.cx} ${ring.cy + ring.r} A${ring.r} ${ring.r} 0 1 0 ${ring.cx} ${ring.cy - ring.r} Z ` +
+                `M${ring.cx} ${ring.cy - inner} A${inner} ${inner} 0 1 1 ${ring.cx} ${ring.cy + inner} A${inner} ${inner} 0 1 1 ${ring.cx} ${ring.cy - inner} Z`;
+              const segCount = 10;
+              const lines = [];
+              for (let i = 0; i < segCount; i++) {
+                const a = (i / segCount) * Math.PI * 2 + rand(seed, idx) * 0.5;
+                lines.push(
+                  <line
+                    key={i}
+                    x1={ring.cx + Math.cos(a) * inner}
+                    y1={ring.cy + Math.sin(a) * inner}
+                    x2={ring.cx + Math.cos(a) * ring.r}
+                    y2={ring.cy + Math.sin(a) * ring.r}
+                    stroke={topping.accent}
+                    strokeWidth="1.6"
+                    opacity="0.55"
+                  />
+                );
+              }
+              return (
+                <g key={idx}>
+                  <path
+                    d={ringPath}
+                    fill={topping.color}
+                    stroke={topping.accent}
+                    strokeWidth="2.5"
+                    fillRule="evenodd"
+                  />
+                  {lines}
+                </g>
+              );
+            })}
           </g>
         );
       }
-      const pts = scatterPositions(count, seedKey);
+      const pts = scatterPositions(count, seedKey, { x: 20, y: 25, w: 160, h: 150 });
       return (
         <g>
           {pts.map((p, i) => {
@@ -426,7 +454,7 @@ function ToppingLayer({
       );
     }
     case "banana": {
-      const pts = scatterPositions(7, seedKey);
+      const pts = scatterPositions(7, seedKey, { x: 25, y: 30, w: 150, h: 145 });
       return (
         <g>
           {pts.map((p, i) => (
@@ -443,7 +471,6 @@ function ToppingLayer({
       );
     }
     case "egg": {
-      // full white layer with yolk
       return (
         <g>
           <path
@@ -469,7 +496,6 @@ function ToppingLayer({
       return (
         <g transform="translate(100 100) rotate(-25) translate(-100 -100)">
           <ellipse cx="100" cy="100" rx="55" ry="16" fill={topping.color} stroke={topping.accent} strokeWidth="2.2" />
-          {/* bumps */}
           {[-40, -20, 0, 20, 40].map((dx, i) => (
             <ellipse key={i} cx={100 + dx} cy="92" rx="6" ry="3" fill={topping.accent} opacity="0.45" />
           ))}
@@ -481,6 +507,67 @@ function ToppingLayer({
       );
     }
   }
+}
+
+/* ---------------- Drip renderer for spreads ---------------- */
+
+function SpreadDrips({
+  topping,
+  breadId,
+  spreadIndex,
+}: {
+  topping: Topping;
+  breadId: BreadId;
+  spreadIndex: number;
+}) {
+  const anchors = frontEdgeAnchors(breadId);
+  const seed = hash(`${topping.id}-drip-${breadId}-${spreadIndex}`);
+  // Pick 2-3 anchors per spread so multiple spreads end up dripping in different spots.
+  const dripCount = 2 + (spreadIndex % 2);
+  const startIdx = Math.floor(rand(seed, 1) * anchors.length);
+  return (
+    <g>
+      {Array.from({ length: dripCount }).map((_, i) => {
+        const a = anchors[(startIdx + i * 2) % anchors.length];
+        const dripLen = 14 + rand(seed, i * 3 + 1) * 18;
+        const width = 7 + rand(seed, i * 3 + 2) * 6;
+        const xOff = (rand(seed, i * 3 + 3) - 0.5) * 8;
+        const x = a.x + xOff;
+        const y = a.y - 2;
+        return (
+          <g key={i}>
+            {/* drip stem */}
+            <path
+              d={`M${x - width / 2} ${y} Q${x - width / 2} ${y + dripLen * 0.6} ${x} ${y + dripLen} Q${x + width / 2} ${y + dripLen * 0.6} ${x + width / 2} ${y} Z`}
+              fill={topping.color}
+              stroke={topping.accent ?? topping.color}
+              strokeOpacity="0.4"
+              strokeWidth="0.8"
+            />
+            {/* drop bead */}
+            <circle
+              cx={x}
+              cy={y + dripLen}
+              r={width * 0.55}
+              fill={topping.color}
+              stroke={topping.accent ?? topping.color}
+              strokeOpacity="0.4"
+              strokeWidth="0.8"
+            />
+            {/* tiny highlight */}
+            <ellipse
+              cx={x - width * 0.18}
+              cy={y + dripLen - width * 0.3}
+              rx={width * 0.18}
+              ry={width * 0.35}
+              fill="#ffffff"
+              opacity="0.3"
+            />
+          </g>
+        );
+      })}
+    </g>
+  );
 }
 
 /* ---------------- Main component ---------------- */
@@ -496,46 +583,105 @@ export function BreadCanvas({
 }) {
   const { fill, accent } = breadFillColor(breadId);
   const clipId = `bread-clip-${breadId}`;
+
+  // Per-spread offset so consecutive spread layers visually stack.
+  const SPREAD_OFFSET = 8;
+
+  // Resolve toppings with metadata so we can split overflow vs clipped.
+  const resolved = toppings
+    .map((tid, i) => ({ tid, t: getTopping(tid), i }))
+    .filter((x): x is { tid: ToppingId; t: Topping; i: number } => !!x.t);
+
+  // Pre-compute spread-layer index (only for spread/drizzle types) so the offset
+  // counts only spread/drizzle layers — extras don't bump the stack.
+  let spreadCounter = 0;
+  const spreadIndexFor: Record<number, number> = {};
+  resolved.forEach(({ t, i }) => {
+    if (t.render === "spread" || t.render === "drizzle") {
+      spreadIndexFor[i] = spreadCounter++;
+    }
+  });
+
+  // Isometric tilt transform applied to the entire toast: small skew + vertical compression.
+  // origin around (100,110) for a balanced look.
+  const isoTransform =
+    "matrix(1 0 -0.18 0.78 18 12)";
+
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 200 200"
+      viewBox="-15 -10 230 230"
       role="img"
       aria-label={`Toast on ${breadId}`}
-      style={{ display: "block" }}
+      style={{ display: "block", overflow: "visible" }}
     >
       <defs>
         <clipPath id={clipId}>{breadClipPath(breadId)}</clipPath>
       </defs>
 
-      {/* Bread base */}
-      {breadShape(breadId, fill, accent)}
+      <g transform={isoTransform}>
+        {/* Bread "side" / thickness: same shape offset down + slightly right, darker. */}
+        <g transform="translate(3 14)" opacity="0.95">
+          {breadShape(breadId, "oklch(0.45 0.07 50)", "oklch(0.3 0.05 40)")}
+        </g>
 
-      {/* All bread-surface content clipped to the bread shape */}
-      <g clipPath={`url(#${clipId})`}>
-        {/* Bread texture beneath toppings */}
-        {breadTexture(breadId)}
+        {/* Bread top face */}
+        {breadShape(breadId, fill, accent)}
 
-        {/* Toppings layered in add order */}
-        {toppings.map((tid, i) => {
-          const t = getTopping(tid);
-          if (!t) return null;
-          return <ToppingLayer key={`${tid}-${i}`} topping={t} index={i} breadId={breadId} />;
+        {/* Clipped surface: texture + spreads + non-overflow toppings */}
+        <g clipPath={`url(#${clipId})`}>
+          {breadTexture(breadId)}
+
+          {resolved.map(({ tid, t, i }) => {
+            if (isOverflowTopping(tid)) return null;
+            const sIdx = spreadIndexFor[i];
+            const offset =
+              sIdx !== undefined
+                ? `translate(${-sIdx * SPREAD_OFFSET * 0.6} ${-sIdx * SPREAD_OFFSET})`
+                : undefined;
+            return (
+              <g key={`${tid}-${i}`} transform={offset}>
+                <ToppingLayer topping={t} index={i} breadId={breadId} />
+              </g>
+            );
+          })}
+        </g>
+
+        {/* Spread drips: rendered OUTSIDE the top-surface clip so they hang
+            down over the bread's side face. Each spread gets its own drips. */}
+        {resolved.map(({ tid, t, i }) => {
+          if (t.render !== "spread" && t.render !== "drizzle") return null;
+          const sIdx = spreadIndexFor[i] ?? 0;
+          return (
+            <SpreadDrips
+              key={`drip-${tid}-${i}`}
+              topping={t}
+              breadId={breadId}
+              spreadIndex={sIdx}
+            />
+          );
         })}
-      </g>
 
-      {/* Edge highlight */}
-      {breadId !== "bagel" && breadId !== "englishmuffin" && (
-        <path
-          d="M40 38 Q75 32 105 36"
-          fill="none"
-          stroke="oklch(0.98 0.05 90)"
-          strokeOpacity="0.55"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-      )}
+        {/* Overflow toppings (e.g. pineapple rings) — render AFTER and
+            OUTSIDE the bread clip so they stay round and extend over the edge. */}
+        {resolved.map(({ tid, t, i }) => {
+          if (!isOverflowTopping(tid)) return null;
+          return <ToppingLayer key={`overflow-${tid}-${i}`} topping={t} index={i} breadId={breadId} />;
+        })}
+
+        {/* Edge highlight on the top face */}
+        {breadId !== "bagel" && breadId !== "englishmuffin" && (
+          <path
+            d="M40 38 Q75 32 105 36"
+            fill="none"
+            stroke="oklch(0.98 0.05 90)"
+            strokeOpacity="0.55"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+        )}
+      </g>
     </svg>
   );
 }
