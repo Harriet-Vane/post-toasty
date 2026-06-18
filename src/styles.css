@@ -412,7 +412,23 @@
 /* ===== Variant: Flying Toasters (After Dark homage) ===== */
 @keyframes toasters-fly {
   from { background-position: 0 0; }
-  to   { background-position: -400px 200px; }
+  to   { background-position: -600px 300px; }
+}
+@keyframes bg-pulse {
+  0%, 100% { filter: brightness(1) saturate(1); transform: scale(1); }
+  50%      { filter: brightness(1.15) saturate(1.2); transform: scale(1.04); }
+}
+@keyframes bg-hue {
+  from { filter: hue-rotate(0deg) saturate(1.1); }
+  to   { filter: hue-rotate(360deg) saturate(1.1); }
+}
+@keyframes myspace-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 480px -480px; }
+}
+@keyframes skulls-zoom {
+  0%, 100% { background-size: 240px 240px; background-position: 0 0; }
+  50%      { background-size: 280px 280px; background-position: -80px 80px; }
 }
 .dazzle-stage.variant-toasters {
   background: #000;
@@ -423,7 +439,7 @@
   background-repeat: repeat;
   background-size: 300px 225px;
   background-position: 0 0;
-  animation: toasters-fly 18s linear infinite;
+  animation: toasters-fly 9s linear infinite, bg-pulse 3.5s ease-in-out infinite;
   opacity: 1;
 }
 
@@ -446,11 +462,11 @@
     repeating-linear-gradient(-45deg,
       rgba(255,255,255,0.12) 0 14px,
       transparent 14px 28px);
-  animation: none;
+  animation: rays-spin 30s linear infinite;
   filter: none;
   mix-blend-mode: overlay;
   opacity: 1;
-  inset: 0;
+  inset: -20%;
 }
 .dazzle-stage.variant-glitter .dazzle-stars {
   background-image:
@@ -472,7 +488,7 @@
   background-image: url("/__l5e/assets-v1/f3de8ad0-667c-4f9d-b584-0ac7e534c4ee/myspace_hearts.jpg");
   background-size: 120px 120px;
   background-repeat: repeat;
-  animation: toasters-fly 24s linear infinite;
+  animation: myspace-drift 8s linear infinite, bg-hue 6s linear infinite;
 }
 
 .dazzle-stage.variant-skulls { background: #000; }
@@ -481,7 +497,7 @@
   background-image: url("/__l5e/assets-v1/aba5af75-fcef-46fb-99de-f95207ea9613/skulls_hearts.png");
   background-size: 240px 240px;
   background-repeat: repeat;
-  animation: toasters-fly 28s linear infinite;
+  animation: skulls-zoom 6s ease-in-out infinite, bg-pulse 3s ease-in-out infinite;
 }
 
 
