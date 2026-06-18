@@ -469,7 +469,7 @@ function ShareScreen({
     }
   }
   function emailIt() {
-    const subj = encodeURIComponent(`${name} — a ${toastCount}-toast run`);
+    const subj = encodeURIComponent(`${name} — a toast`);
     const body = encodeURIComponent(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`);
     window.location.href = `mailto:?subject=${subj}&body=${body}`;
   }
