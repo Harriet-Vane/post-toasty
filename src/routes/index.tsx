@@ -277,8 +277,8 @@ function BuilderScreen({
   const extras = TOPPINGS.filter((t) => t.side === "extra");
 
   return (
-    <div className="pt-10">
-      <header className="text-center mb-4">
+    <div className="pt-4">
+      <header className="text-center mb-2">
         <p className="font-pixel text-[10px] text-[var(--toast-crust)]">STEP 2 OF 2</p>
         <h2 className="font-pixel text-[14px] sm:text-[18px] mt-2 text-[var(--ink)]">
           BUILD YOUR TOAST
@@ -293,47 +293,18 @@ function BuilderScreen({
           <SelectionToast key={selectionToast.id} message={selectionToast.message} />
         )}
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-4 items-start">
-          {/* Left: Spreads & Bases */}
-          <ToppingColumn
-            title="SPREADS & BASES"
-            items={spreads}
-            onAdd={addTopping}
-          />
-
-          {/* Center: canvas */}
-          <div className="flex flex-col items-center">
-            <div
-              className={`drop-target bg-[var(--paper)] p-3 ${isOver ? "is-over" : ""}`}
-              style={{
-                border: "3px dashed var(--toast-crust)",
-              }}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsOver(true);
-              }}
-              onDragLeave={() => setIsOver(false)}
-              onDrop={(e) => {
-                e.preventDefault();
-                setIsOver(false);
-                const id = e.dataTransfer.getData("text/topping");
-                if (id) addTopping(id);
-              }}
-              aria-label="Toast canvas"
-            >
-              <BreadCanvas breadId={breadId} toppings={toppings} size={300} />
-            </div>
-            <button
-              onClick={() => setBreadStep(true)}
-              className="pixel-btn-ghost mt-3"
-              style={{ color: "var(--ink)" }}
-            >
-              Change bread
-            </button>
+          {/* Left: Spreads & Bases + Stack */}
+          <div className="flex flex-col gap-3">
+            <ToppingColumn
+              title="SPREADS & BASES"
+              items={spreads}
+              onAdd={addTopping}
+            />
 
             {/* Stack list */}
             {toppings.length > 0 && (
               <div
-                className="mt-3 w-full max-w-[300px] bg-[var(--card)] p-2"
+                className="w-full bg-[var(--card)] p-2"
                 style={{ border: "2px solid var(--ink)" }}
               >
                 <p className="font-pixel text-[8px] mb-1" style={{ color: "var(--toast-crust)" }}>
@@ -366,6 +337,40 @@ function BuilderScreen({
             )}
           </div>
 
+          {/* Center: canvas */}
+          <div className="flex flex-col items-center">
+            <div
+              className={`drop-target bg-[var(--paper)] p-3 ${isOver ? "is-over" : ""}`}
+              style={{
+                border: "3px dashed var(--toast-crust)",
+              }}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsOver(true);
+              }}
+              onDragLeave={() => setIsOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsOver(false);
+                const id = e.dataTransfer.getData("text/topping");
+                if (id) addTopping(id);
+              }}
+              aria-label="Toast canvas"
+            >
+              <BreadCanvas breadId={breadId} toppings={toppings} size={300} />
+            </div>
+            <button
+              onClick={() => setBreadStep(true)}
+              className="pixel-btn-ghost mt-3"
+              style={{ color: "var(--ink)" }}
+            >
+              Change bread
+            </button>
+            <button onClick={onLock} className="pixel-btn-primary mt-3">
+              Let&apos;s eat!
+            </button>
+          </div>
+
           {/* Right: Toppings & Extras */}
           <ToppingColumn
             title="TOPPINGS & EXTRAS"
@@ -373,12 +378,6 @@ function BuilderScreen({
             onAdd={addTopping}
           />
         </div>
-      </div>
-
-      <div className="flex justify-center mt-6">
-        <button onClick={onLock} className="pixel-btn-primary">
-          Let&apos;s eat!
-        </button>
       </div>
     </div>
   );
