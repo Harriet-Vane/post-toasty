@@ -120,8 +120,8 @@ function PostToast() {
 function InputScreen({ onContinue }: { onContinue: () => void }) {
   const [modal, setModal] = useState<null | "yes" | "not-yet">(null);
 
-  const fullText = "WOULD YOU LIKE TO EAT SOME TOAST?";
-  const breakIndex = fullText.indexOf("TO EAT");
+  const fullText = "DO YOU WANT TOAST?";
+  const breakIndex = fullText.indexOf("TOAST");
   const line1 = fullText.slice(0, breakIndex);
   const line2 = fullText.slice(breakIndex);
 
@@ -201,7 +201,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
             </p>
             <div className="flex justify-center">
               <button onClick={onContinue} className="pixel-btn-primary">
-                <span className="align-middle">LET'S TOAST</span>
+                <span className="align-middle">DO YOU WANT SOME TOAST?</span>
               </button>
             </div>
           </div>
