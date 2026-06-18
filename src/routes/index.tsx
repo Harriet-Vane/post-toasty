@@ -148,7 +148,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
       </div>
 
       <p className="font-body text-xs opacity-60 max-w-xs">
-        May all your days end with toast
+        In toast we trust
       </p>
 
       {modal && (
