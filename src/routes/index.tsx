@@ -326,7 +326,7 @@ function BuilderScreen({
           TOP OFF YOUR TOAST
         </h2>
         <p className="font-body text-xs opacity-70 mt-1">
-          Drag or tap to add. No limits. No shade.
+          Tap to add. No limits. No shade.
         </p>
       </header>
 
