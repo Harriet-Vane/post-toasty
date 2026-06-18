@@ -124,7 +124,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
     modal === "yes"
       ? "Heck yeah you do!"
       : modal === "not-yet"
-        ? "I'll make it easy for you. You totally do!"
+        ? "You totally do!"
         : "";
 
   return (
@@ -168,7 +168,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
             </p>
             <div className="flex justify-center">
               <button onClick={onContinue} className="pixel-btn-primary">
-                <span className="align-middle">Time for toast</span>
+                <span className="align-middle">LET'S TOAST</span>
               </button>
             </div>
           </div>
