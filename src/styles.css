@@ -411,22 +411,18 @@
 
 /* ===== Variant: Flying Toasters (After Dark homage) ===== */
 @keyframes toasters-fly {
-  from { background-position: 0 0, 60px 40px, 30px 80px, 90px 20px; }
-  to   { background-position: -400px 200px, -340px 240px, -370px 280px, -310px 220px; }
+  from { background-position: 0 0; }
+  to   { background-position: -400px 200px; }
 }
 .dazzle-stage.variant-toasters {
-  background: linear-gradient(180deg, #0a1a4a 0%, #1a3a7a 100%);
+  background: #000;
 }
 .dazzle-stage.variant-toasters .dazzle-rays { display: none; }
 .dazzle-stage.variant-toasters .dazzle-stars {
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='40' viewBox='0 0 60 40'><g><rect x='14' y='14' width='28' height='18' rx='2' fill='%23c8c8d0' stroke='%23222' stroke-width='1.5'/><rect x='18' y='10' width='6' height='8' fill='%23d9a55a' stroke='%23222' stroke-width='1'/><rect x='26' y='10' width='6' height='8' fill='%23d9a55a' stroke='%23222' stroke-width='1'/><rect x='38' y='18' width='2' height='4' fill='%23222'/><path d='M2 22 q4 -4 8 0 q4 4 8 0' stroke='%23fff' stroke-width='1.5' fill='none'/><path d='M44 14 q4 -4 8 0 q4 4 8 0' stroke='%23fff' stroke-width='1.5' fill='none'/></g></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><rect x='4' y='6' width='20' height='16' rx='2' fill='%23d9a55a' stroke='%23222' stroke-width='1.5'/><rect x='6' y='8' width='16' height='12' fill='%23b87a3a'/></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><circle cx='4' cy='4' r='1.2' fill='%23fff'/></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><circle cx='4' cy='4' r='1' fill='%23ffd23f'/></svg>");
+  background-image: url("/__l5e/assets-v1/e9502f40-de44-422f-871a-8f9e20bb592a/flying_toasters.jpg");
   background-repeat: repeat;
-  background-size: 160px 120px, 120px 100px, 70px 70px, 110px 110px;
-  background-position: 0 0, 60px 40px, 30px 80px, 90px 20px;
+  background-size: 300px 225px;
+  background-position: 0 0;
   animation: toasters-fly 18s linear infinite;
   opacity: 1;
 }
