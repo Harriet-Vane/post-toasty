@@ -494,6 +494,10 @@ function ShareScreen({
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
+  const variant = useMemo(() => {
+    const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-rainbow", "variant-glitter"];
+    return variants[Math.floor(Math.random() * variants.length)];
+  }, []);
 
   const shareText = `${name} — a ${bread.name} toast. Built on PostToast.`;
   const shareUrl = useMemo(() => {
@@ -576,7 +580,7 @@ function ShareScreen({
 
         {/* Dazzling MySpace-era stage around the toast */}
         <div
-          className="dazzle-stage flex items-center justify-center py-6 my-2"
+          className={`dazzle-stage ${variant} flex items-center justify-center py-6 my-2`}
           style={{ border: "3px solid var(--ink)", minHeight: 320 }}
         >
           <div className="dazzle-rays" aria-hidden />
