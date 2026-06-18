@@ -573,7 +573,7 @@ function ShareScreen({
               {name.toUpperCase()}
             </h3>
             <p className="font-body text-sm opacity-80 mt-1">
-              A toast worth celebrating.
+              A toast as tasty as you.
             </p>
           </div>
         </header>
