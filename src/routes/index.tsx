@@ -233,7 +233,7 @@ function BuilderScreen({
         <header className="text-center mb-6">
           <p className="font-pixel text-[10px] text-[var(--toast-crust)]">STEP 1 OF 2</p>
           <h2 className="font-pixel text-[16px] sm:text-[20px] mt-2 text-[var(--ink)]">
-            CHOOSE YOUR BREAD
+            GET BREADY
           </h2>
         </header>
         <div className="relative max-w-3xl mx-auto">
