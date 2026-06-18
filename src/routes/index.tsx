@@ -128,7 +128,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         : "";
 
   return (
-    <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8 gap-8">
+    <div className="flex-1 flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8 gap-8">
       <div className="flex flex-col items-center">
         <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-5">
           DELICIOUS TREATS DEPARTMENT
