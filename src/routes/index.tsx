@@ -124,7 +124,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
     modal === "yes"
       ? "Excellent choice. Let's build it."
       : modal === "not-yet"
-        ? "That's okay. Toast has a way of changing minds."
+        ? "I'll make it easy for you. You totally do!"
         : "";
 
   return (
