@@ -70,14 +70,24 @@ function PostToast() {
               PostToast
             </h1>
           </Link>
-          <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
-            About
-          </Link>
-          {phase !== "input" && (
-            <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
-              Start over
-            </button>
-          )}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {phase === "input" && (
+              <button
+                onClick={() => setWhyToastOpen(true)}
+                className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline cursor-pointer bg-transparent border-0"
+              >
+                Why toast?
+              </button>
+            )}
+            <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
+              About
+            </Link>
+            {phase !== "input" && (
+              <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
+                Start over
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Screen */}
