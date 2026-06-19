@@ -271,22 +271,3 @@ function RecipePage() {
     </main>
   );
 }
-
-          <div className="flex flex-col items-center justify-center gap-3 mt-6">
-            <Link to="/" className="pixel-btn-primary">
-              Make your own toast
-            </Link>
-            <p className="font-body text-xs text-[var(--ink)] opacity-70">
-              Free, fun, and always delicious.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
-          <span className="font-pixel text-[9px]">© Beth Dunn</span>
-          <span className="font-body text-xs">toast is a whole vibe</span>
-        </div>
-      </div>
-    </main>
-  );
-}
