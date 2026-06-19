@@ -66,7 +66,7 @@ function PostToast() {
               className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
               style={{ textShadow: "2px 2px 0 var(--tomato)" }}
             >
-              PostToast
+              PostToasty
             </h1>
           </Link>
           <div className="flex items-center gap-3 sm:gap-4">
