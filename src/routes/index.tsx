@@ -749,6 +749,11 @@ ${shareUrl}`)}`;
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
                   onClick={() => {
+                    posthog.capture("recipe_shared", {
+                      share_method: s.label.toLowerCase(),
+                      bread_id: breadId,
+                      topping_count: toppings.length,
+                    });
                     openShare(s.href);
                     setShareOpen(false);
                   }}
