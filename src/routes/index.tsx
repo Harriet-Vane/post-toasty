@@ -278,6 +278,8 @@ function BuilderScreen({
   breadStep,
   setBreadStep,
   onLock,
+  salted,
+  onSalted,
 }: {
   breadId: BreadId;
   setBreadId: (b: BreadId) => void;
@@ -286,10 +288,11 @@ function BuilderScreen({
   breadStep: boolean;
   setBreadStep: (v: boolean) => void;
   onLock: () => void;
+  salted: boolean;
+  onSalted: () => void;
 }) {
   const [isOver, setIsOver] = useState(false);
   const [selectionToast, setSelectionToast] = useState<{ message: string; id: number } | null>(null);
-  const [salted, setSalted] = useState(false);
   const [saltFalling, setSaltFalling] = useState(false);
 
   function addSalt() {
@@ -297,7 +300,7 @@ function BuilderScreen({
     posthog.capture("add_salt_clicked", { bread_id: breadId, topping_count: toppings.length });
     setSaltFalling(true);
     window.setTimeout(() => {
-      setSalted(true);
+      onSalted();
     }, 3800);
     window.setTimeout(() => {
       setSaltFalling(false);
@@ -580,11 +583,13 @@ function ShareScreen({
   toppings,
   toastCount,
   onBuildAgain,
+  salted,
 }: {
   breadId: BreadId;
   toppings: ToppingId[];
   toastCount: number;
   onBuildAgain: () => void;
+  salted: boolean;
 }) {
   const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
@@ -606,8 +611,9 @@ function ShareScreen({
   // LinkedIn and other crawlers block as unverified content.
   const shareUrl = useMemo(() => {
     const params = new URLSearchParams({ b: breadId, t: toppings.join(",") });
+    if (salted) params.set("s", "1");
     return `https://post-toasty.lovable.app/r?${params.toString()}`;
-  }, [breadId, toppings]);
+  }, [breadId, toppings, salted]);
 
   // Capture the share card and upload it so /r OG tags resolve to a real image.
   async function ensureCardUploaded(): Promise<string | null> {
@@ -621,7 +627,7 @@ function ShareScreen({
         cacheBust: true,
         backgroundColor: "#ffffff",
       });
-      const key = cardKey(breadId, toppings);
+      const key = cardKey(breadId, toppings, salted);
       const res = await fetch("/api/public/upload-card", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -718,7 +724,7 @@ ${shareUrl}`)}`;
             YES
           </span>
           <div className={`dazzle-toast ${plate}`}>
-            <BreadCanvas breadId={breadId} toppings={toppings} size={260} />
+            <BreadCanvas breadId={breadId} toppings={toppings} size={260} salted={salted} />
           </div>
         </div>
 
