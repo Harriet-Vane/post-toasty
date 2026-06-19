@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { usePostHogInit } from "@/lib/posthog";
 
 
 function NotFoundComponent() {
@@ -124,6 +125,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  usePostHogInit();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -131,5 +133,4 @@ function RootComponent() {
       <Toaster />
     </QueryClientProvider>
   );
-
 }
