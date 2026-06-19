@@ -333,7 +333,13 @@ function BuilderScreen({
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <button onClick={() => setBreadStep(false)} className="pixel-btn-primary">
+          <button
+            onClick={() => {
+              posthog.capture("choose_toppings_clicked", { bread_id: breadId });
+              setBreadStep(false);
+            }}
+            className="pixel-btn-primary"
+          >
             Next: Toppings
           </button>
         </div>
