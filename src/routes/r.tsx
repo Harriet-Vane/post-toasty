@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import posthog from "posthog-js";
+import { useEffect, useMemo } from "react";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
