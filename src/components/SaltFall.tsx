@@ -6,8 +6,8 @@ export function SaltFall({ count = 90 }: { count?: number }) {
       Array.from({ length: count }, (_, i) => {
         const left = Math.random() * 100;
         const size = 3 + Math.random() * 5;
-        const duration = 1.2 + Math.random() * 1.4;
-        const delay = Math.random() * 0.6;
+        const duration = 3.0 + Math.random() * 2.5;
+        const delay = Math.random() * 2.0;
         const rotate = Math.random() * 360;
         const sparkle = Math.random() < 0.5;
         return { i, left, size, duration, delay, rotate, sparkle };
