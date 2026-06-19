@@ -680,6 +680,9 @@ function ShareScreen({
                   rel="noopener noreferrer"
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
+                  onClick={() => {
+                    void s.onClick?.();
+                  }}
                 >
                   <span>{s.label}</span>
                 </a>
