@@ -30,12 +30,14 @@ function AboutPage() {
               PostToast
             </h1>
           </Link>
-          <Link to="/how-it-works" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
-            How It Works
-          </Link>
-          <Link to="/" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline">
-            Home
-          </Link>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <Link to="/how-it-works" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
+              How It Works
+            </Link>
+            <Link to="/" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline">
+              Home
+            </Link>
+          </div>
         </div>
 
         <div className="relative arcade-screen crt p-6 sm:p-10 min-h-[420px] flex flex-col">
