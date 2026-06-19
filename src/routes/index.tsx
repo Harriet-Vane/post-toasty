@@ -94,7 +94,11 @@ function PostToast() {
         <div className="relative arcade-screen crt p-4 sm:p-8 min-h-[520px] flex flex-col">
 
           {phase === "input" && (
-            <InputScreen onContinue={() => setPhase("builder")} />
+            <InputScreen
+              onContinue={() => setPhase("builder")}
+              whyToastOpen={whyToastOpen}
+              setWhyToastOpen={setWhyToastOpen}
+            />
           )}
 
           {phase === "builder" && (
