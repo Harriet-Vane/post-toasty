@@ -440,7 +440,17 @@ function BuilderScreen({
             >
               Change bread
             </button>
-            <button onClick={onLock} className="pixel-btn-primary mt-3">
+            <button
+              onClick={() => {
+                posthog.capture("lets_eat_clicked", {
+                  bread_id: breadId,
+                  topping_count: toppings.length,
+                  toppings,
+                });
+                onLock();
+              }}
+              className="pixel-btn-primary mt-3"
+            >
               Let&apos;s eat!
             </button>
           </div>
