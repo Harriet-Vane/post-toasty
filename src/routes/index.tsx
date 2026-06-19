@@ -523,25 +523,26 @@ function ShareScreen({
   }
 
   const enc = encodeURIComponent;
-  type SocialLink = {
-    label: string;
-    href: string;
-    onClick?: () => Promise<void> | void;
-  };
+  type SocialLink = { label: string; href: string };
+  const emailHref = `mailto:?subject=${enc(`${name} — a toast`)}&body=${enc(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`)}`;
   const socialLinks: SocialLink[] = [
-    {
-      label: "LinkedIn",
-      href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}`,
-    },
-    {
-      label: "Facebook",
-      href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}`,
-    },
-    {
-      label: "Threads",
-      href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}`,
-    },
+    { label: "Email", href: emailHref },
+    { label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}` },
+    { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}` },
+    { label: "Threads", href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}` },
   ];
+
+  function openShare(href: string) {
+    // Synchronous window.open inside the click handler preserves the user
+    // gesture so the browser won't pop-up-block it. Lovable's preview iframe
+    // is sandboxed; if window.open is blocked we fall back to navigating
+    // the top-level window.
+    const w = window.open(href, "_blank", "noopener,noreferrer");
+    if (!w) {
+      sonnerToast.error("Pop-up blocked — opening in this tab instead.");
+      try { window.top!.location.href = href; } catch { window.location.href = href; }
+    }
+  }
 
   return (
     <div className="pt-12 pb-2">
