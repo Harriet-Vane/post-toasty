@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import posthog from "posthog-js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
