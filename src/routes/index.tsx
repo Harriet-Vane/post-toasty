@@ -87,8 +87,6 @@ function PostToast() {
           {phase === "input" && (
             <InputScreen
               onContinue={() => setPhase("builder")}
-              whyToastOpen={whyToastOpen}
-              setWhyToastOpen={setWhyToastOpen}
             />
           )}
 
