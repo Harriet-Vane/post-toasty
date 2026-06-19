@@ -214,14 +214,6 @@ function RecipePage() {
                 loading="lazy"
               />
             </footer>
-            <div className="flex justify-center mt-3">
-              <button
-                onClick={() => setWhyToastOpen(true)}
-                className="font-body text-xs underline text-[var(--toast-crust)] opacity-80 hover:opacity-100 cursor-pointer bg-transparent border-0"
-              >
-                Why toast?
-              </button>
-            </div>
           </article>
 
           <div className="flex flex-col items-center justify-center gap-3 mt-6">
