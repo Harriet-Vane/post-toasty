@@ -697,7 +697,18 @@ ${shareUrl}`)}`;
       </article>
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
-        <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">Share</button>
+        <button
+          onClick={() => {
+            posthog.capture("share_clicked", {
+              bread_id: breadId,
+              topping_count: toppings.length,
+            });
+            setShareOpen(true);
+          }}
+          className="pixel-btn-primary"
+        >
+          Share
+        </button>
         <button onClick={onBuildAgain} className="pixel-btn-ghost">TWEAK YOUR TOAST</button>
       </div>
 
