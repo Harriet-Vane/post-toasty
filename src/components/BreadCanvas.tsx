@@ -582,11 +582,14 @@ export function BreadCanvas({
   breadId,
   toppings,
   size = 320,
+  salted = false,
 }: {
   breadId: BreadId;
   toppings: ToppingId[];
   size?: number;
+  salted?: boolean;
 }) {
+
   const { fill, accent } = breadFillColor(breadId);
   const clipId = `bread-clip-${breadId}`;
 
