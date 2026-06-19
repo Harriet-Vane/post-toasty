@@ -254,7 +254,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
           aria-modal="true"
           aria-label="Why toast?"
         >
-          <div className="share-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="share-modal" onClick={(e) => e.stopPropagation()} style={{ background: 'var(--toast-pink)' }}>
             <div className="flex items-start justify-between mb-3">
               <h4 className="font-pixel text-[13px] text-[var(--ink)]">
                 WHY TOAST?
