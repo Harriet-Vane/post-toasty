@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { ToastSprite } from "@/components/ToastSprite";
+import angelToast from "@/assets/angel-toast.png";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
@@ -22,7 +22,13 @@ function HowItWorksPage() {
       <div className="w-full max-w-[720px] arcade-cabinet p-3 sm:p-6">
         <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4 px-2">
           <Link to="/" className="flex items-center gap-2 sm:gap-3">
-            <ToastSprite size={28} />
+            <img
+              src={angelToast}
+              alt="Angel toast"
+              width={28}
+              height={28}
+              className="opacity-90"
+            />
             <h1
               className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
               style={{ textShadow: "2px 2px 0 var(--tomato)" }}
