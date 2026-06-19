@@ -519,39 +519,41 @@ function ShareScreen({
   function emailIt() {
     const subj = encodeURIComponent(`${name} — a toast`);
     const body = encodeURIComponent(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`);
-    window.location.href = `mailto:?subject=${subj}&body=${body}`;
+    window.open(`mailto:?subject=${subj}&body=${body}`, "_blank", "noopener,noreferrer");
   }
 
   const enc = encodeURIComponent;
-  const socialLinks: { label: string; emoji: string; href: string }[] = [
+  type SocialLink = {
+    label: string;
+    href: string;
+    onClick?: () => Promise<void> | void;
+  };
+  const socialLinks: SocialLink[] = [
     {
-      label: "Twitter / X",
-      emoji: "🐦",
-      href: `https://twitter.com/intent/tweet?text=${enc(shareText)}&url=${enc(shareUrl)}`,
-    },
-    {
-      label: "Facebook",
-      emoji: "📘",
-      href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}`,
-    },
-    {
-      label: "Reddit",
-      emoji: "👽",
-      href: `https://www.reddit.com/submit?url=${enc(shareUrl)}&title=${enc(shareText)}`,
+      label: "Instagram",
+      // Instagram has no web post intent. Copy the caption first, then open
+      // instagram.com in a new window (login prompted if needed) so the user
+      // can paste into a new post or story.
+      href: "https://www.instagram.com/",
+      onClick: async () => {
+        try {
+          await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+          sonnerToast.success("Caption copied — paste it into your Instagram post.");
+        } catch {
+          sonnerToast.error("Couldn't copy caption — you can type it in.");
+        }
+      },
     },
     {
       label: "LinkedIn",
-      emoji: "💼",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}`,
     },
     {
-      label: "WhatsApp",
-      emoji: "💬",
-      href: `https://wa.me/?text=${enc(`${shareText} ${shareUrl}`)}`,
+      label: "Facebook",
+      href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}`,
     },
     {
       label: "Threads",
-      emoji: "🧵",
       href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}`,
     },
   ];
