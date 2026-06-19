@@ -33,7 +33,7 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   cinnamon: "Just like mom used to make.",
   gummy: "No reason not to!",
   pickle: "AKA rocket, an objectively cooler name",
-  hotdog: "Why the heck not?",
+  hotdog: "Lightly sauteed in miso butter, oh yes",
   pumpkinseeds: "Stay salty, my friend.",
   pineapple: "Pineapple belongs on everything, frankly.",
   whip: "Whip it good!",

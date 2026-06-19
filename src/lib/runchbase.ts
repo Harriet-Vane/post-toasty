@@ -74,7 +74,7 @@ export const TOPPINGS: Topping[] = [
   { id: "cinnamon", name: "Cinnamon Sugar", side: "extra", render: "scatter", color: "#a45e2b", accent: "#f3e3b9", emoji: "🍂", complimentName: "cinnamon sugar", sound: "S" },
   { id: "gummy", name: "Gummy Bears", side: "extra", render: "scatter", color: "#f04e8a", accent: "#34a85a", emoji: "🐻", complimentName: "gummy bear", sound: "G" },
   { id: "pickle", name: "Arugula", side: "extra", render: "pickle", color: "#6b9c4a", accent: "#3a5a28", emoji: "🥬", complimentName: "arugula", sound: "P" },
-  { id: "hotdog", name: "Hot Dog", side: "extra", render: "hotdog", color: "#d57a5a", accent: "#7a3819", emoji: "🌭", complimentName: "hot dog", sound: "H" },
+  { id: "hotdog", name: "Oyster Mushrooms", side: "extra", render: "hotdog", color: "#e8d6b3", accent: "#7a5a3a", emoji: "🍄", complimentName: "oyster mushrooms", sound: "O" },
   { id: "pumpkinseeds", name: "Pumpkin Seeds", side: "extra", render: "scatter", color: "#c4a35a", emoji: "🎃", complimentName: "pumpkin seed", sound: "P" },
   { id: "pineapple", name: "Pineapple", side: "extra", render: "scatter", color: "#f6d04a", accent: "#d4a81a", emoji: "🍍", complimentName: "pineapple", sound: "P" },
   { id: "whip", name: "Whipped Cream", side: "extra", render: "spread", color: "#ffffff", accent: "#e6e6e6", emoji: "🍦", complimentName: "whipped cream", sound: "W" },

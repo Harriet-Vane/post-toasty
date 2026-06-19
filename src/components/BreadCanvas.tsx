@@ -485,10 +485,42 @@ function ToppingLayer({
       );
     }
     case "hotdog": {
+      // Cluster of oyster mushrooms — overlapping fan-shaped caps with short stems
+      const caps: Array<{ x: number; y: number; r: number; s: number }> = [
+        { x: 70, y: 110, r: -22, s: 1.0 },
+        { x: 100, y: 96, r: -6, s: 1.15 },
+        { x: 132, y: 108, r: 14, s: 1.0 },
+        { x: 88, y: 124, r: -10, s: 0.85 },
+        { x: 118, y: 126, r: 8, s: 0.9 },
+      ];
       return (
-        <g transform="translate(100 100) rotate(-18) translate(-100 -100)">
-          <rect x="35" y="92" width="130" height="22" rx="11" fill={topping.color} stroke={topping.accent} strokeWidth="2.2" />
-          <path d="M40 103 Q100 99 160 103" fill="none" stroke={topping.accent} strokeOpacity="0.5" strokeWidth="1.2" />
+        <g>
+          {caps.map((c, i) => (
+            <g key={i} transform={`translate(${c.x} ${c.y}) rotate(${c.r}) scale(${c.s})`}>
+              {/* stem */}
+              <path
+                d="M-4 2 Q-3 14 -1 20 L5 20 Q7 14 6 2 Z"
+                fill="#f3ead6"
+                stroke={topping.accent}
+                strokeWidth="1"
+              />
+              {/* cap — fan/oyster shape */}
+              <path
+                d="M-24 2 Q-26 -14 -10 -18 Q0 -22 12 -18 Q26 -14 22 2 Q14 6 0 6 Q-14 6 -24 2 Z"
+                fill={topping.color}
+                stroke={topping.accent}
+                strokeWidth="1.4"
+              />
+              {/* gill lines under cap */}
+              <path d="M-18 0 Q-14 4 -10 6" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.5" />
+              <path d="M-10 -4 Q-8 2 -6 6" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.5" />
+              <path d="M-2 -6 L-2 6" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.5" />
+              <path d="M6 -6 Q6 0 6 6" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.5" />
+              <path d="M14 -4 Q12 2 10 6" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.5" />
+              {/* highlight */}
+              <path d="M-14 -10 Q-4 -16 8 -14" fill="none" stroke="#fff8ea" strokeWidth="1.2" opacity="0.7" />
+            </g>
+          ))}
         </g>
       );
     }
