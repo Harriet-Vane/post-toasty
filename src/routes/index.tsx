@@ -223,7 +223,13 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
               {modalCopy}
             </p>
             <div className="flex justify-center">
-              <button onClick={onContinue} className="pixel-btn-primary">
+              <button
+                onClick={() => {
+                  posthog.capture("lets_toast_clicked", { modal: modal });
+                  onContinue();
+                }}
+                className="pixel-btn-primary"
+              >
                 <span className="align-middle">LET'S TOAST</span>
               </button>
             </div>
