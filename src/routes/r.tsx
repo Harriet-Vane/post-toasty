@@ -7,6 +7,7 @@ import { cardPublicUrl } from "@/lib/cardKey";
 import {
   BREADS,
   TOPPINGS,
+  calculateNutrition,
   generateName,
   generateRecipe,
   getBread,
@@ -75,6 +76,7 @@ function RecipePage() {
 
   const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
+  const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
 
   const variant = useMemo(() => {
@@ -157,6 +159,32 @@ function RecipePage() {
                   <li key={i}>{line}</li>
                 ))}
               </ol>
+            </div>
+
+            <div className="mt-4">
+              <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
+                NUTRITION (approx, per toast)
+              </p>
+              <div
+                className="grid grid-cols-4 gap-2"
+                style={{ border: "2px solid var(--ink)", padding: "8px" }}
+              >
+                {[
+                  { label: "CAL", value: nutrition.calories },
+                  { label: "CARBS", value: `${nutrition.carbs}g` },
+                  { label: "PROTEIN", value: `${nutrition.protein}g` },
+                  { label: "FAT", value: `${nutrition.fat}g` },
+                ].map((stat) => (
+                  <div key={stat.label} className="flex flex-col items-center text-center">
+                    <span className="font-pixel text-[8px]" style={{ color: "var(--toast-crust)" }}>
+                      {stat.label}
+                    </span>
+                    <span className="font-pixel text-[12px] text-[var(--ink)] mt-1">
+                      {stat.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <footer
