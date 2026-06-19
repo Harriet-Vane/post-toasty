@@ -657,50 +657,19 @@ function ShareScreen({
             </p>
             <div className="grid grid-cols-2 gap-2">
               {socialLinks.map((s) => (
-                <a
+                <button
                   key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  type="button"
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
                   onClick={() => {
-                    void s.onClick?.();
+                    openShare(s.href);
+                    setShareOpen(false);
                   }}
                 >
                   <span>{s.label}</span>
-                </a>
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-2 mt-3">
-              <button
-                onClick={async () => {
-                  await copyLink();
-                  setShareOpen(false);
-                }}
-                className="pixel-btn-ghost"
-              >
-                Copy text + link
-              </button>
-              {typeof navigator !== "undefined" && (navigator as Navigator).share && (
-                <button
-                  onClick={async () => {
-                    try {
-                      await (navigator as Navigator).share({
-                        title: "PostToast",
-                        text: shareText,
-                        url: shareUrl,
-                      });
-                      setShareOpen(false);
-                    } catch {
-                      /* dismissed */
-                    }
-                  }}
-                  className="pixel-btn-ghost"
-                >
-                  System share
                 </button>
-              )}
+              ))}
             </div>
           </div>
         </div>
