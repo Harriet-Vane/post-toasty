@@ -287,7 +287,7 @@ function BuilderScreen({
     window.setTimeout(() => {
       setSalted(true);
       setSaltFalling(false);
-    }, 1800);
+    }, 7500);
   }
 
 
