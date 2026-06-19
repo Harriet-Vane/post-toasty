@@ -12,6 +12,7 @@ import { cardKey } from "@/lib/cardKey";
 import {
   BREADS,
   TOPPINGS,
+  calculateNutrition,
   generateName,
   generateRecipe,
   getBread,
