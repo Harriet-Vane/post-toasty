@@ -508,19 +508,6 @@ function ShareScreen({
     return `${origin}/r?${params.toString()}`;
   }, [breadId, toppings]);
 
-  async function copyLink() {
-    try {
-      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-      sonnerToast.success("Copied to clipboard — share away.");
-    } catch {
-      sonnerToast.error("Couldn't copy link.");
-    }
-  }
-  function emailIt() {
-    const subj = encodeURIComponent(`${name} — a toast`);
-    const body = encodeURIComponent(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`);
-    window.open(`mailto:?subject=${subj}&body=${body}`, "_blank", "noopener,noreferrer");
-  }
 
   const enc = encodeURIComponent;
   type SocialLink = { label: string; href: string };
