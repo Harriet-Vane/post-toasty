@@ -275,6 +275,19 @@ function BuilderScreen({
 }) {
   const [isOver, setIsOver] = useState(false);
   const [selectionToast, setSelectionToast] = useState<{ message: string; id: number } | null>(null);
+  const [salted, setSalted] = useState(false);
+  const [saltFalling, setSaltFalling] = useState(false);
+
+  function addSalt() {
+    if (saltFalling) return;
+    posthog.capture("add_salt_clicked", { bread_id: breadId, topping_count: toppings.length });
+    setSaltFalling(true);
+    window.setTimeout(() => {
+      setSalted(true);
+      setSaltFalling(false);
+    }, 1800);
+  }
+
 
   useEffect(() => {
     if (!selectionToast) return;
