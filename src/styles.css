@@ -432,9 +432,9 @@
   from { background-position: 0 0; }
   to   { background-position: 480px -480px; }
 }
-@keyframes skulls-zoom {
-  0%, 100% { background-size: 240px 240px; background-position: 0 0; }
-  50%      { background-size: 280px 280px; background-position: -80px 80px; }
+@keyframes skulls-fly {
+  from { background-position: 0 0; }
+  to   { background-position: -480px 0; }
 }
 .dazzle-stage.variant-toasters {
   background: #000;
@@ -502,7 +502,7 @@
   background-image: url("/__l5e/assets-v1/aba5af75-fcef-46fb-99de-f95207ea9613/skulls_hearts.png");
   background-size: 240px 240px;
   background-repeat: repeat;
-  animation: skulls-zoom 6s ease-in-out infinite, bg-pulse 3s ease-in-out infinite;
+  animation: skulls-fly 12s linear infinite;
 }
 
 
