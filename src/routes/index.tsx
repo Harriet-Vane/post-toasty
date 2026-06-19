@@ -136,9 +136,16 @@ function PostToast() {
 
 /* -------------------- Input -------------------- */
 
-function InputScreen({ onContinue }: { onContinue: () => void }) {
+function InputScreen({
+  onContinue,
+  whyToastOpen,
+  setWhyToastOpen,
+}: {
+  onContinue: () => void;
+  whyToastOpen: boolean;
+  setWhyToastOpen: (v: boolean) => void;
+}) {
   const [modal, setModal] = useState<null | "yes" | "not-yet">(null);
-  const [whyToastOpen, setWhyToastOpen] = useState(false);
 
   const line1 = "DO YOU WANT TO";
   const line2 = "MAKE SOME TOAST?";
