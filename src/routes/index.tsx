@@ -41,7 +41,6 @@ export const Route = createFileRoute("/")({
 type Phase = "input" | "builder" | "share";
 
 function PostToast() {
-  const [whyToastOpen, setWhyToastOpen] = useState(false);
   const [phase, setPhase] = useState<Phase>("input");
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
