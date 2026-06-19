@@ -41,6 +41,7 @@ export const Route = createFileRoute("/")({
 type Phase = "input" | "builder" | "share";
 
 function PostToast() {
+  const [whyToastOpen, setWhyToastOpen] = useState(false);
   const [phase, setPhase] = useState<Phase>("input");
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
@@ -69,21 +70,35 @@ function PostToast() {
               PostToast
             </h1>
           </Link>
-          <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
-            About
-          </Link>
-          {phase !== "input" && (
-            <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
-              Start over
-            </button>
-          )}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {phase === "input" && (
+              <button
+                onClick={() => setWhyToastOpen(true)}
+                className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline cursor-pointer bg-transparent border-0"
+              >
+                Why toast?
+              </button>
+            )}
+            <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
+              About
+            </Link>
+            {phase !== "input" && (
+              <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
+                Start over
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Screen */}
         <div className="relative arcade-screen crt p-4 sm:p-8 min-h-[520px] flex flex-col">
 
           {phase === "input" && (
-            <InputScreen onContinue={() => setPhase("builder")} />
+            <InputScreen
+              onContinue={() => setPhase("builder")}
+              whyToastOpen={whyToastOpen}
+              setWhyToastOpen={setWhyToastOpen}
+            />
           )}
 
           {phase === "builder" && (
@@ -121,9 +136,16 @@ function PostToast() {
 
 /* -------------------- Input -------------------- */
 
-function InputScreen({ onContinue }: { onContinue: () => void }) {
+function InputScreen({
+  onContinue,
+  whyToastOpen,
+  setWhyToastOpen,
+}: {
+  onContinue: () => void;
+  whyToastOpen: boolean;
+  setWhyToastOpen: (v: boolean) => void;
+}) {
   const [modal, setModal] = useState<null | "yes" | "not-yet">(null);
-  const [whyToastOpen, setWhyToastOpen] = useState(false);
 
   const line1 = "DO YOU WANT TO";
   const line2 = "MAKE SOME TOAST?";
@@ -159,7 +181,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-5">
           DELICIOUS TREATS DEPARTMENT
         </p>
-        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
+        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] min-h-[52px] sm:min-h-[70px]">
           {displayed.length <= line1Len ? displayed : (
             <>
               {line1}
@@ -195,12 +217,6 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         </button>
       </div>
 
-      <button
-        onClick={() => setWhyToastOpen(true)}
-        className="font-body text-xs underline text-[var(--toast-crust)] opacity-80 hover:opacity-100 cursor-pointer bg-transparent border-0"
-      >
-        Why toast?
-      </button>
 
       <div className="flex flex-col items-center gap-1 mt-auto">
         <img
