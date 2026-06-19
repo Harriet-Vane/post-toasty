@@ -561,17 +561,20 @@ ${shareUrl}`)}`;
     { label: "Threads", href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}` },
   ];
 
-  async function openShare(href: string) {
-    // Make sure the OG image is uploaded before the share window opens, so the
-    // first crawler hit on /r can resolve it.
-    await ensureCardUploaded();
-    // window.open after an await may be pop-up blocked; fall back to top-level
-    // navigation when that happens (Lovable's preview iframe is sandboxed).
-    const w = window.open(href, "_blank", "noopener,noreferrer");
+  function openShare(href: string) {
+    // Open the window SYNCHRONOUSLY inside the click handler so the browser
+    // treats it as user-initiated and doesn't pop-up-block it. Then point it
+    // at the share URL once the OG card upload finishes.
+    const w = window.open("about:blank", "_blank", "noopener,noreferrer");
     if (!w) {
-      sonnerToast.error("Pop-up blocked — opening in this tab instead.");
-      try { window.top!.location.href = href; } catch { window.location.href = href; }
+      sonnerToast.error("Pop-up blocked — allow pop-ups for PostToast to share.");
+      return;
     }
+    ensureCardUploaded()
+      .catch(() => {})
+      .finally(() => {
+        try { w.location.href = href; } catch { /* window may have been closed */ }
+      });
   }
 
   return (
