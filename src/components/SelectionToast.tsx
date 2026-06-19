@@ -32,7 +32,7 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   egg: "Sunnyside up!",
   cinnamon: "Just like mom used to make.",
   gummy: "No reason not to!",
-  pickle: "Live in your truth!",
+  pickle: "AKA rocket, an objectively cooler name",
   hotdog: "Why the heck not?",
   pumpkinseeds: "Stay salty, my friend.",
   pineapple: "Pineapple belongs on everything, frankly.",
