@@ -65,6 +65,7 @@ function RecipePage() {
   const search = Route.useSearch();
   const breadId: BreadId = search.b;
   const t: string = search.t;
+  const [whyToastOpen, setWhyToastOpen] = useState(false);
 
   const toppings = useMemo<ToppingId[]>(
     () =>
