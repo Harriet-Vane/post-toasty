@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RRouteImport } from './routes/r'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicUploadCardRouteImport } from './routes/api/public/upload-card'
 
 const RRoute = RRouteImport.update({
   id: '/r',
@@ -28,35 +29,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicUploadCardRoute = ApiPublicUploadCardRouteImport.update({
+  id: '/api/public/upload-card',
+  path: '/api/public/upload-card',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/r': typeof RRoute
+  '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/r': typeof RRoute
+  '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/r': typeof RRoute
+  '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/r'
+  fullPaths: '/' | '/about' | '/r' | '/api/public/upload-card'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/r'
-  id: '__root__' | '/' | '/about' | '/r'
+  to: '/' | '/about' | '/r' | '/api/public/upload-card'
+  id: '__root__' | '/' | '/about' | '/r' | '/api/public/upload-card'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   RRoute: typeof RRoute
+  ApiPublicUploadCardRoute: typeof ApiPublicUploadCardRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/upload-card': {
+      id: '/api/public/upload-card'
+      path: '/api/public/upload-card'
+      fullPath: '/api/public/upload-card'
+      preLoaderRoute: typeof ApiPublicUploadCardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   RRoute: RRoute,
+  ApiPublicUploadCardRoute: ApiPublicUploadCardRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
