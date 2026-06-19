@@ -455,10 +455,7 @@
   50%      { filter: hue-rotate(40deg) brightness(1.15); }
 }
 .dazzle-stage.variant-glitter {
-  background:
-    conic-gradient(from 45deg at 50% 50%,
-      #ff5fb4 0deg, #a96bff 90deg, #2db6ff 180deg, #ff5fb4 270deg, #a96bff 360deg);
-  animation: glitter-shimmer 4s ease-in-out infinite;
+  background: #0a0a0a;
 }
 .dazzle-stage.variant-glitter .dazzle-rays {
   background:
@@ -467,11 +464,13 @@
       transparent 10px 20px),
     repeating-linear-gradient(-45deg,
       rgba(255,255,255,0.12) 0 14px,
-      transparent 14px 28px);
-  animation: rays-spin 30s linear infinite;
-  filter: none;
-  mix-blend-mode: overlay;
-  opacity: 1;
+      transparent 14px 28px),
+    conic-gradient(from 45deg at 50% 50%,
+      #ff5fb4 0deg, #a96bff 90deg, #2db6ff 180deg, #ff5fb4 270deg, #a96bff 360deg);
+  animation: rays-spin 30s linear infinite, glitter-shimmer 4s ease-in-out infinite;
+  filter: blur(0.3px) saturate(1.2);
+  mix-blend-mode: screen;
+  opacity: 0.8;
   inset: -20%;
 }
 .dazzle-stage.variant-glitter .dazzle-stars {
