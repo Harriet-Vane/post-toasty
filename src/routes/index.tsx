@@ -6,7 +6,9 @@ import { toast as sonnerToast } from "sonner";
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
+import { SaltFall } from "@/components/SaltFall";
 import { ToastSprite } from "@/components/ToastSprite";
+
 import { cardKey } from "@/lib/cardKey";
 
 import {
@@ -275,6 +277,19 @@ function BuilderScreen({
 }) {
   const [isOver, setIsOver] = useState(false);
   const [selectionToast, setSelectionToast] = useState<{ message: string; id: number } | null>(null);
+  const [salted, setSalted] = useState(false);
+  const [saltFalling, setSaltFalling] = useState(false);
+
+  function addSalt() {
+    if (saltFalling) return;
+    posthog.capture("add_salt_clicked", { bread_id: breadId, topping_count: toppings.length });
+    setSaltFalling(true);
+    window.setTimeout(() => {
+      setSalted(true);
+      setSaltFalling(false);
+    }, 1800);
+  }
+
 
   useEffect(() => {
     if (!selectionToast) return;
@@ -444,15 +459,26 @@ function BuilderScreen({
               }}
               aria-label="Toast canvas"
             >
-              <BreadCanvas breadId={breadId} toppings={toppings} size={300} />
+              <BreadCanvas breadId={breadId} toppings={toppings} size={300} salted={salted} />
             </div>
-            <button
-              onClick={() => setBreadStep(true)}
-              className="pixel-btn-ghost mt-3"
-              style={{ color: "var(--ink)" }}
-            >
-              Change bread
-            </button>
+            <div className="flex flex-wrap gap-2 mt-3 justify-center">
+              <button
+                onClick={() => setBreadStep(true)}
+                className="pixel-btn-ghost"
+                style={{ color: "var(--ink)" }}
+              >
+                Change bread
+              </button>
+              <button
+                onClick={addSalt}
+                disabled={saltFalling}
+                className="pixel-btn-ghost"
+                style={{ color: "var(--ink)" }}
+              >
+                Add salt
+              </button>
+            </div>
+
             <button
               onClick={() => {
                 posthog.capture("lets_eat_clicked", {
@@ -476,6 +502,7 @@ function BuilderScreen({
           />
         </div>
       </div>
+      {saltFalling && <SaltFall />}
     </div>
   );
 }

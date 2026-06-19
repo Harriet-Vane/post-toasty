@@ -556,3 +556,50 @@
   }
 }
 
+
+/* ===== Salt fall animation ===== */
+.salt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+.salt-grain {
+  position: absolute;
+  top: -24px;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border: 1px solid #e6e9f0;
+  box-shadow:
+    0 0 4px rgba(255, 255, 255, 0.9),
+    0 0 10px rgba(200, 220, 255, 0.55);
+  animation-name: salt-fall;
+  animation-timing-function: cubic-bezier(0.4, 0.05, 0.7, 1);
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+.salt-grain.sparkle::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 70%);
+  animation: salt-twinkle 0.6s ease-in-out infinite alternate;
+}
+@keyframes salt-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+@keyframes salt-twinkle {
+  from { opacity: 0.3; transform: scale(0.6); }
+  to   { opacity: 1;   transform: scale(1.4); }
+}
