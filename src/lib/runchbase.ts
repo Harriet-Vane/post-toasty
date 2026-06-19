@@ -203,37 +203,11 @@ const NAME_TEMPLATES = [
 ];
 const TIMES = ["Late-Night", "Tuesday", "Pre-Dawn", "Mid-Morning", "Weekend", "Afternoon"];
 
-const UNHINGED_TEMPLATES = [
-  "The Unhinged {hero} Catastrophe",
-  "A Rogue {hero} Disaster",
-  "The {hero} Mistake",
-  "An Unholy {hero} Creation",
-  "The {hero} Catastrophe",
-  "A {hero} Disasterpiece",
-  "The {hero} Incident",
-  "A Cursed {hero} Situation",
-  "The {hero} Abomination",
-  "A {hero} Nightmare",
-  "The {hero} Fiasco",
-  "A {hero} Travesty",
-];
-
-function isUnhinged(toppings: ToppingId[]): boolean {
-  if (toppings.length === 0) return false;
-  const chaosIds = new Set(["hotdog", "marmite", "pickle"]);
-  return toppings.some((id) => chaosIds.has(id));
-}
-
 export function generateName(breadId: BreadId, toppings: ToppingId[]): string {
   const hero =
     (toppings.length > 0 && getTopping(toppings[toppings.length - 1])?.name) ||
     getBread(breadId).name;
   const seed = breadId.length + toppings.join("").length;
-
-  if (isUnhinged(toppings)) {
-    const tpl = UNHINGED_TEMPLATES[seed % UNHINGED_TEMPLATES.length];
-    return tpl.replace("{hero}", hero);
-  }
 
   const tpl = NAME_TEMPLATES[seed % NAME_TEMPLATES.length];
   const time = TIMES[(seed * 7) % TIMES.length];
