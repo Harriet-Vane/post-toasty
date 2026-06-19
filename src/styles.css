@@ -531,10 +531,18 @@
 
 /* Selection toast */
 .selection-toast {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: -0.75rem;
+  top: 1rem;
+  z-index: 60;
   animation: selection-toast 3s ease forwards;
+}
+
+@media (min-width: 768px) {
+  .selection-toast {
+    position: absolute;
+    top: -0.75rem;
+  }
 }
 
 @keyframes selection-toast {
@@ -544,15 +552,15 @@
   }
   8% {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
   }
   90% {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -20%);
   }
 }
 
