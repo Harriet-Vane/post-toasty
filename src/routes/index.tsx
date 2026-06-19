@@ -625,7 +625,7 @@ function ShareScreen({
             <div className="flex items-start justify-between mb-3">
               <div>
                 <p className="font-pixel text-[9px]" style={{ color: "var(--toast-crust)" }}>
-                  ★ SHARE THE TOAST ★
+                  {"\n"}
                 </p>
                 <h4 className="font-pixel text-[13px] mt-2 text-[var(--ink)]">
                   SHARE YOUR TOAST
@@ -640,7 +640,7 @@ function ShareScreen({
               </button>
             </div>
             <p className="font-body text-sm text-[var(--ink)] opacity-80 mb-3">
-              Pick a place to brag (gently).
+              Bring some toasty love to the world.
             </p>
             <div className="grid grid-cols-2 gap-2">
               {socialLinks.map((s) => (
