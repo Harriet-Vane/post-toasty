@@ -24,9 +24,22 @@ export function usePostHogInit() {
   }, []);
 
   useEffect(() => {
-    const unsub = router.subscribe("onResolved", () => {
+    let lastPath: string | null = null;
+
+    const capturePageview = () => {
+      const path = window.location.pathname + window.location.search;
+      // Guard against duplicate captures for the same URL (e.g. the initial
+      // load firing both here and via onResolved).
+      if (path === lastPath) return;
+      lastPath = path;
       posthog.capture("$pageview");
-    });
+    };
+
+    // Capture the initial pageview — the route is already resolved by the time
+    // this effect runs, so onResolved won't fire for it on first load.
+    capturePageview();
+
+    const unsub = router.subscribe("onResolved", capturePageview);
     return () => unsub();
   }, [router]);
 }
