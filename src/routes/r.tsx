@@ -110,7 +110,7 @@ function RecipePage() {
               className="font-pixel text-[var(--paper)] text-[14px] sm:text-[18px] leading-none"
               style={{ textShadow: "2px 2px 0 var(--tomato)" }}
             >
-              PostToasty
+              PostToast
             </h1>
           </Link>
           <span className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm">
