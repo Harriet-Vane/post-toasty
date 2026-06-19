@@ -278,11 +278,17 @@ function BuilderScreen({
 
   function selectBread(id: BreadId) {
     setBreadId(id);
+    posthog.capture("bread_chosen", { bread_id: id });
     showToast(id);
   }
 
   function addTopping(id: ToppingId) {
-    setToppings([...toppings, id]);
+    const next = [...toppings, id];
+    setToppings(next);
+    posthog.capture("topping_chosen", { topping_id: id, stack_size: next.length });
+    if (next.length === 1) {
+      posthog.capture("first_topping_chosen", { topping_id: id });
+    }
     showToast(id);
   }
   function removeAt(i: number) {
