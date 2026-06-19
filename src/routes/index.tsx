@@ -218,6 +218,7 @@ function InputScreen({
         <img
           src={angelToast}
           alt="Angel toast"
+          title="toast angel, toast angel, will you be mine?"
           width={96}
           height={96}
           className="opacity-80"
