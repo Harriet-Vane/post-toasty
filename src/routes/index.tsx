@@ -551,7 +551,9 @@ function ShareScreen({
 
   const enc = encodeURIComponent;
   type SocialLink = { label: string; href: string };
-  const emailHref = `mailto:?subject=${enc(`${name} — a toast for you`)}&body=${enc(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`)}`;
+  const emailHref = `mailto:?subject=${enc(`${name} — a toast for you`)}&body=${enc(`I made you a toast on PostToast!
+
+${shareUrl}`)}`;
   const socialLinks: SocialLink[] = [
     { label: "Email", href: emailHref },
     { label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}` },
