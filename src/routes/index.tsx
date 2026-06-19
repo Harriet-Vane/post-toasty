@@ -502,6 +502,7 @@ function BuilderScreen({
           />
         </div>
       </div>
+      {saltFalling && <SaltFall />}
     </div>
   );
 }
