@@ -533,7 +533,7 @@
 .selection-toast {
   position: fixed;
   left: 50%;
-  top: 1rem;
+  top: 2.5rem;
   z-index: 60;
   animation: selection-toast 3s ease forwards;
 }
@@ -542,6 +542,7 @@
   .selection-toast {
     position: absolute;
     top: -0.75rem;
+    z-index: 20;
   }
 }
 
@@ -552,15 +553,15 @@
   }
   8% {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
   }
   90% {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -20%);
+    transform: translate(-50%, -60%);
   }
 }
 
