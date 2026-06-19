@@ -142,6 +142,73 @@ export const COMPLIMENT_POOLS: Record<Sound, { adjectives: string[]; nouns: stri
   },
 };
 
+export interface Nutrition {
+  calories: number;
+  carbs: number;
+  protein: number;
+  fat: number;
+}
+
+export const BREAD_NUTRITION: Record<BreadId, Nutrition> = {
+  white:         { calories: 80,  carbs: 15, protein: 3, fat: 1 },
+  sourdough:     { calories: 90,  carbs: 18, protein: 4, fat: 1 },
+  wholewheat:    { calories: 80,  carbs: 14, protein: 4, fat: 1 },
+  rye:           { calories: 85,  carbs: 15, protein: 3, fat: 1 },
+  englishmuffin: { calories: 130, carbs: 25, protein: 5, fat: 1 },
+  bagel:         { calories: 270, carbs: 53, protein: 11, fat: 2 },
+  scone:         { calories: 350, carbs: 45, protein: 6, fat: 16 },
+  mystery:       { calories: 100, carbs: 18, protein: 3, fat: 2 },
+};
+
+export const TOPPING_NUTRITION: Record<string, Nutrition> = {
+  butter:        { calories: 100, carbs: 0,  protein: 0, fat: 11 },
+  plantbutter:   { calories: 90,  carbs: 0,  protein: 0, fat: 10 },
+  peanutbutter:  { calories: 190, carbs: 7,  protein: 8, fat: 16 },
+  almondbutter:  { calories: 195, carbs: 6,  protein: 7, fat: 18 },
+  hummus:        { calories: 70,  carbs: 6,  protein: 2, fat: 5 },
+  creamcheese:   { calories: 100, carbs: 2,  protein: 2, fat: 10 },
+  jam:           { calories: 55,  carbs: 14, protein: 0, fat: 0 },
+  clottedcream:  { calories: 130, carbs: 1,  protein: 1, fat: 14 },
+  marmalade:     { calories: 50,  carbs: 13, protein: 0, fat: 0 },
+  lemoncurd:     { calories: 60,  carbs: 10, protein: 0, fat: 2 },
+  honey:         { calories: 65,  carbs: 17, protein: 0, fat: 0 },
+  oliveoil:      { calories: 120, carbs: 0,  protein: 0, fat: 14 },
+  fluff:         { calories: 60,  carbs: 15, protein: 0, fat: 0 },
+  marmite:       { calories: 12,  carbs: 1,  protein: 2, fat: 0 },
+  avocado:       { calories: 80,  carbs: 4,  protein: 1, fat: 7 },
+  banana:        { calories: 105, carbs: 27, protein: 1, fat: 0 },
+  tomato:        { calories: 20,  carbs: 4,  protein: 1, fat: 0 },
+  egg:           { calories: 90,  carbs: 0,  protein: 6, fat: 7 },
+  cinnamon:      { calories: 50,  carbs: 12, protein: 0, fat: 0 },
+  gummy:         { calories: 90,  carbs: 22, protein: 1, fat: 0 },
+  pickle:        { calories: 15,  carbs: 3,  protein: 0, fat: 0 },
+  hotdog:        { calories: 150, carbs: 2,  protein: 5, fat: 13 },
+  pumpkinseeds:  { calories: 60,  carbs: 2,  protein: 3, fat: 5 },
+  pineapple:     { calories: 40,  carbs: 11, protein: 0, fat: 0 },
+  whip:          { calories: 50,  carbs: 4,  protein: 0, fat: 4 },
+  frosting:      { calories: 140, carbs: 22, protein: 0, fat: 6 },
+  ghost:         { calories: 5,   carbs: 1,  protein: 0, fat: 0 },
+  sprinkles:     { calories: 25,  carbs: 5,  protein: 0, fat: 1 },
+};
+
+export function calculateNutrition(breadId: BreadId, toppings: ToppingId[]): Nutrition {
+  const total: Nutrition = { ...(BREAD_NUTRITION[breadId] ?? { calories: 0, carbs: 0, protein: 0, fat: 0 }) };
+  for (const id of toppings) {
+    const n = TOPPING_NUTRITION[id];
+    if (!n) continue;
+    total.calories += n.calories;
+    total.carbs += n.carbs;
+    total.protein += n.protein;
+    total.fat += n.fat;
+  }
+  return {
+    calories: Math.round(total.calories),
+    carbs: Math.round(total.carbs),
+    protein: Math.round(total.protein),
+    fat: Math.round(total.fat),
+  };
+}
+
 export function getTopping(id: ToppingId): Topping | undefined {
   return TOPPINGS.find((t) => t.id === id);
 }
