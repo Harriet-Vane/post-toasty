@@ -202,7 +202,7 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
         Why toast?
       </button>
 
-      <div className="flex flex-col items-center gap-1">
+      <div className="flex flex-col items-center gap-1 mt-auto">
         <img
           src={angelToast}
           alt="Angel toast"
