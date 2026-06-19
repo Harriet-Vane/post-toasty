@@ -7,7 +7,7 @@ import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { SaltFall } from "@/components/SaltFall";
-import { ToastSprite } from "@/components/ToastSprite";
+
 
 import { cardKey } from "@/lib/cardKey";
 
