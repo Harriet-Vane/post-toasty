@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { ToastSprite } from "@/components/ToastSprite";
+import angelToast from "@/assets/angel-toast.png";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
