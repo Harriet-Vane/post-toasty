@@ -535,6 +535,7 @@ function ShareScreen({
 }) {
   const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
+  const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
   const cardRef = useRef<HTMLElement | null>(null);
