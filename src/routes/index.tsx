@@ -562,22 +562,19 @@ ${shareUrl}`)}`;
   ];
 
   function openShare(href: string) {
-    // Open the window SYNCHRONOUSLY inside the click handler so the browser
-    // treats it as user-initiated and doesn't pop-up-block it. We must NOT
-    // pass "noopener" here — that makes window.open return null and we lose
-    // the ability to navigate the tab once the upload finishes.
-    const w = window.open("about:blank", "_blank");
+    void ensureCardUploaded();
+
+    if (href.startsWith("mailto:")) {
+      window.location.href = href;
+      return;
+    }
+
+    const w = window.open(href, "_blank");
     if (!w) {
       sonnerToast.error("Pop-up blocked — allow pop-ups for PostToast to share.");
       return;
     }
-    // Harden the opened tab against tabnabbing.
     try { w.opener = null; } catch { /* cross-origin */ }
-    ensureCardUploaded()
-      .catch(() => {})
-      .finally(() => {
-        try { w.location.href = href; } catch { /* window may have been closed */ }
-      });
   }
 
   return (
