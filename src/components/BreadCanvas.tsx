@@ -576,7 +576,37 @@ function SpreadDrips({
   );
 }
 
+/* ---------------- Salt sprinkle ---------------- */
+
+function SaltSprinkle({ breadId }: { breadId: BreadId }) {
+  const pts = scatterPositions(55, `salt-${breadId}`, { x: 25, y: 30, w: 150, h: 140 });
+  return (
+    <g>
+      {pts.map((p, i) => {
+        const s = 1.2 + (i % 3) * 0.5;
+        return (
+          <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r})`}>
+            <rect
+              x={-s / 2}
+              y={-s / 2}
+              width={s}
+              height={s}
+              fill="#ffffff"
+              stroke="#cfd6e2"
+              strokeWidth="0.3"
+            />
+            {i % 4 === 0 && (
+              <circle r={s * 0.9} fill="#ffffff" opacity="0.55" />
+            )}
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
 /* ---------------- Main component ---------------- */
+
 
 export function BreadCanvas({
   breadId,
