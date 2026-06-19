@@ -686,7 +686,7 @@ export function BreadCanvas({
             );
           })}
 
-          {salted && <SaltSprinkle breadId={breadId} />}
+          
         </g>
 
 
@@ -712,6 +712,13 @@ export function BreadCanvas({
           if (!isOverflowTopping(tid)) return null;
           return <ToppingLayer key={`overflow-${tid}-${i}`} topping={t} index={i} breadId={breadId} />;
         })}
+
+        {/* Salt always sits on top of the entire stack, including overflow toppings */}
+        {salted && (
+          <g clipPath={`url(#${clipId})`}>
+            <SaltSprinkle breadId={breadId} />
+          </g>
+        )}
 
         {/* Edge highlight on the top face */}
         {breadId !== "bagel" && breadId !== "englishmuffin" && (
