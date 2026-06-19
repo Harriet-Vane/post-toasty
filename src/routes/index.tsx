@@ -457,15 +457,26 @@ function BuilderScreen({
               }}
               aria-label="Toast canvas"
             >
-              <BreadCanvas breadId={breadId} toppings={toppings} size={300} />
+              <BreadCanvas breadId={breadId} toppings={toppings} size={300} salted={salted} />
             </div>
-            <button
-              onClick={() => setBreadStep(true)}
-              className="pixel-btn-ghost mt-3"
-              style={{ color: "var(--ink)" }}
-            >
-              Change bread
-            </button>
+            <div className="flex flex-wrap gap-2 mt-3 justify-center">
+              <button
+                onClick={() => setBreadStep(true)}
+                className="pixel-btn-ghost"
+                style={{ color: "var(--ink)" }}
+              >
+                Change bread
+              </button>
+              <button
+                onClick={addSalt}
+                disabled={saltFalling}
+                className="pixel-btn-ghost"
+                style={{ color: "var(--ink)" }}
+              >
+                Add salt
+              </button>
+            </div>
+
             <button
               onClick={() => {
                 posthog.capture("lets_eat_clicked", {
