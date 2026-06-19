@@ -227,7 +227,7 @@ function InputScreen({
         >
           <div className="share-modal text-center" onClick={(e) => e.stopPropagation()}>
             <p className="font-pixel text-[9px] mb-3" style={{ color: "var(--toast-crust)" }}>
-              IT'S TOASTY TIME
+              WHAT'S ALL THIS, THEN?
             </p>
             <p className="font-body text-base text-[var(--ink)] leading-snug mb-5">
               {modalCopy}
