@@ -80,6 +80,16 @@ function RecipePage() {
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
 
+  useEffect(() => {
+    if (toppings.length >= 1) {
+      posthog.capture("toast_created", {
+        bread_id: breadId,
+        topping_count: toppings.length,
+        toppings,
+      });
+    }
+  }, [breadId, toppings]);
+
   const variant = useMemo(() => {
     const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-glitter", "variant-myspace", "variant-skulls"];
     const seed = (breadId + "|" + toppings.join(",")).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
