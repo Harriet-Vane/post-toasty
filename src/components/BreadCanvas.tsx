@@ -493,20 +493,31 @@ function ToppingLayer({
       );
     }
     case "pickle": {
-      const pts = scatterPositions(7, seedKey, { x: 45, y: 45, w: 110, h: 110 });
+      const pts = scatterPositions(8, seedKey, { x: 40, y: 40, w: 120, h: 120 });
       return (
         <g>
           {pts.map((p, i) => (
-            <g key={i} transform={`translate(${p.x} ${p.y})`}>
-              <circle r="16" fill={topping.color} stroke={topping.accent} strokeWidth="2.4" />
-              <circle r="11" fill="none" stroke={topping.accent} strokeWidth="1.2" opacity="0.6" />
-              {[0, 60, 120, 180, 240, 300].map((deg, j) => {
-                const rad = (deg * Math.PI) / 180;
-                const cx = Math.cos(rad) * 6;
-                const cy = Math.sin(rad) * 6;
-                return <ellipse key={j} cx={cx} cy={cy} rx="1.6" ry="1.1" fill={topping.accent} opacity="0.7" />;
-              })}
-              <ellipse cx="-4" cy="-4" rx="3" ry="1.4" fill="#ffffff" opacity="0.35" />
+            <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r + 90})`}>
+              {/* Leaf shape */}
+              <path
+                d="M0 -16 C5 -10, 7 0, 0 14 C-7 0, -5 -10, 0 -16 Z"
+                fill={topping.color}
+                stroke={topping.accent}
+                strokeWidth="1.4"
+              />
+              {/* Central vein */}
+              <path
+                d="M0 -12 Q1 -2 0 10"
+                fill="none"
+                stroke={topping.accent}
+                strokeWidth="0.8"
+                opacity="0.6"
+              />
+              {/* Side veins */}
+              <path d="M0 -6 L3 -8" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
+              <path d="M0 -2 L-3 -4" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
+              <path d="M0 2 L3 0" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
+              <path d="M0 6 L-3 4" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
             </g>
           ))}
         </g>
