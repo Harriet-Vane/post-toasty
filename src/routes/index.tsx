@@ -574,6 +574,7 @@ function ShareScreen({
     <div className="pt-12 pb-2">
       {/* The "share card" */}
       <article
+        ref={cardRef}
         className="mx-auto max-w-[560px] bg-[var(--card)] p-4 sm:p-5"
         style={{
           border: "4px solid var(--ink)",

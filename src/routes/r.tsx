@@ -3,6 +3,7 @@ import { useMemo } from "react";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
+import { cardPublicUrl } from "@/lib/cardKey";
 import {
   BREADS,
   TOPPINGS,
@@ -38,14 +39,21 @@ export const Route = createFileRoute("/r")({
     const name = generateName(b, toppings);
     const title = `${name} — PostToast`;
     const description = `A ${getBread(b).name} toast recipe built on PostToast. Make your own.`;
+    const image = cardPublicUrl(b, toppings);
+    const url = `https://post-toasty.lovable.app/r?b=${encodeURIComponent(b)}&t=${encodeURIComponent(t)}`;
     return {
       meta: [
         { title },
         { name: "description", content: description },
         { property: "og:title", content: name },
         { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "article" },
+        { property: "og:image", content: image },
         { property: "twitter:card", content: "summary_large_image" },
+        { property: "twitter:image", content: image },
       ],
+      links: [{ rel: "canonical", href: url }],
     };
   },
   component: RecipePage,
