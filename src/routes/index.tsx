@@ -547,7 +547,6 @@ function ShareScreen({
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
-  const [whyToastOpen, setWhyToastOpen] = useState(false);
   const cardRef = useRef<HTMLElement | null>(null);
   const uploadedRef = useRef<string | null>(null);
   const variant = useMemo(() => {
@@ -732,14 +731,6 @@ ${shareUrl}`)}`;
             loading="lazy"
           />
         </footer>
-        <div className="flex justify-center mt-3">
-          <button
-            onClick={() => setWhyToastOpen(true)}
-            className="font-body text-xs underline text-[var(--toast-crust)] opacity-80 hover:opacity-100 cursor-pointer bg-transparent border-0"
-          >
-            Why toast?
-          </button>
-        </div>
       </article>
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
