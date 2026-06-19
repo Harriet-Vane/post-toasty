@@ -655,7 +655,10 @@ export function BreadCanvas({
               </g>
             );
           })}
+
+          {salted && <SaltSprinkle breadId={breadId} />}
         </g>
+
 
         {/* Spread drips: rendered OUTSIDE the top-surface clip so they hang
             down over the bread's side face. Each spread gets its own drips.
