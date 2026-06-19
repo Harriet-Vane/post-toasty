@@ -525,33 +525,32 @@ function ToppingLayer({
       );
     }
     case "pickle": {
-      const pts = scatterPositions(8, seedKey, { x: 40, y: 40, w: 120, h: 120 });
+      const pts = scatterPositions(7, seedKey, { x: 30, y: 30, w: 140, h: 140 });
       return (
         <g>
-          {pts.map((p, i) => (
-            <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r + 90})`}>
-              {/* Leaf shape */}
-              <path
-                d="M0 -16 C5 -10, 7 0, 0 14 C-7 0, -5 -10, 0 -16 Z"
-                fill={topping.color}
-                stroke={topping.accent}
-                strokeWidth="1.4"
-              />
-              {/* Central vein */}
-              <path
-                d="M0 -12 Q1 -2 0 10"
-                fill="none"
-                stroke={topping.accent}
-                strokeWidth="0.8"
-                opacity="0.6"
-              />
-              {/* Side veins */}
-              <path d="M0 -6 L3 -8" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
-              <path d="M0 -2 L-3 -4" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
-              <path d="M0 2 L3 0" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
-              <path d="M0 6 L-3 4" fill="none" stroke={topping.accent} strokeWidth="0.5" opacity="0.4" />
-            </g>
-          ))}
+          {pts.map((p, i) => {
+            const scale = 0.9 + ((i % 3) * 0.15);
+            return (
+              <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r}) scale(${scale})`}>
+                {/* Broad leaf body - spinach/kale shape */}
+                <path
+                  d="M0 -20 C12 -18, 18 -6, 14 8 C10 18, 4 22, 0 22 C-4 22, -10 18, -14 8 C-18 -6, -12 -18, 0 -20 Z"
+                  fill={topping.color}
+                  stroke={topping.accent}
+                  strokeWidth="1.4"
+                />
+                {/* Lighter highlight */}
+                <path d="M-6 -14 C-2 -16, 4 -14, 6 -8" fill="none" stroke="#a8d47a" strokeWidth="1.2" opacity="0.7" />
+                {/* Central vein */}
+                <path d="M0 -18 Q0 0 0 20" fill="none" stroke={topping.accent} strokeWidth="0.9" opacity="0.7" />
+                {/* Side veins */}
+                <path d="M0 -10 Q5 -8 10 -2" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.55" />
+                <path d="M0 -10 Q-5 -8 -10 -2" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.55" />
+                <path d="M0 0 Q6 2 11 8" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.55" />
+                <path d="M0 0 Q-6 2 -11 8" fill="none" stroke={topping.accent} strokeWidth="0.6" opacity="0.55" />
+              </g>
+            );
+          })}
         </g>
       );
     }
