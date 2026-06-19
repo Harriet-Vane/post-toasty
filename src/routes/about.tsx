@@ -30,6 +30,9 @@ function AboutPage() {
               PostToast
             </h1>
           </Link>
+          <Link to="/how-it-works" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
+            How It Works
+          </Link>
           <Link to="/" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline">
             Home
           </Link>
