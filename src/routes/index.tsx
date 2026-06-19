@@ -734,6 +734,7 @@ ${shareUrl}`)}`;
       </article>
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
+        <button onClick={onBuildAgain} className="pixel-btn-ghost">Tweak your toast</button>
         <button
           onClick={() => {
             posthog.capture("share_clicked", {
@@ -746,7 +747,6 @@ ${shareUrl}`)}`;
         >
           Share
         </button>
-        <button onClick={onBuildAgain} className="pixel-btn-ghost">TWEAK YOUR TOAST</button>
       </div>
 
       {shareOpen && (
