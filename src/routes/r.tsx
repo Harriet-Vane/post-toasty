@@ -19,6 +19,7 @@ import {
 type RecipeSearch = {
   b: BreadId;
   t: string;
+  s: boolean;
 };
 
 const BREAD_IDS = new Set<string>(BREADS.map((b) => b.id));
@@ -27,13 +28,14 @@ const TOPPING_IDS = new Set<string>(TOPPINGS.map((t) => t.id));
 function parseSearch(raw: Record<string, unknown>): RecipeSearch {
   const b = typeof raw.b === "string" && BREAD_IDS.has(raw.b) ? (raw.b as BreadId) : "white";
   const t = typeof raw.t === "string" ? raw.t : "";
-  return { b, t };
+  const s = raw.s === "1" || raw.s === 1;
+  return { b, t, s };
 }
 
 export const Route = createFileRoute("/r")({
   validateSearch: (search) => parseSearch(search as Record<string, unknown>),
   head: ({ match }) => {
-    const { b, t } = (match.search ?? { b: "white", t: "" }) as RecipeSearch;
+    const { b, t, s } = (match.search ?? { b: "white", t: "", s: false }) as RecipeSearch;
     const toppings = t
       .split(",")
       .map((s) => s.trim())
@@ -41,8 +43,8 @@ export const Route = createFileRoute("/r")({
     const name = generateName(b, toppings);
     const title = `${name} — PostToast`;
     const description = `A ${getBread(b).name} toast recipe built on PostToast. Make your own.`;
-    const image = cardPublicUrl(b, toppings);
-    const url = `https://post-toasty.lovable.app/r?b=${encodeURIComponent(b)}&t=${encodeURIComponent(t)}`;
+    const image = cardPublicUrl(b, toppings, s);
+    const url = `https://post-toasty.lovable.app/r?b=${encodeURIComponent(b)}&t=${encodeURIComponent(t)}${s ? `&s=1` : ""}`;
     return {
       meta: [
         { title },
@@ -65,6 +67,7 @@ function RecipePage() {
   const search = Route.useSearch();
   const breadId: BreadId = search.b;
   const t: string = search.t;
+  const salted: boolean = search.s;
 
   const toppings = useMemo<ToppingId[]>(
     () =>
@@ -157,7 +160,7 @@ function RecipePage() {
                 YES
               </span>
               <div className={`dazzle-toast ${plate}`}>
-                <BreadCanvas breadId={breadId} toppings={toppings} size={260} />
+                <BreadCanvas breadId={breadId} toppings={toppings} size={260} salted={salted} />
               </div>
             </div>
 
