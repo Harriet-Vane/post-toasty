@@ -530,21 +530,6 @@ function ShareScreen({
   };
   const socialLinks: SocialLink[] = [
     {
-      label: "Instagram",
-      // Instagram has no web post intent. Copy the caption first, then open
-      // instagram.com in a new window (login prompted if needed) so the user
-      // can paste into a new post or story.
-      href: "https://www.instagram.com/",
-      onClick: async () => {
-        try {
-          await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-          sonnerToast.success("Caption copied — paste it into your Instagram post.");
-        } catch {
-          sonnerToast.error("Couldn't copy caption — you can type it in.");
-        }
-      },
-    },
-    {
       label: "LinkedIn",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}`,
     },
