@@ -623,8 +623,6 @@ function ShareScreen({
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
         <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">Share</button>
-        <button onClick={copyLink} className="pixel-btn">Copy link</button>
-        <button onClick={emailIt} className="pixel-btn">Email</button>
         <button onClick={onBuildAgain} className="pixel-btn-ghost">TWEAK YOUR TOAST</button>
       </div>
 
