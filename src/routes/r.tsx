@@ -76,6 +76,7 @@ function RecipePage() {
 
   const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
+  const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
 
   const variant = useMemo(() => {
