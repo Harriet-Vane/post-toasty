@@ -164,13 +164,19 @@
 }
 @utility pixel-btn-ghost {
   font-family: var(--font-pixel);
-  font-size: 0.65rem;
-  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 1rem 1.4rem;
   background: transparent;
   color: var(--ink);
-  border: 2px solid var(--ink);
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 0 var(--ink);
   cursor: pointer;
   text-transform: uppercase;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 
