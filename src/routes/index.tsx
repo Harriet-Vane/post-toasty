@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { ToastSprite } from "@/components/ToastSprite";
+import { cardKey } from "@/lib/cardKey";
 
 import {
   BREADS,
@@ -494,6 +495,8 @@ function ShareScreen({
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
+  const cardRef = useRef<HTMLElement | null>(null);
+  const uploadedRef = useRef<string | null>(null);
   const variant = useMemo(() => {
     const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-glitter", "variant-myspace", "variant-skulls"];
     return variants[Math.floor(Math.random() * variants.length)];
@@ -508,6 +511,41 @@ function ShareScreen({
     return `${origin}/r?${params.toString()}`;
   }, [breadId, toppings]);
 
+  // Capture the share card and upload it so /r OG tags resolve to a real image.
+  async function ensureCardUploaded(): Promise<string | null> {
+    if (uploadedRef.current) return uploadedRef.current;
+    const node = cardRef.current;
+    if (!node) return null;
+    try {
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(node, {
+        pixelRatio: 2,
+        cacheBust: true,
+        backgroundColor: "#ffffff",
+      });
+      const key = cardKey(breadId, toppings);
+      const res = await fetch("/api/public/upload-card", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key, dataUrl }),
+      });
+      if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
+      const { url } = (await res.json()) as { url: string };
+      uploadedRef.current = url;
+      return url;
+    } catch (err) {
+      console.error("[share] card upload failed", err);
+      return null;
+    }
+  }
+
+  // Kick off the upload as soon as the share screen renders so link previews
+  // are ready by the time someone shares.
+  useEffect(() => {
+    void ensureCardUploaded();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const enc = encodeURIComponent;
   type SocialLink = { label: string; href: string };
@@ -519,11 +557,12 @@ function ShareScreen({
     { label: "Threads", href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}` },
   ];
 
-  function openShare(href: string) {
-    // Synchronous window.open inside the click handler preserves the user
-    // gesture so the browser won't pop-up-block it. Lovable's preview iframe
-    // is sandboxed; if window.open is blocked we fall back to navigating
-    // the top-level window.
+  async function openShare(href: string) {
+    // Make sure the OG image is uploaded before the share window opens, so the
+    // first crawler hit on /r can resolve it.
+    await ensureCardUploaded();
+    // window.open after an await may be pop-up blocked; fall back to top-level
+    // navigation when that happens (Lovable's preview iframe is sandboxed).
     const w = window.open(href, "_blank", "noopener,noreferrer");
     if (!w) {
       sonnerToast.error("Pop-up blocked — opening in this tab instead.");
