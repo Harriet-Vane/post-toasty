@@ -505,10 +505,12 @@ function ShareScreen({
 
 
   const shareText = `${name} — a ${bread.name} toast. Built on PostToast.`;
+  // Always share the canonical published URL. From the preview iframe,
+  // window.location.origin is the id-preview--...lovable.app sandbox which
+  // LinkedIn and other crawlers block as unverified content.
   const shareUrl = useMemo(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://posttoast.app";
     const params = new URLSearchParams({ b: breadId, t: toppings.join(",") });
-    return `${origin}/r?${params.toString()}`;
+    return `https://post-toasty.lovable.app/r?${params.toString()}`;
   }, [breadId, toppings]);
 
   // Capture the share card and upload it so /r OG tags resolve to a real image.
