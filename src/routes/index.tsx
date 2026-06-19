@@ -111,7 +111,7 @@ function PostToast() {
         {/* Cabinet footer */}
         <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
           <span className="font-pixel text-[9px]">© Beth Dunn</span>
-          <span className="font-body text-xs">toast is a whole vibe</span>
+          <span className="font-body text-xs">toast is the most</span>
         </div>
       </div>
     </main>
