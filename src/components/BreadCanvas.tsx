@@ -454,7 +454,7 @@ function ToppingLayer({
       );
     }
     case "banana": {
-      const pts = scatterPositions(7, seedKey, { x: 12, y: 12, w: 176, h: 176 });
+      const pts = scatterPositions(7, seedKey, { x: 45, y: 45, w: 110, h: 110 });
       return (
         <g>
           {pts.map((p, i) => (
@@ -493,7 +493,7 @@ function ToppingLayer({
       );
     }
     case "pickle": {
-      const pts = scatterPositions(7, seedKey, { x: 12, y: 12, w: 176, h: 176 });
+      const pts = scatterPositions(7, seedKey, { x: 45, y: 45, w: 110, h: 110 });
       return (
         <g>
           {pts.map((p, i) => (
