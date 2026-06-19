@@ -173,10 +173,22 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-        <button onClick={() => setModal("yes")} className="pixel-btn-primary">
+        <button
+          onClick={() => {
+            posthog.capture("home_yes_clicked");
+            setModal("yes");
+          }}
+          className="pixel-btn-primary"
+        >
           Yes
         </button>
-        <button onClick={() => setModal("not-yet")} className="pixel-btn">
+        <button
+          onClick={() => {
+            posthog.capture("home_convince_me_clicked");
+            setModal("not-yet");
+          }}
+          className="pixel-btn"
+        >
           CONVINCE ME
         </button>
       </div>
