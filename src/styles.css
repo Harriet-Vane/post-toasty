@@ -531,10 +531,19 @@
 
 /* Selection toast */
 .selection-toast {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: -0.75rem;
+  top: 2.5rem;
+  z-index: 60;
   animation: selection-toast 3s ease forwards;
+}
+
+@media (min-width: 768px) {
+  .selection-toast {
+    position: absolute;
+    top: -0.75rem;
+    z-index: 20;
+  }
 }
 
 @keyframes selection-toast {
