@@ -11,9 +11,9 @@ export function cardKey(breadId: string, toppings: string[], salted?: boolean): 
   return h.toString(36);
 }
 
-export function cardPublicUrl(breadId: string, toppings: string[]): string {
+export function cardPublicUrl(breadId: string, toppings: string[], salted?: boolean): string {
   const base =
     (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) ||
     "";
-  return `${base}/storage/v1/object/public/toast-cards/cards/${cardKey(breadId, toppings)}.png`;
+  return `${base}/storage/v1/object/public/toast-cards/cards/${cardKey(breadId, toppings, salted)}.png`;
 }

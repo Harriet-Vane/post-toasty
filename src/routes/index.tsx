@@ -47,6 +47,7 @@ function PostToast() {
   const [breadId, setBreadId] = useState<BreadId>("white");
   const [breadStep, setBreadStep] = useState(true); // step 1 vs step 2 in builder
   const [toppings, setToppings] = useState<ToppingId[]>([]);
+  const [salted, setSalted] = useState(false);
 
   const toastCount = 1;
 
@@ -55,6 +56,7 @@ function PostToast() {
     setBreadId("white");
     setBreadStep(true);
     setToppings([]);
+    setSalted(false);
   }
 
   return (
@@ -110,6 +112,8 @@ function PostToast() {
               breadStep={breadStep}
               setBreadStep={setBreadStep}
               onLock={() => setPhase("share")}
+              salted={salted}
+              onSalted={() => setSalted(true)}
             />
           )}
 
@@ -119,6 +123,7 @@ function PostToast() {
               toppings={toppings}
               toastCount={toastCount}
               onBuildAgain={() => setPhase("builder")}
+              salted={salted}
             />
           )}
         </div>
