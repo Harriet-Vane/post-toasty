@@ -802,6 +802,34 @@ ${shareUrl}`)}`;
           </div>
         </div>
       )}
+
+      {whyToastOpen && (
+        <div
+          className="share-modal-backdrop"
+          onClick={() => setWhyToastOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Why toast?"
+        >
+          <div className="share-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between mb-3">
+              <h4 className="font-pixel text-[13px] text-[var(--ink)]">
+                WHY TOAST?
+              </h4>
+              <button
+                onClick={() => setWhyToastOpen(false)}
+                className="pixel-btn-ghost text-xl flex items-center justify-center w-10 h-10"
+                aria-label="Close Why toast dialog"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="font-body text-sm text-[var(--ink)] opacity-90 leading-relaxed">
+              PostToast is a platform for tasty creativity and nutritious fuel. Use PostToast to explore new taste combinations, save and share recipes, and ponder the infinite variety offered by toast.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
