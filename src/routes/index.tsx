@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import posthog from "posthog-js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
@@ -172,10 +173,22 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-        <button onClick={() => setModal("yes")} className="pixel-btn-primary">
+        <button
+          onClick={() => {
+            posthog.capture("home_yes_clicked");
+            setModal("yes");
+          }}
+          className="pixel-btn-primary"
+        >
           Yes
         </button>
-        <button onClick={() => setModal("not-yet")} className="pixel-btn">
+        <button
+          onClick={() => {
+            posthog.capture("home_convince_me_clicked");
+            setModal("not-yet");
+          }}
+          className="pixel-btn"
+        >
           CONVINCE ME
         </button>
       </div>
@@ -210,7 +223,13 @@ function InputScreen({ onContinue }: { onContinue: () => void }) {
               {modalCopy}
             </p>
             <div className="flex justify-center">
-              <button onClick={onContinue} className="pixel-btn-primary">
+              <button
+                onClick={() => {
+                  posthog.capture("lets_toast_clicked", { modal: modal });
+                  onContinue();
+                }}
+                className="pixel-btn-primary"
+              >
                 <span className="align-middle">LET'S TOAST</span>
               </button>
             </div>
@@ -259,11 +278,17 @@ function BuilderScreen({
 
   function selectBread(id: BreadId) {
     setBreadId(id);
+    posthog.capture("bread_chosen", { bread_id: id });
     showToast(id);
   }
 
   function addTopping(id: ToppingId) {
-    setToppings([...toppings, id]);
+    const next = [...toppings, id];
+    setToppings(next);
+    posthog.capture("topping_chosen", { topping_id: id, stack_size: next.length });
+    if (next.length === 1) {
+      posthog.capture("first_topping_chosen", { topping_id: id });
+    }
     showToast(id);
   }
   function removeAt(i: number) {
@@ -308,7 +333,13 @@ function BuilderScreen({
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <button onClick={() => setBreadStep(false)} className="pixel-btn-primary">
+          <button
+            onClick={() => {
+              posthog.capture("choose_toppings_clicked", { bread_id: breadId });
+              setBreadStep(false);
+            }}
+            className="pixel-btn-primary"
+          >
             Next: Toppings
           </button>
         </div>
@@ -409,7 +440,17 @@ function BuilderScreen({
             >
               Change bread
             </button>
-            <button onClick={onLock} className="pixel-btn-primary mt-3">
+            <button
+              onClick={() => {
+                posthog.capture("lets_eat_clicked", {
+                  bread_id: breadId,
+                  topping_count: toppings.length,
+                  toppings,
+                });
+                onLock();
+              }}
+              className="pixel-btn-primary mt-3"
+            >
               Let&apos;s eat!
             </button>
           </div>
@@ -656,7 +697,18 @@ ${shareUrl}`)}`;
       </article>
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
-        <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">Share</button>
+        <button
+          onClick={() => {
+            posthog.capture("share_clicked", {
+              bread_id: breadId,
+              topping_count: toppings.length,
+            });
+            setShareOpen(true);
+          }}
+          className="pixel-btn-primary"
+        >
+          Share
+        </button>
         <button onClick={onBuildAgain} className="pixel-btn-ghost">TWEAK YOUR TOAST</button>
       </div>
 
@@ -697,6 +749,11 @@ ${shareUrl}`)}`;
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
                   onClick={() => {
+                    posthog.capture("recipe_shared", {
+                      share_method: s.label.toLowerCase(),
+                      bread_id: breadId,
+                      topping_count: toppings.length,
+                    });
                     openShare(s.href);
                     setShareOpen(false);
                   }}

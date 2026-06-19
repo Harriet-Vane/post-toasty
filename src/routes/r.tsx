@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import posthog from "posthog-js";
+import { useEffect, useMemo } from "react";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
@@ -78,6 +79,16 @@ function RecipePage() {
   const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
+
+  useEffect(() => {
+    if (toppings.length >= 1) {
+      posthog.capture("toast_created", {
+        bread_id: breadId,
+        topping_count: toppings.length,
+        toppings,
+      });
+    }
+  }, [breadId, toppings]);
 
   const variant = useMemo(() => {
     const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-glitter", "variant-myspace", "variant-skulls"];
