@@ -15,6 +15,9 @@ export function usePostHogInit() {
       posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
         capture_pageview: false,
+        // Pageviews are captured manually below, but pageleave defaults to
+        // 'if_capture_pageview' — so it stays off unless we opt in explicitly.
+        capture_pageleave: true,
         loaded: (ph) => {
           if (process.env.NODE_ENV === "development") ph.debug();
         },
