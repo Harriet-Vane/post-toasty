@@ -76,7 +76,7 @@ function PostToast() {
                 onClick={() => setWhyToastOpen(true)}
                 className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline cursor-pointer bg-transparent border-0"
               >
-                Why toast?
+                Why toast
               </button>
             )}
             <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
