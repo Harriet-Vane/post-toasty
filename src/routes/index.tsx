@@ -508,40 +508,28 @@ function ShareScreen({
     return `${origin}/r?${params.toString()}`;
   }, [breadId, toppings]);
 
-  async function copyLink() {
-    try {
-      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-      sonnerToast.success("Copied to clipboard — share away.");
-    } catch {
-      sonnerToast.error("Couldn't copy link.");
-    }
-  }
-  function emailIt() {
-    const subj = encodeURIComponent(`${name} — a toast`);
-    const body = encodeURIComponent(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`);
-    window.open(`mailto:?subject=${subj}&body=${body}`, "_blank", "noopener,noreferrer");
-  }
 
   const enc = encodeURIComponent;
-  type SocialLink = {
-    label: string;
-    href: string;
-    onClick?: () => Promise<void> | void;
-  };
+  type SocialLink = { label: string; href: string };
+  const emailHref = `mailto:?subject=${enc(`${name} — a toast`)}&body=${enc(`${shareText}\n\n${recipe.join("\n")}\n\n${shareUrl}`)}`;
   const socialLinks: SocialLink[] = [
-    {
-      label: "LinkedIn",
-      href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}`,
-    },
-    {
-      label: "Facebook",
-      href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}`,
-    },
-    {
-      label: "Threads",
-      href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}`,
-    },
+    { label: "Email", href: emailHref },
+    { label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(shareUrl)}` },
+    { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}` },
+    { label: "Threads", href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}` },
   ];
+
+  function openShare(href: string) {
+    // Synchronous window.open inside the click handler preserves the user
+    // gesture so the browser won't pop-up-block it. Lovable's preview iframe
+    // is sandboxed; if window.open is blocked we fall back to navigating
+    // the top-level window.
+    const w = window.open(href, "_blank", "noopener,noreferrer");
+    if (!w) {
+      sonnerToast.error("Pop-up blocked — opening in this tab instead.");
+      try { window.top!.location.href = href; } catch { window.location.href = href; }
+    }
+  }
 
   return (
     <div className="pt-12 pb-2">
@@ -622,8 +610,6 @@ function ShareScreen({
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6">
         <button onClick={() => setShareOpen(true)} className="pixel-btn-primary">Share</button>
-        <button onClick={copyLink} className="pixel-btn">Copy link</button>
-        <button onClick={emailIt} className="pixel-btn">Email</button>
         <button onClick={onBuildAgain} className="pixel-btn-ghost">TWEAK YOUR TOAST</button>
       </div>
 
@@ -658,50 +644,19 @@ function ShareScreen({
             </p>
             <div className="grid grid-cols-2 gap-2">
               {socialLinks.map((s) => (
-                <a
+                <button
                   key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  type="button"
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
                   onClick={() => {
-                    void s.onClick?.();
+                    openShare(s.href);
+                    setShareOpen(false);
                   }}
                 >
                   <span>{s.label}</span>
-                </a>
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-2 mt-3">
-              <button
-                onClick={async () => {
-                  await copyLink();
-                  setShareOpen(false);
-                }}
-                className="pixel-btn-ghost"
-              >
-                Copy text + link
-              </button>
-              {typeof navigator !== "undefined" && (navigator as Navigator).share && (
-                <button
-                  onClick={async () => {
-                    try {
-                      await (navigator as Navigator).share({
-                        title: "PostToast",
-                        text: shareText,
-                        url: shareUrl,
-                      });
-                      setShareOpen(false);
-                    } catch {
-                      /* dismissed */
-                    }
-                  }}
-                  className="pixel-btn-ghost"
-                >
-                  System share
                 </button>
-              )}
+              ))}
             </div>
           </div>
         </div>
