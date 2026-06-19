@@ -181,7 +181,7 @@ function InputScreen({
         <p className="font-pixel text-[10px] text-[var(--toast-crust)] mb-5">
           DELICIOUS TREATS DEPARTMENT
         </p>
-        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)]">
+        <h2 className="font-pixel text-[18px] sm:text-[24px] leading-[1.4] text-[var(--ink)] min-h-[52px] sm:min-h-[70px]">
           {displayed.length <= line1Len ? displayed : (
             <>
               {line1}
@@ -217,12 +217,6 @@ function InputScreen({
         </button>
       </div>
 
-      <button
-        onClick={() => setWhyToastOpen(true)}
-        className="font-body text-xs underline text-[var(--toast-crust)] opacity-80 hover:opacity-100 cursor-pointer bg-transparent border-0"
-      >
-        Why toast?
-      </button>
 
       <div className="flex flex-col items-center gap-1 mt-auto">
         <img
