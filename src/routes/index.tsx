@@ -827,7 +827,7 @@ ${shareUrl}`)}`;
                 </h4>
               </div>
               <button
-                onClick={() => setShareOpen(false)}
+                onClick={() => { setShareOpen(false); setEmailCaptureOpen(false); }}
                 className="pixel-btn-ghost text-xl flex items-center justify-center w-10 h-10"
                 aria-label="Close share dialog"
               >
