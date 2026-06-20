@@ -1,10 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import posthog from "posthog-js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
-
-import { captureShareEmail } from "@/lib/share-capture.functions";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
@@ -599,12 +596,6 @@ function ShareScreen({
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
-  const [emailCaptureOpen, setEmailCaptureOpen] = useState(false);
-  const [captureEmail, setCaptureEmail] = useState("");
-  const [captureOptIn, setCaptureOptIn] = useState(true);
-  const [captureSubmitting, setCaptureSubmitting] = useState(false);
-  const [captureError, setCaptureError] = useState<string | null>(null);
-  const submitCapture = useServerFn(captureShareEmail);
   const cardRef = useRef<HTMLElement | null>(null);
   const uploadedRef = useRef<string | null>(null);
   const variant = useMemo(() => {
@@ -827,7 +818,7 @@ ${shareUrl}`)}`;
                 </h4>
               </div>
               <button
-                onClick={() => { setShareOpen(false); setEmailCaptureOpen(false); }}
+                onClick={() => setShareOpen(false)}
                 className="pixel-btn-ghost text-xl flex items-center justify-center w-10 h-10"
                 aria-label="Close share dialog"
               >
@@ -837,123 +828,27 @@ ${shareUrl}`)}`;
             <p className="font-body text-sm text-[var(--ink)] opacity-80 mb-3">
               Bring some toasty love to the world.
             </p>
-            {emailCaptureOpen ? (
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  setCaptureError(null);
-                  const trimmed = captureEmail.trim();
-                  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-                    setCaptureError("Please enter a valid email.");
-                    return;
-                  }
-                  setCaptureSubmitting(true);
-                  try {
-                    await submitCapture({
-                      data: {
-                        email: trimmed,
-                        marketingOptIn: captureOptIn,
-                        breadId,
-                        toppingIds: toppings,
-                        recipeName: name,
-                        shareUrl,
-                        userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
-                        referrer: typeof document !== "undefined" ? document.referrer || undefined : undefined,
-                      },
-                    });
-                    posthog.capture("share_email_captured", {
-                      opt_in: captureOptIn,
+            <div className="grid grid-cols-2 gap-2">
+              {socialLinks.map((s) => (
+                <button
+                  key={s.label}
+                  type="button"
+                  className="pixel-btn"
+                  style={{ justifyContent: "flex-start" }}
+                  onClick={() => {
+                    posthog.capture("recipe_shared", {
+                      share_method: s.label.toLowerCase(),
                       bread_id: breadId,
                       topping_count: toppings.length,
                     });
-                  } catch (err) {
-                    console.error("[share-capture] submit failed", err);
-                    // proceed anyway — don't block the user's share
-                  } finally {
-                    setCaptureSubmitting(false);
-                  }
-                  posthog.capture("recipe_shared", {
-                    share_method: "email",
-                    bread_id: breadId,
-                    topping_count: toppings.length,
-                  });
-                  openShare(emailHref);
-                  setEmailCaptureOpen(false);
-                  setShareOpen(false);
-                }}
-                className="flex flex-col gap-3"
-              >
-                <label className="font-body text-sm text-[var(--ink)]">
-                  Your email
-                  <input
-                    type="email"
-                    required
-                    autoFocus
-                    value={captureEmail}
-                    onChange={(e) => setCaptureEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="mt-1 w-full px-3 py-2 font-body text-sm bg-white text-[var(--ink)]"
-                    style={{ border: "3px solid var(--ink)" }}
-                  />
-                </label>
-                <label className="flex items-start gap-2 font-body text-xs text-[var(--ink)] opacity-80">
-                  <input
-                    type="checkbox"
-                    checked={captureOptIn}
-                    onChange={(e) => setCaptureOptIn(e.target.checked)}
-                    className="mt-0.5"
-                  />
-                  <span>Send me occasional PostToast updates. Unsubscribe anytime.</span>
-                </label>
-                {captureError && (
-                  <p className="font-body text-xs" style={{ color: "#b91c1c" }}>{captureError}</p>
-                )}
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className="pixel-btn-ghost"
-                    onClick={() => {
-                      setEmailCaptureOpen(false);
-                      setCaptureError(null);
-                    }}
-                    disabled={captureSubmitting}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="pixel-btn" disabled={captureSubmitting}>
-                    {captureSubmitting ? "One sec…" : "Continue to email"}
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                {socialLinks.map((s) => (
-                  <button
-                    key={s.label}
-                    type="button"
-                    className="pixel-btn"
-                    style={{ justifyContent: "flex-start" }}
-                    onClick={() => {
-                      if (s.label === "Email") {
-                        void ensureCardUploaded();
-                        setCaptureError(null);
-                        setEmailCaptureOpen(true);
-                        return;
-                      }
-                      posthog.capture("recipe_shared", {
-                        share_method: s.label.toLowerCase(),
-                        bread_id: breadId,
-                        topping_count: toppings.length,
-                      });
-                      openShare(s.href);
-                      setShareOpen(false);
-                    }}
-                  >
-                    <span>{s.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
+                    openShare(s.href);
+                    setShareOpen(false);
+                  }}
+                >
+                  <span>{s.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
