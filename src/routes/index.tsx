@@ -599,6 +599,12 @@ function ShareScreen({
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
   const [shareOpen, setShareOpen] = useState(false);
+  const [emailCaptureOpen, setEmailCaptureOpen] = useState(false);
+  const [captureEmail, setCaptureEmail] = useState("");
+  const [captureOptIn, setCaptureOptIn] = useState(true);
+  const [captureSubmitting, setCaptureSubmitting] = useState(false);
+  const [captureError, setCaptureError] = useState<string | null>(null);
+  const submitCapture = useServerFn(captureShareEmail);
   const cardRef = useRef<HTMLElement | null>(null);
   const uploadedRef = useRef<string | null>(null);
   const variant = useMemo(() => {
