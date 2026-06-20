@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      share_email_captures: {
+        Row: {
+          bread_id: string | null
+          created_at: string
+          email: string
+          hubspot_error: string | null
+          hubspot_synced: boolean
+          id: string
+          marketing_opt_in: boolean
+          recipe_name: string | null
+          referrer: string | null
+          share_url: string | null
+          topping_ids: string[] | null
+          user_agent: string | null
+        }
+        Insert: {
+          bread_id?: string | null
+          created_at?: string
+          email: string
+          hubspot_error?: string | null
+          hubspot_synced?: boolean
+          id?: string
+          marketing_opt_in?: boolean
+          recipe_name?: string | null
+          referrer?: string | null
+          share_url?: string | null
+          topping_ids?: string[] | null
+          user_agent?: string | null
+        }
+        Update: {
+          bread_id?: string | null
+          created_at?: string
+          email?: string
+          hubspot_error?: string | null
+          hubspot_synced?: boolean
+          id?: string
+          marketing_opt_in?: boolean
+          recipe_name?: string | null
+          referrer?: string | null
+          share_url?: string | null
+          topping_ids?: string[] | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
