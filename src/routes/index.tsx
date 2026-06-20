@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import posthog from "posthog-js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
+
+import { captureShareEmail } from "@/lib/share-capture.functions";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
