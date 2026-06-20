@@ -1,0 +1,1 @@
+REVOKE ALL ON public.share_email_captures FROM anon, authenticated; GRANT ALL ON public.share_email_captures TO service_role;
