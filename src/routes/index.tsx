@@ -823,11 +823,17 @@ ${shareUrl}`)}`;
           <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
             RECIPE
           </p>
-          <ol className="font-body text-sm text-[var(--ink)] space-y-1 list-none">
-            {recipe.map((line, i) => (
-              <li key={i}>{line}</li>
-            ))}
-          </ol>
+          {aiQuery.isLoading ? (
+            <p className="font-body text-sm text-[var(--ink)] opacity-70 italic">
+              Cooking up your recipe…
+            </p>
+          ) : (
+            <ol className="font-body text-sm text-[var(--ink)] space-y-1 list-none">
+              {recipe.map((line, i) => (
+                <li key={i}>{line}</li>
+              ))}
+            </ol>
+          )}
         </div>
 
         <div className="mt-4">
