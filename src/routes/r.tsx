@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import posthog from "posthog-js";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { cardPublicUrl } from "@/lib/cardKey";
+import { generateAiRecipe } from "@/lib/recipe-ai.functions";
 import {
   BREADS,
   TOPPINGS,
@@ -78,10 +81,35 @@ function RecipePage() {
     [t],
   );
 
-  const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
-  const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
+  const fallbackName = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
+  const fallbackRecipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
+
+  const generateAiRecipeFn = useServerFn(generateAiRecipe);
+  const aiQuery = useQuery({
+    queryKey: ["ai-recipe", "shared", breadId, toppings.join(","), salted],
+    queryFn: () => generateAiRecipeFn({ data: { breadId, toppingIds: toppings, salted } }),
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+
+  const aiOk =
+    !!aiQuery.data &&
+    aiQuery.data.name &&
+    aiQuery.data.steps &&
+    aiQuery.data.steps.length > 0;
+  const name = aiOk ? (aiQuery.data!.name as string) : fallbackName;
+  const recipe = aiOk
+    ? (aiQuery.data!.steps as string[]).map((step, i) => `${i + 1}. ${step}`)
+    : fallbackRecipe;
+  const traceIdRef = useRef<string>(
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `trace-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  );
 
   useEffect(() => {
     if (toppings.length >= 1) {
@@ -92,6 +120,47 @@ function RecipePage() {
       });
     }
   }, [breadId, toppings]);
+
+  const reportedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (aiQuery.isLoading) return;
+    const key = `${breadId}|${toppings.join(",")}|${salted}|${
+      aiQuery.data?.error ?? "ok"
+    }`;
+    if (reportedRef.current === key) return;
+    reportedRef.current = key;
+
+    posthog.capture("toast_recipe_generated", {
+      source: aiOk ? "ai" : "fallback",
+      latency_ms: aiQuery.data?.latencyMs ?? null,
+      model: aiQuery.data?.model ?? null,
+      bread_id: breadId,
+      topping_count: toppings.length,
+      salted,
+      shared_page: true,
+    });
+
+    if (aiQuery.data && aiQuery.data.model) {
+      const latencyMs = aiQuery.data.latencyMs ?? null;
+      const usage = aiQuery.data.usage ?? {};
+      const aiProps: Record<string, unknown> = {
+        $ai_trace_id: traceIdRef.current,
+        $ai_provider: aiQuery.data.model.startsWith("anthropic/")
+          ? "anthropic"
+          : aiQuery.data.model.startsWith("google/")
+            ? "google"
+            : "lovable",
+        $ai_model: aiQuery.data.model,
+        $ai_is_error: !!aiQuery.data.error,
+      };
+      if (typeof latencyMs === "number") aiProps.$ai_latency = latencyMs / 1000;
+      if (typeof usage.promptTokens === "number") aiProps.$ai_input_tokens = usage.promptTokens;
+      if (typeof usage.completionTokens === "number") aiProps.$ai_output_tokens = usage.completionTokens;
+      if (typeof usage.totalTokens === "number") aiProps.$ai_total_tokens = usage.totalTokens;
+      if (aiQuery.data.error) aiProps.$ai_error = aiQuery.data.error;
+      posthog.capture("$ai_generation", aiProps);
+    }
+  }, [aiQuery.isLoading, aiQuery.data, aiOk, breadId, toppings, salted]);
 
   const variant = useMemo(() => {
     const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-glitter", "variant-myspace", "variant-skulls"];
@@ -168,11 +237,17 @@ function RecipePage() {
               <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
                 RECIPE
               </p>
-              <ol className="font-body text-sm text-[var(--ink)] space-y-1 list-none">
-                {recipe.map((line, i) => (
-                  <li key={i}>{line}</li>
-                ))}
-              </ol>
+              {aiQuery.isLoading ? (
+                <p className="font-body text-sm text-[var(--ink)] opacity-70 italic">
+                  Cooking up your recipe…
+                </p>
+              ) : (
+                <ol className="font-body text-sm text-[var(--ink)] space-y-1 list-none">
+                  {recipe.map((line, i) => (
+                    <li key={i}>{line}</li>
+                  ))}
+                </ol>
+              )}
             </div>
 
             <div className="mt-4">

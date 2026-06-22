@@ -99,7 +99,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
         model: gateway(modelId),
         system,
         prompt: user,
-        experimental_output: Output.object({ schema: RecipeSchema }),
+        output: Output.object({ schema: RecipeSchema }),
       });
       const latencyMs = Math.round(performance.now() - started);
       return { result, latencyMs };
@@ -117,8 +117,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       }
 
       const { result, latencyMs } = attempt;
-      const output = (result as unknown as { experimental_output?: unknown })
-        .experimental_output;
+      const output = (result as unknown as { output?: unknown }).output;
       const parsed = RecipeSchema.safeParse(output);
       if (!parsed.success) {
         return {
