@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import posthog from "posthog-js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
+
+import { generateAiRecipe } from "@/lib/recipe-ai.functions";
 
 import angelToast from "@/assets/angel-toast.png";
 import { BreadCanvas } from "@/components/BreadCanvas";
@@ -592,11 +596,95 @@ function ShareScreen({
   onBuildAgain: () => void;
   salted: boolean;
 }) {
-  const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
-  const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
+  const fallbackName = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
+  const fallbackRecipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
-  const [shareOpen, setShareOpen] = useState(false);
+
+  // AI-generated recipe (Claude via Lovable AI Gateway). Falls back to local
+  // rule-based generator on error.
+  const traceIdRef = useRef<string>(
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `trace-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  );
+  const generateAiRecipeFn = useServerFn(generateAiRecipe);
+  const aiQuery = useQuery({
+    queryKey: ["ai-recipe", breadId, toppings.join(","), salted],
+    queryFn: () => generateAiRecipeFn({ data: { breadId, toppingIds: toppings, salted } }),
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+
+  const aiOk =
+    !!aiQuery.data &&
+    aiQuery.data.name &&
+    aiQuery.data.steps &&
+    aiQuery.data.steps.length > 0;
+  const name = aiOk ? (aiQuery.data!.name as string) : fallbackName;
+  const recipe = aiOk
+    ? (aiQuery.data!.steps as string[]).map((s, i) => `${i + 1}. ${s}`)
+    : fallbackRecipe;
+
+  // Fire analytics once per resolved recipe (success or fallback).
+  const reportedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (aiQuery.isLoading) return;
+    const key = `${breadId}|${toppings.join(",")}|${salted}|${
+      aiQuery.data?.error ?? "ok"
+    }`;
+    if (reportedRef.current === key) return;
+    reportedRef.current = key;
+
+    const source: "ai" | "fallback" = aiOk ? "ai" : "fallback";
+    const latencyMs = aiQuery.data?.latencyMs ?? null;
+    const model = aiQuery.data?.model ?? null;
+
+    posthog.capture("toast_recipe_generated", {
+      source,
+      latency_ms: latencyMs,
+      model,
+      bread_id: breadId,
+      topping_count: toppings.length,
+      salted,
+    });
+
+    // PostHog AI Observability event — only fire when we actually called the AI,
+    // including when the call errored (so error rate shows in the dashboard).
+    if (aiQuery.data && aiQuery.data.model) {
+      const usage = aiQuery.data.usage ?? {};
+      const aiProps: Record<string, unknown> = {
+        $ai_trace_id: traceIdRef.current,
+        $ai_provider: aiQuery.data.model.startsWith("anthropic/")
+          ? "anthropic"
+          : aiQuery.data.model.startsWith("google/")
+            ? "google"
+            : "lovable",
+        $ai_model: aiQuery.data.model,
+        $ai_is_error: !!aiQuery.data.error,
+      };
+      if (typeof latencyMs === "number") {
+        $assignLatency(aiProps, latencyMs);
+      }
+      if (typeof usage.promptTokens === "number") {
+        aiProps.$ai_input_tokens = usage.promptTokens;
+      }
+      if (typeof usage.completionTokens === "number") {
+        aiProps.$ai_output_tokens = usage.completionTokens;
+      }
+      if (typeof usage.totalTokens === "number") {
+        aiProps.$ai_total_tokens = usage.totalTokens;
+      }
+      if (aiQuery.data.error) {
+        aiProps.$ai_error = aiQuery.data.error;
+      }
+      posthog.capture("$ai_generation", aiProps);
+    }
+  }, [aiQuery.isLoading, aiQuery.data, aiOk, breadId, toppings, salted]);
+
+
   const cardRef = useRef<HTMLElement | null>(null);
   const uploadedRef = useRef<string | null>(null);
   const variant = useMemo(() => {
