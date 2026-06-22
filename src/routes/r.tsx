@@ -81,10 +81,30 @@ function RecipePage() {
     [t],
   );
 
-  const name = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
-  const recipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
+  const fallbackName = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
+  const fallbackRecipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
   const nutrition = useMemo(() => calculateNutrition(breadId, toppings), [breadId, toppings]);
   const bread = getBread(breadId);
+
+  const generateAiRecipeFn = useServerFn(generateAiRecipe);
+  const aiQuery = useQuery({
+    queryKey: ["ai-recipe", "shared", breadId, toppings.join(","), salted],
+    queryFn: () => generateAiRecipeFn({ data: { breadId, toppingIds: toppings, salted } }),
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+
+  const aiOk =
+    !!aiQuery.data &&
+    aiQuery.data.name &&
+    aiQuery.data.steps &&
+    aiQuery.data.steps.length > 0;
+  const name = aiOk ? (aiQuery.data!.name as string) : fallbackName;
+  const recipe = aiOk
+    ? (aiQuery.data!.steps as string[]).map((step, i) => `${i + 1}. ${step}`)
+    : fallbackRecipe;
 
   useEffect(() => {
     if (toppings.length >= 1) {
@@ -95,6 +115,19 @@ function RecipePage() {
       });
     }
   }, [breadId, toppings]);
+
+  useEffect(() => {
+    if (aiQuery.isLoading) return;
+    posthog.capture("toast_recipe_generated", {
+      source: aiOk ? "ai" : "fallback",
+      latency_ms: aiQuery.data?.latencyMs ?? null,
+      model: aiQuery.data?.model ?? null,
+      bread_id: breadId,
+      topping_count: toppings.length,
+      salted,
+      shared_page: true,
+    });
+  }, [aiQuery.isLoading, aiQuery.data, aiOk, breadId, toppings, salted]);
 
   const variant = useMemo(() => {
     const variants = ["", "variant-starfield", "variant-hearts", "variant-toasters", "variant-glitter", "variant-myspace", "variant-skulls"];
