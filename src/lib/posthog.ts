@@ -2,8 +2,16 @@ import { useEffect } from "react";
 import posthog from "posthog-js";
 import { useRouter } from "@tanstack/react-router";
 
-const POSTHOG_KEY = "phc_vckhM8o2VPsu6q3MDGKwDSCQUpXdVeVvAsJT8BphC2BY";
+const POSTHOG_KEY = "phc_yDPSEJTQgShjMvfjj96uDCHbRdAVuvuPcDyQWH7CWjs6";
 const POSTHOG_HOST = "https://us.i.posthog.com";
+
+export function track(event: string, props?: Record<string, unknown>) {
+  try {
+    posthog.capture(event, props);
+  } catch {
+    /* posthog not initialized yet */
+  }
+}
 
 let initialized = false;
 
