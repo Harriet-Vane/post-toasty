@@ -298,6 +298,7 @@ function BuilderScreen({
   function addSalt() {
     if (saltFalling) return;
     posthog.capture("add_salt_clicked", { bread_id: breadId, topping_count: toppings.length });
+    setSelectionToast({ message: "SALTY GOODNESS FTW", id: Date.now() });
     setSaltFalling(true);
     window.setTimeout(() => {
       onSalted();
