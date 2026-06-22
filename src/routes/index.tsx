@@ -666,7 +666,8 @@ function ShareScreen({
         $ai_is_error: !!aiQuery.data.error,
       };
       if (typeof latencyMs === "number") {
-        $assignLatency(aiProps, latencyMs);
+        // PostHog AI Observability expects latency in seconds.
+        aiProps.$ai_latency = latencyMs / 1000;
       }
       if (typeof usage.promptTokens === "number") {
         aiProps.$ai_input_tokens = usage.promptTokens;
@@ -685,6 +686,7 @@ function ShareScreen({
   }, [aiQuery.isLoading, aiQuery.data, aiOk, breadId, toppings, salted]);
 
 
+  const [shareOpen, setShareOpen] = useState(false);
   const cardRef = useRef<HTMLElement | null>(null);
   const uploadedRef = useRef<string | null>(null);
   const variant = useMemo(() => {
