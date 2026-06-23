@@ -1,35 +1,28 @@
-## 1. Root cause of the error
+## What's broken
 
-OpenAI's structured-output mode requires every object property to appear in `required`. In `src/lib/toast-chat.functions.ts` the custom-ingredient variant has `accent: z.string().regex(...).optional()`, which compiles to a JSON schema where `accent` is in `properties` but not in `required`. The gateway rejects it with:
+The share card's OG image isn't being uploaded, so `/r` link previews and downstream shares don't show the toast image.
 
-> Invalid schema for response_format 'response': … 'required' is required to be supplied and to be an array including every key in properties. Missing 'accent'.
+## Why
 
-**Fix:** make `accent` required but nullable — `z.string().regex(...).nullable()` — and update the system prompt to say "return null when no accent". On the client, treat `accent: null` as undefined when registering the custom topping.
+`ShareScreen` captures the share card (`cardRef`) with `html-to-image`'s `toPng`, then POSTs the result to `/api/public/upload-card`. The uploaded URL is what `/r`'s `og:image` / `twitter:image` point to (via `cardPublicUrl`).
 
-## 2. Rename Toast Oracle → Toast Angel everywhere
+Recent change: the angel image inside the share card's footer (`src/routes/index.tsx` ~line 880) was swapped from a plain `<img>` to `<ToastAngel>`. `ToastAngel` always renders an inline `<style>{@keyframes toast-angel-heart-rise ...}</style>` sibling to the `<img>`, plus a stateful click handler.
 
-- Rename file `src/components/ToastOracle.tsx` → `src/components/ToastAngel.tsx`; rename exported component `ToastOracle` → `ToastAngel`.
-- Update import + JSX usage in `src/routes/index.tsx`.
-- Update PostHog events: `oracle_message_sent` → `angel_message_sent`, `oracle_stack_applied` → `angel_stack_applied`, `oracle_feedback` → `angel_feedback`.
-- Update server distinct_id `server:toast-oracle` → `server:toast-angel` and the system prompt line "You are the toast oracle…" → "You are Toast Angel…".
-- Update all user-visible strings (toasts, fallback messages, console tags) to say "Toast Angel".
+`html-to-image` clones the captured subtree and serializes it inside an SVG `<foreignObject>`. Inline `<style>` tags inside that subtree are a well-known failure mode — the keyframe block ends up inside the SVG payload and the resulting data URL either throws during decode or yields a broken PNG. `ensureCardUploaded` catches the error and logs `[share] card upload failed`, so `uploadedRef` stays `null` and no card is ever uploaded for that recipe key. `/r` then advertises an `og:image` URL that 404s in storage.
 
-## 3. Friendlier, human error messages
+The interactive heart-burst angel only needs to live where users actually click it (the hero on `/` and the footer on `/r`), not inside the static captured card.
 
-Centralize friendly copy and surface it in both the chat transcript and the sonner toast. Examples:
+## Fix
 
-- Schema/validation failure → "Sorry, that message got stuck in my toaster. Care to try again?"
-- Network/throw → "Looks like the toaster unplugged itself. Try again?"
-- 429 rate limit → "Too many slices at once — give me a sec and try again."
-- 402 credits → "The toaster's out of tokens for now. Try again later."
-- Missing API key / 500 → "Something burned in the back. Try again in a minute."
+1. **`src/routes/index.tsx` (share card footer, ~line 880)** — replace the `<ToastAngel width={48} height={48} />` inside the captured `<article ref={cardRef}>` with a plain `<img src={angelToast} alt="" width={48} height={48} className="opacity-80" />`. Add the `angelToast` import if it isn't already in this file. This removes the inline `<style>` from the captured DOM and restores html-to-image's ability to produce a valid PNG.
+2. **Leave the other two `<ToastAngel>` usages alone** — the hero one on `/` (line ~228) and the footer one on `/r` (r.tsx line ~297) are outside any capture and should keep their floating-hearts interaction.
+3. **Tighten the failure surface** — in `ensureCardUploaded`, when capture or upload fails, also call `sonnerToast.error("Couldn't prepare the share image — link previews may be blank.")` so future regressions are visible to users instead of silently producing image-less shares.
 
-Implementation: small `friendlyError(result | errorObj)` helper in `ToastAngel.tsx` that maps `result.error` / thrown error text to one of the above. Use it for both the in-chat assistant bubble and the sonner toast. Keep the raw error in `console.error` for debugging and still send it to PostHog via the existing `$ai_generation` event.
+## How to verify
 
-## 4. Files touched
+- Open `/`, build a toast, advance to the share screen.
+- Watch the Network tab: a `POST /api/public/upload-card` should fire within a second of the share screen mounting and return `200` with a `{ url }` pointing at the `toast-cards` bucket.
+- Visit that URL directly — it should render the captured share card as a PNG.
+- Paste the `/r?b=...&t=...` URL into a link-preview debugger (or just check the page source's `og:image`) — it should match the uploaded URL and resolve to the same PNG.
 
-- `src/lib/toast-chat.functions.ts` — schema fix (`accent` nullable + required), prompt rename, distinct_id rename.
-- `src/components/ToastAngel.tsx` (renamed from `ToastOracle.tsx`) — component rename, friendly error helper, accept `accent: null`.
-- `src/routes/index.tsx` — import + JSX rename.
-
-No DB, no new packages, no UI layout changes.
+No backend or schema changes; this is purely a presentational tweak to the captured DOM plus a user-visible error toast.
