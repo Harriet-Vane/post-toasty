@@ -1,11 +1,29 @@
-Plan:
+## Problem
 
-1. Update the share-card capture so it uses the card’s full rendered dimensions instead of only forcing a fixed width. This should prevent the right edge from being clipped when `html-to-image` creates the PNG.
+On `/r/$slug`, the recipe title flickers: it renders with the deterministic `fallbackName` first, then swaps to the AI-generated name once `generateAiRecipe` resolves. The slug only carries a shared name in some cases; when it doesn't, the AI result currently overrides the fallback for the heading.
 
-2. Add a small capture-only CSS class/state during export to normalize the card layout: fixed 600px card width, no responsive text sizing, centered dazzle stage, and explicit stage/plate bounds so the toast, plate, and background all fit inside the exported image.
+Relevant line in `src/routes/r.$slug.tsx`:
 
-3. Make the visible shared recipe page use the same centered stage sizing as the generated share card, so the social thumbnail and destination page visually match.
+```ts
+const name = sharedName || (aiOk ? aiQuery.data!.name : fallbackName);
+```
 
-4. Add a cache-busting/versioned card key for the uploaded preview image if needed, so old cropped PNGs don’t keep appearing from storage/social cache for the same toast combination.
+## Fix
 
-5. Verify by generating a local share card and checking that the exported PNG contains the full right edge of the dazzle background, plate, and toast without clipping.
+Decouple the heading from the AI response. Use a stable title source that's known on first paint, and let the AI response only affect the recipe steps / pairing.
+
+Change the `name` derivation to:
+
+```ts
+const name = sharedName || fallbackName;
+```
+
+Effects:
+- The `<h2>` title (line 205) and `head()` meta `title` / `og:title` both already use `sharedName || fallbackName` semantics on the server. The client now matches, so no swap occurs.
+- The AI recipe steps and pairing block continue to render when `aiOk`, unchanged.
+- No change to loader, head(), or share-card logic.
+
+## Scope
+
+- Edit one line in `src/routes/r.$slug.tsx` (the `name` assignment).
+- No other files touched. No schema or dependency changes.

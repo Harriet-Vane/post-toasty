@@ -96,7 +96,7 @@ function RecipePage() {
     aiQuery.data.name &&
     aiQuery.data.steps &&
     aiQuery.data.steps.length > 0;
-  const name = sharedName || (aiOk ? (aiQuery.data!.name as string) : fallbackName);
+  const name = sharedName || fallbackName;
   const recipe = aiOk
     ? (aiQuery.data!.steps as string[]).map((step, i) => `${i + 1}. ${step}`)
     : fallbackRecipe;
