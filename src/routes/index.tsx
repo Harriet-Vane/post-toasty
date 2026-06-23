@@ -8,6 +8,7 @@ import { toast as sonnerToast } from "sonner";
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
 
 import angelToast from "@/assets/angel-toast.png";
+import { ToastAngel } from "@/components/ToastAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { SaltFall } from "@/components/SaltFall";
