@@ -71,8 +71,13 @@ export function ToastOracle({
   ]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatFn = useServerFn(chatToastBuilder);
+
+  // Auto-expand once the user has sent at least one message.
+  const hasConversation = messages.some((m) => m.role === "user");
+  const showTranscript = expanded || hasConversation;
 
   useEffect(() => {
     const el = scrollRef.current;
