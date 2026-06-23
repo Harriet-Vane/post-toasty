@@ -283,14 +283,14 @@ export function AngelChat({
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onFocus={() => setExpanded(true)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               send();
             }
           }}
-          rows={showTranscript ? 2 : 1}
+          rows={1}
+
           placeholder="Describe your dream toast…"
           disabled={pending}
           className="flex-1 font-body text-[12px] p-1.5 resize-none"
