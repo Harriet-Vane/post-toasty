@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import posthog from "posthog-js";
 import { useEffect, useMemo, useRef } from "react";
 
-import angelToast from "@/assets/angel-toast.png";
+
 import { ToastAngel } from "@/components/ToastAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { cardPublicUrl } from "@/lib/cardKey";
@@ -311,6 +311,3 @@ function RecipePage() {
     </main>
   );
 }
-
-// Suppress unused import lint (angelToast retained for future avatar use).
-void angelToast;
