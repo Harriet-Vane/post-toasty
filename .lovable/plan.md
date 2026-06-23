@@ -1,35 +1,28 @@
-Replace the VOICE/STRUCTURE block in `src/lib/recipe-ai.functions.ts` (lines 75-89) with new guidance, and update the recipe schema/UI so the fun fact has somewhere to live.
+## What's broken
 
-## Voice changes (lines 75-89)
+The share card's OG image isn't being uploaded, so `/r` link previews and downstream shares don't show the toast image.
 
-```
-"VOICE: Direct and concise. No fluff, no flourishes, no metaphors. Technical but approachable — confident, friendly, plain language. Think 'good cookbook author,' not 'food blogger.'",
-"All toast is good toast — never imply the user's build is weird, questionable, or a mistake.",
-"No emojis (the UI handles those).",
-"",
-"STRUCTURE:",
-"Give the recipe a short, punchy title with personality. Do NOT use the '<ingredient>, revisited' format. Acceptable shapes (vary across recipes — don't reuse the same template every time):",
-"  - 'The <Ingredient> Report'",
-"  - '<Ingredient> Toast: Shipped'",
-"  - '<Ingredient> + <Ingredient>: Get You Some Toast That Does Both'",
-"  - 'Nobody Toasts It Better'",
-"  - 'Every Toast Is Sacred'",
-"  - 'Let's Bring Toasty Back'",
-"  - 'My House, My Toast'",
-"  - 'There Is a Toast That Never Goes Out'",
-"Pick the shape that best fits the build. Ingredient-based titles should reference the most distinctive bread or topping actually chosen.",
-"Write 4 to 7 numbered steps that reference the actual bread and toppings the user chose. Each step is one short sentence under ~90 characters, starting with a plain verb (Toast, Spread, Add, Top, Finish). Include a useful technical detail when it helps (temperature, timing, thickness, texture cue).",
-"Do NOT include the leading number in each step — return raw strings; the client renders the numbering.",
-"",
-"After the steps, include a single 'fun fact' about bread — one sentence, true, genuinely interesting, tied to the bread the user chose when possible (history, science, baking technique, cultural note). No jokes, no hype, no 'did you know.'",
-```
+## Why
 
-## Schema + return shape
+`ShareScreen` captures the share card (`cardRef`) with `html-to-image`'s `toPng`, then POSTs the result to `/api/public/upload-card`. The uploaded URL is what `/r`'s `og:image` / `twitter:image` point to (via `cardPublicUrl`).
 
-`RecipeSchema` currently returns `{ name, steps }`. Add a `funFact: string` field, and surface it in whatever component renders the recipe so it shows up under the steps (labeled "Fun fact" in the same retro style as "RECIPE" / "NUTRITION").
+Recent change: the angel image inside the share card's footer (`src/routes/index.tsx` ~line 880) was swapped from a plain `<img>` to `<ToastAngel>`. `ToastAngel` always renders an inline `<style>{@keyframes toast-angel-heart-rise ...}</style>` sibling to the `<img>`, plus a stateful click handler.
 
-Files I expect to touch:
-- `src/lib/recipe-ai.functions.ts` — prompt + schema
-- The recipe display component (need to locate it — likely under `src/components/` rendering "RECIPE" + "NUTRITION") to render the new field
+`html-to-image` clones the captured subtree and serializes it inside an SVG `<foreignObject>`. Inline `<style>` tags inside that subtree are a well-known failure mode — the keyframe block ends up inside the SVG payload and the resulting data URL either throws during decode or yields a broken PNG. `ensureCardUploaded` catches the error and logs `[share] card upload failed`, so `uploadedRef` stays `null` and no card is ever uploaded for that recipe key. `/r` then advertises an `og:image` URL that 404s in storage.
 
-No new deps. No backend/DB changes.
+The interactive heart-burst angel only needs to live where users actually click it (the hero on `/` and the footer on `/r`), not inside the static captured card.
+
+## Fix
+
+1. **`src/routes/index.tsx` (share card footer, ~line 880)** — replace the `<ToastAngel width={48} height={48} />` inside the captured `<article ref={cardRef}>` with a plain `<img src={angelToast} alt="" width={48} height={48} className="opacity-80" />`. Add the `angelToast` import if it isn't already in this file. This removes the inline `<style>` from the captured DOM and restores html-to-image's ability to produce a valid PNG.
+2. **Leave the other two `<ToastAngel>` usages alone** — the hero one on `/` (line ~228) and the footer one on `/r` (r.tsx line ~297) are outside any capture and should keep their floating-hearts interaction.
+3. **Tighten the failure surface** — in `ensureCardUploaded`, when capture or upload fails, also call `sonnerToast.error("Couldn't prepare the share image — link previews may be blank.")` so future regressions are visible to users instead of silently producing image-less shares.
+
+## How to verify
+
+- Open `/`, build a toast, advance to the share screen.
+- Watch the Network tab: a `POST /api/public/upload-card` should fire within a second of the share screen mounting and return `200` with a `{ url }` pointing at the `toast-cards` bucket.
+- Visit that URL directly — it should render the captured share card as a PNG.
+- Paste the `/r?b=...&t=...` URL into a link-preview debugger (or just check the page source's `og:image`) — it should match the uploaded URL and resolve to the same PNG.
+
+No backend or schema changes; this is purely a presentational tweak to the captured DOM plus a user-visible error toast.
