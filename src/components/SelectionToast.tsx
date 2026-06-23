@@ -23,7 +23,7 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   honey: "Finger-licking good!",
   oliveoil: "Weird flex, but OK!",
   fluff: "The New Englander in me bows to the New Englander in you.",
-  marmite: "The original, definitive, acquired taste. (Hi Lottie!)",
+  marmite: "The original, definitive, acquired taste.",
 
   // Toppings & extras
   avocado: "Always the right choice. Usually needs salt.",
