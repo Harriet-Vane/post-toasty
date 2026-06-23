@@ -836,13 +836,13 @@ ${shareUrl}`)}`;
           )}
         </div>
 
-        {aiOk && aiQuery.data?.funFact ? (
+        {aiOk && aiQuery.data?.pairing ? (
           <div className="mt-4">
             <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
-              FUN FACT
+              PAIRS WITH
             </p>
             <p className="font-body text-sm text-[var(--ink)]">
-              {aiQuery.data.funFact}
+              {aiQuery.data.pairing}
             </p>
           </div>
         ) : null}
