@@ -57,7 +57,7 @@ function HowItWorksPage() {
             <p>It&apos;s as easy as toast.</p>
             <ol className="text-left space-y-2 list-decimal list-inside">
               <li>Choose your bread</li>
-              <li>Choose a few toppings (I like marmalade, but YMMV)</li>
+              <li>Choose a few toppings. Go ahead, let &apos;er rip.</li>
               <li>Share your tasty recipe with a friend</li>
             </ol>
           </div>
