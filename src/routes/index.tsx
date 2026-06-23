@@ -727,6 +727,7 @@ function ShareScreen({
       return url;
     } catch (err) {
       console.error("[share] card upload failed", err);
+      sonnerToast.error("Couldn't prepare the share image — link previews may be blank.");
       return null;
     }
   }
