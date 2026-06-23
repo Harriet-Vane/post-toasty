@@ -29,8 +29,7 @@ export type AiRecipeResult = {
   error: string | null;
 };
 
-const PRIMARY_MODEL = "anthropic/claude-sonnet-4.5";
-const FALLBACK_MODEL = "google/gemini-3-flash-preview";
+const MODEL = "google/gemini-3-flash-preview";
 
 export const generateAiRecipe = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => InputSchema.parse(data))
