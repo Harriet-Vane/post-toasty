@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import angelToast from "@/assets/angel-toast.png";
+import { NavMenu } from "@/components/NavMenu";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
