@@ -418,7 +418,7 @@ function BuilderScreen({
           <ToastOracle
             breadId={breadId}
             toppings={toppings}
-            onApplyStack={(b, t) => {
+            onApplyStack={(b: BreadId, t: ToppingId[]) => {
               setBreadId(b);
               setToppings(t);
             }}
