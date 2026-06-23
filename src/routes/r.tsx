@@ -5,6 +5,7 @@ import posthog from "posthog-js";
 import { useEffect, useMemo, useRef } from "react";
 
 import angelToast from "@/assets/angel-toast.png";
+import { ToastAngel } from "@/components/ToastAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { cardPublicUrl } from "@/lib/cardKey";
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
