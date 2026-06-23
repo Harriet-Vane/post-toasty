@@ -78,6 +78,8 @@ function RecipePage() {
   const t: string = search.t;
   const salted: boolean = search.s;
 
+  const sharedName: string = search.n;
+
   const toppings = useMemo<ToppingId[]>(
     () =>
       t
@@ -107,7 +109,10 @@ function RecipePage() {
     aiQuery.data.name &&
     aiQuery.data.steps &&
     aiQuery.data.steps.length > 0;
-  const name = aiOk ? (aiQuery.data!.name as string) : fallbackName;
+  // Title precedence: the name baked into the share URL wins so the email /
+  // social headline and the page title always match. Recipe steps still come
+  // from the AI (or local fallback) for shared visitors.
+  const name = sharedName || (aiOk ? (aiQuery.data!.name as string) : fallbackName);
   const recipe = aiOk
     ? (aiQuery.data!.steps as string[]).map((step, i) => `${i + 1}. ${step}`)
     : fallbackRecipe;
