@@ -622,64 +622,32 @@
   to   { opacity: 1;   transform: scale(1.4); }
 }
 
-/* Toast angel flies around the screen on click.
-   Three layers, each animating its own transform so they compose cleanly:
-   - .angel-flying-wrap : slow, rhythmic flight path (translate + rotate)
-   - .angel-flying-bob  : gentle up/down bob in time with the wing flap
-   - .angel-flying-img  : pronounced wing flap (squash/stretch)              */
-@keyframes angel-flap {
-  0%, 100% { transform: scaleY(1)    scaleX(1); }
-  50%      { transform: scaleY(0.55) scaleX(1.28); }
-}
+/* Toast angel: gentle in-place bob + slow wing flap on click.
+   The angel image is rendered as three clipped slices in <FlyingAngel/>;
+   these rules animate only the wing slices so the bread itself never squashes. */
 @keyframes angel-bob {
   0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
+  50%      { transform: translateY(-7px); }
 }
-@keyframes angel-fly-path {
-  0% {
-    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
-    opacity: 0;
-  }
-  6% {
-    opacity: 1;
-  }
-  20% {
-    transform: translate(-50%, -50%) translate(-32vw, -22vh) rotate(-10deg);
-  }
-  40% {
-    transform: translate(-50%, -50%) translate(34vw, -26vh) rotate(10deg);
-  }
-  60% {
-    transform: translate(-50%, -50%) translate(36vw, 22vh) rotate(-6deg);
-  }
-  80% {
-    transform: translate(-50%, -50%) translate(-34vw, 24vh) rotate(8deg);
-  }
-  94% {
-    opacity: 1;
-    transform: translate(-50%, -50%) translate(-4vw, -2vh) rotate(-3deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
-    opacity: 0;
-  }
+@keyframes angel-wing-flap {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.45); }
 }
-.angel-flying-wrap {
-  animation: angel-fly-path 7s ease-in-out forwards;
-  transform-origin: 50% 50%;
-  will-change: transform, opacity;
-  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.15));
-}
-.angel-flying-bob {
-  animation: angel-bob 520ms ease-in-out infinite;
+.angel-bob {
+  animation: angel-bob 950ms ease-in-out infinite;
   will-change: transform;
 }
-.angel-flying-img {
-  display: block;
-  animation: angel-flap 260ms ease-in-out infinite;
-  transform-origin: 50% 80%;
+.angel-wing-left {
+  transform-origin: 100% 50%;
+  animation: angel-wing-flap 950ms ease-in-out infinite;
   will-change: transform;
 }
+.angel-wing-right {
+  transform-origin: 0% 50%;
+  animation: angel-wing-flap 950ms ease-in-out infinite;
+  will-change: transform;
+}
+
 
 
 
