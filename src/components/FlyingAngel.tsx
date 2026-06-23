@@ -19,7 +19,7 @@ export function FlyingAngel(props: FlyingAngelProps) {
     timeoutRef.current = window.setTimeout(() => {
       setFlying(false);
       timeoutRef.current = null;
-    }, 4000);
+    }, 7000);
   }
 
   return (
@@ -39,15 +39,17 @@ export function FlyingAngel(props: FlyingAngelProps) {
           aria-hidden="true"
           className="angel-flying-wrap pointer-events-none fixed left-1/2 top-1/2 z-[9999]"
         >
-          <img
-            {...rest}
-            aria-hidden="true"
-            className="angel-flying-img block"
-            style={{
-              width: rest.width,
-              height: rest.height,
-            }}
-          />
+          <div className="angel-flying-bob">
+            <img
+              {...rest}
+              aria-hidden="true"
+              className="angel-flying-img"
+              style={{
+                width: rest.width,
+                height: rest.height,
+              }}
+            />
+          </div>
         </div>
       ) : null}
     </>
