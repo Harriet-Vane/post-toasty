@@ -208,14 +208,7 @@ export function AngelChat({
         </p>
       </div>
 
-        <span
-          className="font-pixel text-[9px]"
-          style={{ color: "var(--toast-crust)" }}
-          aria-hidden
-        >
-          {showTranscript ? "▾" : "▸"}
-        </span>
-      </button>
+
 
       {showTranscript && (
         <div
