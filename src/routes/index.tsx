@@ -839,7 +839,7 @@ ${shareUrl}`)}`;
         {aiOk && aiQuery.data?.pairing ? (
           <div className="mt-4">
             <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
-              PAIRS WITH
+              GOES WELL WITH
             </p>
             <p className="font-body text-sm text-[var(--ink)]">
               {aiQuery.data.pairing}
