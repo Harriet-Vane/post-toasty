@@ -20,7 +20,7 @@ const RecipeSchema = z.object({
 export type AiRecipeResult = {
   name: string | null;
   steps: string[] | null;
-  funFact: string | null;
+  pairing: string | null;
   model: string | null;
   latencyMs: number | null;
   usage: {
