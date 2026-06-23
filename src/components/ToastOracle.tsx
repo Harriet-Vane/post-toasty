@@ -71,8 +71,13 @@ export function ToastOracle({
   ]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatFn = useServerFn(chatToastBuilder);
+
+  // Auto-expand once the user has sent at least one message.
+  const hasConversation = messages.some((m) => m.role === "user");
+  const showTranscript = expanded || hasConversation;
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -181,24 +186,38 @@ export function ToastOracle({
       style={{
         border: "3px solid var(--ink)",
         boxShadow: "3px 3px 0 0 var(--ink)",
-        minHeight: 320,
       }}
     >
-      <div className="flex items-center gap-2 mb-2">
-        <img src={angelToast} alt="" width={20} height={20} />
-        <p
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        className="flex items-center justify-between gap-2 w-full"
+        aria-expanded={showTranscript}
+      >
+        <div className="flex items-center gap-2">
+          <img src={angelToast} alt="" width={20} height={20} />
+          <p
+            className="font-pixel text-[9px]"
+            style={{ color: "var(--toast-crust)" }}
+          >
+            ASK TOAST ANGEL
+          </p>
+        </div>
+        <span
           className="font-pixel text-[9px]"
           style={{ color: "var(--toast-crust)" }}
+          aria-hidden
         >
-          ASK TOAST ANGEL
-        </p>
-      </div>
+          {showTranscript ? "▾" : "▸"}
+        </span>
+      </button>
 
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto space-y-2 pr-1"
-        style={{ maxHeight: 280, minHeight: 160 }}
-      >
+      {showTranscript && (
+        <div
+          ref={scrollRef}
+          className="overflow-y-auto space-y-2 pr-1 mt-2"
+          style={{ maxHeight: 280, minHeight: 140 }}
+        >
         {messages.map((m, i) => (
           <div
             key={i}
@@ -259,19 +278,21 @@ export function ToastOracle({
             Thinking…
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       <div className="flex gap-1 mt-2">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onFocus={() => setExpanded(true)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               send();
             }
           }}
-          rows={2}
+          rows={showTranscript ? 2 : 1}
           placeholder="Describe your dream toast…"
           disabled={pending}
           className="flex-1 font-body text-[12px] p-1.5 resize-none"
