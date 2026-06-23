@@ -877,14 +877,8 @@ ${shareUrl}`)}`;
           <span className="font-body text-xs text-[var(--ink)] opacity-80">
             Everyone deserves a good toast.
           </span>
-          <img
-            src={angelToast}
-            alt="Angel toast"
-            width={48}
-            height={48}
-            className="opacity-80"
-            loading="lazy"
-          />
+          <ToastAngel width={48} height={48} />
+
         </footer>
       </article>
 
