@@ -143,18 +143,42 @@ export function AngelChat({
 
       const newToppings = materializeStack(result.stack);
       onApplyStack(result.breadId, newToppings);
+      const customIngredients = result.stack
+        .filter((s): s is Extract<ToastChatStackItem, { kind: "custom" }> => s.kind === "custom")
+        .map((s) => ({
+          name: s.name,
+          side: s.side,
+          render: s.render,
+          color: s.color,
+          accent: s.accent ?? null,
+          emoji: s.emoji,
+        }));
       posthog.capture("angel_stack_applied", {
         stack_size: newToppings.length,
         bread_id: result.breadId,
         trace_id: result.traceId,
         model: result.model,
+        custom_ingredient_count: customIngredients.length,
+        custom_ingredients: customIngredients,
+        custom_ingredient_names: customIngredients.map((c) => c.name),
+      });
+      customIngredients.forEach((ing) => {
+        posthog.capture("angel_custom_ingredient", {
+          ...ing,
+          trace_id: result.traceId,
+          bread_id: result.breadId,
+        });
       });
 
+      const replyText = result.reply!.trim();
+      const withFollowup = /anything else\??$/i.test(replyText)
+        ? replyText
+        : `${replyText}${/[.!?]$/.test(replyText) ? "" : "."} Anything else?`;
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: result.reply!,
+          content: withFollowup,
           traceId: result.traceId,
         },
       ]);
