@@ -143,18 +143,42 @@ export function AngelChat({
 
       const newToppings = materializeStack(result.stack);
       onApplyStack(result.breadId, newToppings);
+      const customIngredients = result.stack
+        .filter((s): s is Extract<ToastChatStackItem, { kind: "custom" }> => s.kind === "custom")
+        .map((s) => ({
+          name: s.name,
+          side: s.side,
+          render: s.render,
+          color: s.color,
+          accent: s.accent ?? null,
+          emoji: s.emoji,
+        }));
       posthog.capture("angel_stack_applied", {
         stack_size: newToppings.length,
         bread_id: result.breadId,
         trace_id: result.traceId,
         model: result.model,
+        custom_ingredient_count: customIngredients.length,
+        custom_ingredients: customIngredients,
+        custom_ingredient_names: customIngredients.map((c) => c.name),
+      });
+      customIngredients.forEach((ing) => {
+        posthog.capture("angel_custom_ingredient", {
+          ...ing,
+          trace_id: result.traceId,
+          bread_id: result.breadId,
+        });
       });
 
+      const replyText = result.reply!.trim();
+      const withFollowup = /anything else\??$/i.test(replyText)
+        ? replyText
+        : `${replyText}${/[.!?]$/.test(replyText) ? "" : "."} Anything else?`;
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: result.reply!,
+          content: withFollowup,
           traceId: result.traceId,
         },
       ]);
@@ -201,7 +225,7 @@ export function AngelChat({
       <div className="flex items-center gap-2">
         <img src={angelToast} alt="" width={20} height={20} />
         <p
-          className="font-pixel text-[9px]"
+          className="font-pixel text-[11px]"
           style={{ color: "var(--toast-crust)" }}
         >
           ASK TOAST ANGEL
@@ -224,7 +248,7 @@ export function AngelChat({
             }`}
           >
             <div
-              className={`font-body text-[12px] leading-snug max-w-[90%] ${
+              className={`font-body text-[15px] leading-snug max-w-[90%] ${
                 m.role === "user" ? "px-2 py-1" : ""
               }`}
               style={
@@ -243,7 +267,7 @@ export function AngelChat({
                   <button
                     onClick={() => vote(i, 1)}
                     disabled={!!m.feedback}
-                    className="text-[12px] leading-none px-1"
+                    className="text-[16px] leading-none px-1"
                     style={{
                       opacity: m.feedback === 1 ? 1 : 0.5,
                       cursor: m.feedback ? "default" : "pointer",
@@ -256,7 +280,7 @@ export function AngelChat({
                   <button
                     onClick={() => vote(i, -1)}
                     disabled={!!m.feedback}
-                    className="text-[12px] leading-none px-1"
+                    className="text-[16px] leading-none px-1"
                     style={{
                       opacity: m.feedback === -1 ? 1 : 0.5,
                       cursor: m.feedback ? "default" : "pointer",
@@ -272,7 +296,7 @@ export function AngelChat({
           </div>
         ))}
         {pending && (
-          <div className="font-body text-[12px] opacity-70 italic">
+          <div className="font-body text-[15px] opacity-70 italic">
             Toast Angel is thinking…
           </div>
         )}
@@ -293,7 +317,7 @@ export function AngelChat({
 
           placeholder="Describe your dream toast…"
           disabled={pending}
-          className="flex-1 font-body text-[12px] p-1.5 resize-none"
+          className="flex-1 font-body text-[15px] p-2 resize-none"
           style={{
             background: "var(--paper)",
             border: "2px solid var(--ink)",
@@ -303,7 +327,7 @@ export function AngelChat({
         <button
           onClick={send}
           disabled={pending || !input.trim()}
-          className="pixel-btn-primary text-[10px] px-2"
+          className="pixel-btn-primary text-[12px] px-2"
           style={{ alignSelf: "stretch" }}
         >
           Send
