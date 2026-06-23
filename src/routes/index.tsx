@@ -727,6 +727,7 @@ function ShareScreen({
       return url;
     } catch (err) {
       console.error("[share] card upload failed", err);
+      sonnerToast.error("Couldn't prepare the share image — link previews may be blank.");
       return null;
     }
   }
@@ -877,7 +878,14 @@ ${shareUrl}`)}`;
           <span className="font-body text-xs text-[var(--ink)] opacity-80">
             Everyone deserves a good toast.
           </span>
-          <ToastAngel width={48} height={48} />
+          <img
+            src={angelToast}
+            alt=""
+            width={48}
+            height={48}
+            className="opacity-80"
+            draggable={false}
+          />
 
         </footer>
       </article>
