@@ -12,6 +12,7 @@ import { ToastAngel } from "@/components/ToastAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { SaltFall } from "@/components/SaltFall";
+import { NavMenu } from "@/components/NavMenu";
 
 
 import { cardKey } from "@/lib/cardKey";
