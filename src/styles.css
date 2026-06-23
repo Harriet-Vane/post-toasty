@@ -621,3 +621,51 @@
   from { opacity: 0.3; transform: scale(0.6); }
   to   { opacity: 1;   transform: scale(1.4); }
 }
+
+/* Toast angel flies around the screen on click */
+@keyframes angel-flap {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50%      { transform: scaleY(0.82) scaleX(1.08); }
+}
+@keyframes angel-fly-path {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-50%, -50%) translate(-32vw, -24vh) rotate(-12deg);
+  }
+  40% {
+    transform: translate(-50%, -50%) translate(34vw, -28vh) rotate(14deg);
+  }
+  60% {
+    transform: translate(-50%, -50%) translate(36vw, 22vh) rotate(-8deg);
+  }
+  80% {
+    transform: translate(-50%, -50%) translate(-34vw, 24vh) rotate(10deg);
+  }
+  92% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(-4vw, -2vh) rotate(-4deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+}
+.angel-flying-wrap {
+  animation: angel-fly-path 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.15));
+}
+.angel-flying-img {
+  animation: angel-flap 220ms ease-in-out infinite;
+  transform-origin: 50% 70%;
+  will-change: transform;
+}
+
+
