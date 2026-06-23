@@ -968,6 +968,42 @@ ${shareUrl}`)}`;
                 </button>
               ))}
             </div>
+
+            <div className="mt-4">
+              <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
+                OR COPY LINK
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={shareUrl}
+                  onFocus={(e) => e.currentTarget.select()}
+                  aria-label="Shareable link to your toast"
+                  className="flex-1 min-w-0 font-body text-xs text-[var(--ink)] bg-[var(--paper)] px-2 py-2"
+                  style={{ border: "2px solid var(--ink)" }}
+                />
+                <button
+                  type="button"
+                  className="pixel-btn"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(shareUrl);
+                      sonnerToast.success("Link copied!");
+                      posthog.capture("recipe_shared", {
+                        share_method: "copy_link",
+                        bread_id: breadId,
+                        topping_count: toppings.length,
+                      });
+                    } catch {
+                      sonnerToast.error("Couldn't copy — select the link and copy manually.");
+                    }
+                  }}
+                >
+                  Copy
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
