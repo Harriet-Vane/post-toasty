@@ -1,12 +1,15 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import angelToast from "@/assets/angel-toast.png";
 
 type Heart = {
   id: number;
-  left: number;
+  x: number; // viewport px
+  y: number; // viewport px (start)
   drift: number;
   rotate: number;
   duration: number;
+  rise: number;
   emoji: string;
   size: number;
 };
@@ -31,80 +34,102 @@ export function ToastAngel({
   loading = "lazy",
 }: Props) {
   const [hearts, setHearts] = useState<Heart[]>([]);
-  const wrapperRef = useRef<HTMLSpanElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const spawn = useCallback(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height * 0.4;
+
     const burst = 4 + Math.floor(Math.random() * 3);
     const next: Heart[] = Array.from({ length: burst }).map(() => ({
       id: ++heartIdCounter,
-      left: 50 + (Math.random() * 40 - 20),
-      drift: Math.random() * 40 - 20,
-      rotate: Math.random() * 40 - 20,
-      duration: 1100 + Math.random() * 700,
+      x: cx + (Math.random() * rect.width * 0.4 - rect.width * 0.2),
+      y: cy,
+      drift: Math.random() * 120 - 60,
+      rotate: Math.random() * 60 - 30,
+      duration: 5500 + Math.random() * 2500,
+      rise: cy + 80, // travel from start up past the top of viewport
       emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
-      size: 12 + Math.floor(Math.random() * 8),
+      size: 14 + Math.floor(Math.random() * 10),
     }));
     setHearts((prev) => [...prev, ...next]);
     const maxDuration = Math.max(...next.map((h) => h.duration));
     const ids = new Set(next.map((h) => h.id));
     window.setTimeout(() => {
       setHearts((prev) => prev.filter((h) => !ids.has(h.id)));
-    }, maxDuration + 50);
+    }, maxDuration + 100);
   }, []);
 
+  const overlay =
+    mounted && hearts.length > 0
+      ? createPortal(
+          <div
+            className="pointer-events-none fixed inset-0 overflow-hidden"
+            style={{ zIndex: 9999 }}
+          >
+            {hearts.map((h) => (
+              <span
+                key={h.id}
+                className="absolute"
+                style={{
+                  left: `${h.x}px`,
+                  top: `${h.y}px`,
+                  fontSize: `${h.size}px`,
+                  transform: "translate(-50%, -50%)",
+                  animation: `toast-angel-heart-rise ${h.duration}ms linear forwards`,
+                  ["--drift" as never]: `${h.drift}px`,
+                  ["--rotate" as never]: `${h.rotate}deg`,
+                  ["--rise" as never]: `${h.rise}px`,
+                }}
+              >
+                {h.emoji}
+              </span>
+            ))}
+          </div>,
+          document.body,
+        )
+      : null;
+
   return (
-    <span
-      ref={wrapperRef}
-      className="relative inline-block cursor-pointer select-none"
-      onClick={spawn}
-      style={{ width, height, lineHeight: 0 }}
-    >
+    <>
       <img
+        ref={imgRef}
         src={angelToast}
         alt="Angel toast"
         title={title}
         width={width}
         height={height}
-        className={className}
+        className={`${className} cursor-pointer select-none`}
         loading={loading}
         draggable={false}
+        onClick={spawn}
       />
-      <span className="pointer-events-none absolute inset-0 overflow-visible">
-        {hearts.map((h) => (
-          <span
-            key={h.id}
-            className="absolute"
-            style={{
-              left: `${h.left}%`,
-              top: "40%",
-              fontSize: `${h.size}px`,
-              transform: "translate(-50%, -50%)",
-              animation: `toast-angel-heart ${h.duration}ms ease-out forwards`,
-              // CSS custom props consumed by the keyframes below
-              ["--drift" as never]: `${h.drift}px`,
-              ["--rotate" as never]: `${h.rotate}deg`,
-            }}
-          >
-            {h.emoji}
-          </span>
-        ))}
-      </span>
+      {overlay}
       <style>{`
-        @keyframes toast-angel-heart {
+        @keyframes toast-angel-heart-rise {
           0% {
             opacity: 0;
-            transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+            transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
           }
-          15% {
+          8% {
             opacity: 1;
-            transform: translate(calc(-50% + (var(--drift) * 0.15)), calc(-50% - 8px)) scale(1) rotate(calc(var(--rotate) * 0.2));
+            transform: translate(-50%, calc(-50% - 12px)) scale(1) rotate(calc(var(--rotate) * 0.15));
+          }
+          90% {
+            opacity: 1;
           }
           100% {
             opacity: 0;
-            transform: translate(calc(-50% + var(--drift)), calc(-50% - 70px)) scale(0.9) rotate(var(--rotate));
+            transform: translate(calc(-50% + var(--drift)), calc(-50% - var(--rise))) scale(1) rotate(var(--rotate));
           }
         }
       `}</style>
-    </span>
+    </>
   );
 }
