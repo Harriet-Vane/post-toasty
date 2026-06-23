@@ -656,16 +656,16 @@
     opacity: 0;
   }
 }
-.angel-flying {
-  /* Outer element handles the flight path, inner pseudo handles the flap.
-     Single element: stack two animations on transform via composition trick —
-     use animation-composition where supported, otherwise the flap is subtle. */
-  animation:
-    angel-fly-path 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards,
-    angel-flap 220ms ease-in-out infinite;
-  animation-composition: accumulate;
+.angel-flying-wrap {
+  animation: angel-fly-path 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
   transform-origin: 50% 50%;
   will-change: transform, opacity;
   filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.15));
 }
+.angel-flying-img {
+  animation: angel-flap 220ms ease-in-out infinite;
+  transform-origin: 50% 70%;
+  will-change: transform;
+}
+
 
