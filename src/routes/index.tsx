@@ -736,17 +736,39 @@ function ShareScreen({
     if (!node) return null;
     try {
       const { toPng } = await import("html-to-image");
+      // Force a fixed desktop-sized layout, then measure the resulting
+      // height so the capture canvas matches the card's actual rendered
+      // bounds (plus a margin for the offset box-shadow on the right/bottom).
       const CAPTURE_WIDTH = 600;
+      const SHADOW_PAD = 16;
+      const prevWidth = node.style.width;
+      const prevMaxWidth = node.style.maxWidth;
+      node.style.width = `${CAPTURE_WIDTH}px`;
+      node.style.maxWidth = `${CAPTURE_WIDTH}px`;
+      // Force a reflow so we measure the new width's height.
+      void node.offsetHeight;
+      const measuredHeight = Math.ceil(node.getBoundingClientRect().height);
+
       const dataUrl = await toPng(node, {
         pixelRatio: 2,
         cacheBust: true,
         backgroundColor: "#ffffff",
-        width: CAPTURE_WIDTH,
+        width: CAPTURE_WIDTH + SHADOW_PAD,
+        height: measuredHeight + SHADOW_PAD,
         style: {
           width: `${CAPTURE_WIDTH}px`,
           maxWidth: `${CAPTURE_WIDTH}px`,
+          margin: "0",
+          // Push the card in slightly so the offset box-shadow is captured
+          // instead of being clipped at the canvas edge.
+          boxSizing: "border-box",
+          transform: "translate(0, 0)",
         },
       });
+
+      node.style.width = prevWidth;
+      node.style.maxWidth = prevMaxWidth;
+
       const key = cardKey(breadId, toppings, salted);
       const res = await fetch("/api/public/upload-card", {
         method: "POST",
@@ -763,6 +785,7 @@ function ShareScreen({
       return null;
     }
   }
+
 
   // Kick off the upload once the AI recipe has resolved so the captured card
   // contains the final recipe text, not the "Cooking up your recipe…" stub.
