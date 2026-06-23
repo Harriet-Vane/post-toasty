@@ -717,15 +717,14 @@ function ShareScreen({
 
 
   const shareText = `${name} — a ${bread.name} toast. Built on PostToast.`;
-  // Always share the canonical published URL. From the preview iframe,
-  // window.location.origin is the id-preview--...lovable.app sandbox which
-  // LinkedIn and other crawlers block as unverified content.
+  // Always share the canonical custom-domain URL with a short, silly slug
+  // like /r/awesome-toast-mix-15100. The trailing digits encode bread,
+  // toppings, and salt so the /r/$slug page can reconstruct the recipe.
   const shareUrl = useMemo(() => {
-    const params = new URLSearchParams({ b: breadId, t: toppings.join(",") });
-    if (salted) params.set("s", "1");
-    params.set("n", name);
-    return `https://post-toasty.lovable.app/r?${params.toString()}`;
-  }, [breadId, toppings, salted, name]);
+    const slug = buildShareSlug(name, breadId, toppings, salted);
+    return `${SHARE_ORIGIN}/r/${slug}`;
+  }, [name, breadId, toppings, salted]);
+
 
   // Capture the share card and upload it so /r OG tags resolve to a real image.
   // Width is forced to a fixed value so the captured image is identical
