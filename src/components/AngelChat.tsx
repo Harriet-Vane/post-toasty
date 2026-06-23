@@ -78,21 +78,14 @@ export function AngelChat({
   toppings: ToppingId[];
   onApplyStack: (breadId: BreadId, toppings: ToppingId[]) => void;
 }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: "assistant",
-      content:
-        "Tell me what you're craving — “PB&J but spicy,” “fancy ricotta with figs,” whatever — and I'll build the stack.",
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatFn = useServerFn(chatToastBuilder);
 
-  const hasConversation = messages.some((m) => m.role === "user");
-  const showTranscript = expanded || hasConversation;
+  const showTranscript = messages.length > 0;
+
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -205,29 +198,17 @@ export function AngelChat({
         boxShadow: "3px 3px 0 0 var(--ink)",
       }}
     >
-      <button
-        type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="flex items-center justify-between gap-2 w-full"
-        aria-expanded={showTranscript}
-      >
-        <div className="flex items-center gap-2">
-          <img src={angelToast} alt="" width={20} height={20} />
-          <p
-            className="font-pixel text-[9px]"
-            style={{ color: "var(--toast-crust)" }}
-          >
-            ASK TOAST ANGEL
-          </p>
-        </div>
-        <span
+      <div className="flex items-center gap-2">
+        <img src={angelToast} alt="" width={20} height={20} />
+        <p
           className="font-pixel text-[9px]"
           style={{ color: "var(--toast-crust)" }}
-          aria-hidden
         >
-          {showTranscript ? "▾" : "▸"}
-        </span>
-      </button>
+          ASK TOAST ANGEL
+        </p>
+      </div>
+
+
 
       {showTranscript && (
         <div
@@ -302,14 +283,14 @@ export function AngelChat({
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onFocus={() => setExpanded(true)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               send();
             }
           }}
-          rows={showTranscript ? 2 : 1}
+          rows={1}
+
           placeholder="Describe your dream toast…"
           disabled={pending}
           className="flex-1 font-body text-[12px] p-1.5 resize-none"
