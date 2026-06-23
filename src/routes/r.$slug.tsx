@@ -179,9 +179,13 @@ function RecipePage() {
               PostToast
             </h1>
           </Link>
-          <span className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm">
-            toast is for sharing
-          </span>
+          <NavMenu
+            links={[
+              { to: "/about", label: "About" },
+              { to: "/how-it-works", label: "How It Works" },
+              { to: "/", label: "Make one" },
+            ]}
+          />
         </div>
 
         <div className="relative arcade-screen crt p-4 sm:p-8 flex flex-col">
