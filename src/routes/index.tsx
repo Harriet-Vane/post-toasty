@@ -85,19 +85,19 @@ function PostToast() {
               PostToast
             </h1>
           </Link>
-          <div className="flex items-center gap-3 sm:gap-4">
-            <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
-              About
-            </Link>
-            <Link to="/how-it-works" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
-              How It Works
-            </Link>
-            {phase !== "input" && (
-              <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
-                Start over
-              </button>
-            )}
-          </div>
+          <NavMenu
+            links={[
+              { to: "/about", label: "About" },
+              { to: "/how-it-works", label: "How It Works" },
+            ]}
+            extras={
+              phase !== "input" ? (
+                <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
+                  Start over
+                </button>
+              ) : null
+            }
+          />
         </div>
 
         {/* Screen */}
