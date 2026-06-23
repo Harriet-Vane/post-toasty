@@ -1,58 +1,89 @@
-import { useState, useRef, type ImgHTMLAttributes } from "react";
+import { useState, useRef, type ImgHTMLAttributes, type CSSProperties } from "react";
 
 type FlyingAngelProps = ImgHTMLAttributes<HTMLImageElement>;
 
 /**
- * Wraps the toast-angel image. Clicking it makes the angel flap its wings
- * and fly around the screen for a few seconds before settling back into place.
+ * Renders the toast-angel image as three overlapping slices of the same PNG
+ * (left wing / body / right wing) so we can animate only the wings.
+ *
+ * Clicking the angel triggers a slow, rhythmic wing flap and a gentle in-place
+ * bob (modeled on the Dribbble "Flying Pig" loop) for a few seconds.
  */
 export function FlyingAngel(props: FlyingAngelProps) {
-  const { className = "", onClick, style, ...rest } = props;
-  const [flying, setFlying] = useState(false);
+  const {
+    className = "",
+    onClick,
+    style,
+    width,
+    height,
+    src,
+    alt,
+    title,
+    loading,
+    ...rest
+  } = props;
+  const [animating, setAnimating] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
-  function handleClick(e: React.MouseEvent<HTMLImageElement>) {
-    onClick?.(e);
-    if (flying) return;
-    setFlying(true);
+  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+    onClick?.(e as unknown as React.MouseEvent<HTMLImageElement>);
+    if (animating) return;
+    setAnimating(true);
     if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
     timeoutRef.current = window.setTimeout(() => {
-      setFlying(false);
+      setAnimating(false);
       timeoutRef.current = null;
-    }, 7000);
+    }, 5000);
   }
 
+  const w = typeof width === "number" ? `${width}px` : width;
+  const h = typeof height === "number" ? `${height}px` : height;
+
+  const layerStyle: CSSProperties = {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+  };
+
   return (
-    <>
-      {/* Hide the inline image while flying so the fixed overlay reads as "the same" angel */}
+    <div
+      onClick={handleClick}
+      className={`${className} relative inline-block cursor-pointer select-none ${animating ? "angel-bob" : ""}`}
+      style={{ ...style, width: w, height: h }}
+      title={title}
+      role="img"
+      aria-label={typeof alt === "string" ? alt : undefined}
+    >
+      {/* Left wing slice (0% – 30% of width) */}
       <img
         {...rest}
-        onClick={handleClick}
-        className={`${className} cursor-pointer select-none`}
-        style={{
-          ...style,
-          visibility: flying ? "hidden" : "visible",
-        }}
+        src={src}
+        alt=""
+        aria-hidden
+        loading={loading}
+        className={animating ? "angel-wing-left" : undefined}
+        style={{ ...layerStyle, clipPath: "inset(0 70% 0 0)" }}
       />
-      {flying ? (
-        <div
-          aria-hidden="true"
-          className="angel-flying-wrap pointer-events-none fixed left-1/2 top-1/2 z-[9999]"
-        >
-          <div className="angel-flying-bob">
-            <img
-              {...rest}
-              aria-hidden="true"
-              className="angel-flying-img"
-              style={{
-                width: rest.width,
-                height: rest.height,
-              }}
-            />
-          </div>
-        </div>
-      ) : null}
-    </>
+      {/* Right wing slice (70% – 100% of width) */}
+      <img
+        {...rest}
+        src={src}
+        alt=""
+        aria-hidden
+        loading={loading}
+        className={animating ? "angel-wing-right" : undefined}
+        style={{ ...layerStyle, clipPath: "inset(0 0 0 70%)" }}
+      />
+      {/* Body slice (30% – 70% of width), rendered last so it sits on top */}
+      <img
+        {...rest}
+        src={src}
+        alt={alt}
+        loading={loading}
+        style={{ ...layerStyle, clipPath: "inset(0 30% 0 30%)" }}
+      />
+    </div>
   );
 }
 
