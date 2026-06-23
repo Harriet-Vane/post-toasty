@@ -119,6 +119,7 @@ function PostToast() {
               onLock={() => setPhase("share")}
               salted={salted}
               onSalted={() => setSalted(true)}
+              onUnsalt={() => setSalted(false)}
             />
           )}
 
@@ -281,6 +282,7 @@ function BuilderScreen({
   onLock,
   salted,
   onSalted,
+  onUnsalt,
 }: {
   breadId: BreadId;
   setBreadId: (b: BreadId) => void;
@@ -291,6 +293,7 @@ function BuilderScreen({
   onLock: () => void;
   salted: boolean;
   onSalted: () => void;
+  onUnsalt: () => void;
 }) {
   const [isOver, setIsOver] = useState(false);
   const [selectionToast, setSelectionToast] = useState<{ message: string; id: number } | null>(null);
@@ -423,13 +426,13 @@ function BuilderScreen({
             />
 
             {/* Stack list */}
-            {toppings.length > 0 && (
+            {(toppings.length > 0 || salted) && (
               <div
                 className="w-full bg-[var(--card)] p-2"
                 style={{ border: "2px solid var(--ink)" }}
               >
                 <p className="font-pixel text-[8px] mb-1" style={{ color: "var(--toast-crust)" }}>
-                  STACK ({toppings.length})
+                  STACK ({toppings.length + (salted ? 1 : 0)})
                 </p>
                 <ol className="flex flex-wrap gap-1">
                   {toppings.map((id, i) => {
@@ -453,6 +456,26 @@ function BuilderScreen({
                       </li>
                     );
                   })}
+                  {salted && (
+                    <li key="salt">
+                      <button
+                        onClick={() => {
+                          posthog.capture("remove_salt_clicked", { bread_id: breadId, topping_count: toppings.length });
+                          onUnsalt();
+                        }}
+                        className="font-body text-[11px] px-1.5 py-0.5"
+                        style={{
+                          background: "var(--paper)",
+                          border: "1.5px solid var(--ink)",
+                          cursor: "pointer",
+                        }}
+                        aria-label="Remove salt"
+                        title="Remove"
+                      >
+                        Salt ×
+                      </button>
+                    </li>
+                  )}
                 </ol>
               </div>
             )}
