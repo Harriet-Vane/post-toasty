@@ -15,6 +15,7 @@ import { SaltFall } from "@/components/SaltFall";
 
 
 import { cardKey } from "@/lib/cardKey";
+import { buildShareSlug, SHARE_ORIGIN } from "@/lib/shortShare";
 
 import {
   BREADS,
