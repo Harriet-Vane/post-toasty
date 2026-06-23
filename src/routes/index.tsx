@@ -521,7 +521,16 @@ function BuilderScreen({
             onAdd={addTopping}
           />
         </div>
-      </div>
+        <div className="mt-4 max-w-2xl mx-auto w-full">
+          <ToastOracle
+            breadId={breadId}
+            toppings={toppings}
+            onApplyStack={(b: BreadId, t: ToppingId[]) => {
+              setBreadId(b);
+              setToppings(t);
+            }}
+          />
+        </div>
       {saltFalling && <SaltFall />}
     </div>
   );
