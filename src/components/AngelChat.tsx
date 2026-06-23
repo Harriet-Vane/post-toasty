@@ -225,7 +225,7 @@ export function AngelChat({
       <div className="flex items-center gap-2">
         <img src={angelToast} alt="" width={20} height={20} />
         <p
-          className="font-pixel text-[9px]"
+          className="font-pixel text-[11px]"
           style={{ color: "var(--toast-crust)" }}
         >
           ASK TOAST ANGEL
