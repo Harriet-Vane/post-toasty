@@ -49,12 +49,12 @@ function AboutPage() {
           <header className="text-center mb-6">
             <p className="font-pixel text-[10px] text-[var(--toast-crust)]">{"\n"}</p>
           <h2 className="font-pixel text-[18px] sm:text-[24px] mt-3 text-[var(--ink)]">
-            What's all this then?
+            What's all this, then?
           </h2>
           </header>
 
           <div className="font-body text-base text-[var(--ink)] max-w-xl mx-auto opacity-80 leading-relaxed text-center space-y-4">
-            <p>I built PostToast originally as a way to help other runners decide what to eat after going for a long run. Then I realized all my best post-run meals involved toast in some way. Which makes sense, because toast is the best.</p>
+            <p>I built PostToast originally as a way to help other runners decide what to eat after going for a long run. I was going to call it PostRun. Then I realized all my best post-run meals involved toast in some way. Which makes sense, because toast is the best.</p>
             <p>Seriously. You can make it in a few minutes, customize it however you want, and it's full of delicious carbohydrates, which your body needs.</p>
             <p>So I made this into a tool for anyone who wants to make the perfect slice of toast. You can even share your creation on social or email it to a friend.</p>
           </div>
