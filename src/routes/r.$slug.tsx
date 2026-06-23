@@ -1,17 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import posthog from "posthog-js";
 import { useEffect, useMemo, useRef } from "react";
 
-import angelToast from "@/assets/angel-toast.png";
+
 import { ToastAngel } from "@/components/ToastAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { cardPublicUrl } from "@/lib/cardKey";
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
+import { parseShareSlug, SHARE_ORIGIN } from "@/lib/shortShare";
 import {
-  BREADS,
-  TOPPINGS,
   calculateNutrition,
   generateName,
   generateRecipe,
@@ -20,40 +19,20 @@ import {
   type ToppingId,
 } from "@/lib/runchbase";
 
-type RecipeSearch = {
-  b: BreadId;
-  t: string;
-  s: boolean;
-  n: string;
-};
-
-const BREAD_IDS = new Set<string>(BREADS.map((b) => b.id));
-const TOPPING_IDS = new Set<string>(TOPPINGS.map((t) => t.id));
-
-function parseSearch(raw: Record<string, unknown>): RecipeSearch {
-  const b = typeof raw.b === "string" && BREAD_IDS.has(raw.b) ? (raw.b as BreadId) : "white";
-  const t = typeof raw.t === "string" ? raw.t : "";
-  const s = raw.s === "1" || raw.s === 1;
-  const n = typeof raw.n === "string" ? raw.n.slice(0, 120) : "";
-  return { b, t, s, n };
-}
-
-export const Route = createFileRoute("/r")({
-  validateSearch: (search) => parseSearch(search as Record<string, unknown>),
-  head: ({ match }) => {
-    const { b, t, s, n } = (match.search ?? { b: "white", t: "", s: false, n: "" }) as RecipeSearch;
-    const toppings = t
-      .split(",")
-      .map((s) => s.trim())
-      .filter((s) => TOPPING_IDS.has(s));
-    const name = n || generateName(b, toppings);
+export const Route = createFileRoute("/r/$slug")({
+  loader: ({ params }) => {
+    const parsed = parseShareSlug(params.slug);
+    if (!parsed) throw notFound();
+    return parsed;
+  },
+  head: ({ loaderData, params }) => {
+    if (!loaderData) return {};
+    const { breadId, toppings, salted, name: sharedName } = loaderData;
+    const name = sharedName || generateName(breadId, toppings);
     const title = `${name} — PostToast`;
-    const description = `A ${getBread(b).name} toast recipe built on PostToast. Make your own.`;
-    const image = cardPublicUrl(b, toppings, s);
-    const params = new URLSearchParams({ b, t });
-    if (s) params.set("s", "1");
-    if (n) params.set("n", n);
-    const url = `https://post-toasty.lovable.app/r?${params.toString()}`;
+    const description = `A ${getBread(breadId).name} toast recipe built on PostToast. Make your own.`;
+    const image = cardPublicUrl(breadId, toppings, salted);
+    const url = `${SHARE_ORIGIN}/r/${params.slug}`;
     return {
       meta: [
         { title },
@@ -69,25 +48,32 @@ export const Route = createFileRoute("/r")({
       links: [{ rel: "canonical", href: url }],
     };
   },
+  notFoundComponent: () => (
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="text-center">
+        <h1 className="font-pixel text-[var(--paper)] text-lg mb-3">Toast not found</h1>
+        <Link to="/" className="pixel-btn-primary">Make a toast</Link>
+      </div>
+    </main>
+  ),
+  errorComponent: ({ reset }) => (
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="text-center">
+        <p className="font-body text-[var(--paper)] mb-3">Something went wrong loading this toast.</p>
+        <button onClick={reset} className="pixel-btn">Try again</button>
+      </div>
+    </main>
+  ),
   component: RecipePage,
 });
 
 function RecipePage() {
-  const search = Route.useSearch();
-  const breadId: BreadId = search.b;
-  const t: string = search.t;
-  const salted: boolean = search.s;
-
-  const sharedName: string = search.n;
-
-  const toppings = useMemo<ToppingId[]>(
-    () =>
-      t
-        .split(",")
-        .map((s: string) => s.trim())
-        .filter((s: string) => TOPPING_IDS.has(s)),
-    [t],
-  );
+  const { breadId, toppings, salted, name: sharedName } = Route.useLoaderData() as {
+    breadId: BreadId;
+    toppings: ToppingId[];
+    salted: boolean;
+    name: string;
+  };
 
   const fallbackName = useMemo(() => generateName(breadId, toppings), [breadId, toppings]);
   const fallbackRecipe = useMemo(() => generateRecipe(breadId, toppings), [breadId, toppings]);
@@ -109,9 +95,6 @@ function RecipePage() {
     aiQuery.data.name &&
     aiQuery.data.steps &&
     aiQuery.data.steps.length > 0;
-  // Title precedence: the name baked into the share URL wins so the email /
-  // social headline and the page title always match. Recipe steps still come
-  // from the AI (or local fallback) for shared visitors.
   const name = sharedName || (aiOk ? (aiQuery.data!.name as string) : fallbackName);
   const recipe = aiOk
     ? (aiQuery.data!.steps as string[]).map((step, i) => `${i + 1}. ${step}`)

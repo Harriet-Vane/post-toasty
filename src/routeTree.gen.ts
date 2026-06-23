@@ -9,17 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RRouteImport } from './routes/r'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RSlugRouteImport } from './routes/r.$slug'
 import { Route as ApiPublicUploadCardRouteImport } from './routes/api/public/upload-card'
 
-const RRoute = RRouteImport.update({
-  id: '/r',
-  path: '/r',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
@@ -35,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RSlugRoute = RSlugRouteImport.update({
+  id: '/r/$slug',
+  path: '/r/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicUploadCardRoute = ApiPublicUploadCardRouteImport.update({
   id: '/api/public/upload-card',
   path: '/api/public/upload-card',
@@ -45,14 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/r': typeof RRoute
+  '/r/$slug': typeof RSlugRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/r': typeof RRoute
+  '/r/$slug': typeof RSlugRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRoutesById {
@@ -60,20 +60,25 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/r': typeof RRoute
+  '/r/$slug': typeof RSlugRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/how-it-works' | '/r' | '/api/public/upload-card'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/how-it-works'
+    | '/r/$slug'
+    | '/api/public/upload-card'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/how-it-works' | '/r' | '/api/public/upload-card'
+  to: '/' | '/about' | '/how-it-works' | '/r/$slug' | '/api/public/upload-card'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/how-it-works'
-    | '/r'
+    | '/r/$slug'
     | '/api/public/upload-card'
   fileRoutesById: FileRoutesById
 }
@@ -81,19 +86,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   HowItWorksRoute: typeof HowItWorksRoute
-  RRoute: typeof RRoute
+  RSlugRoute: typeof RSlugRoute
   ApiPublicUploadCardRoute: typeof ApiPublicUploadCardRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/r': {
-      id: '/r'
-      path: '/r'
-      fullPath: '/r'
-      preLoaderRoute: typeof RRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/how-it-works': {
       id: '/how-it-works'
       path: '/how-it-works'
@@ -115,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/r/$slug': {
+      id: '/r/$slug'
+      path: '/r/$slug'
+      fullPath: '/r/$slug'
+      preLoaderRoute: typeof RSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/upload-card': {
       id: '/api/public/upload-card'
       path: '/api/public/upload-card'
@@ -129,7 +134,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   HowItWorksRoute: HowItWorksRoute,
-  RRoute: RRoute,
+  RSlugRoute: RSlugRoute,
   ApiPublicUploadCardRoute: ApiPublicUploadCardRoute,
 }
 export const routeTree = rootRouteImport
