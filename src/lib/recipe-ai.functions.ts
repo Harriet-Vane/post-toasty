@@ -58,6 +58,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
+        funFact: null,
         model: null,
         latencyMs: null,
         usage: null,
