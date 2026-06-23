@@ -198,21 +198,16 @@ export function AngelChat({
         boxShadow: "3px 3px 0 0 var(--ink)",
       }}
     >
-      <button
-        type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="flex items-center justify-between gap-2 w-full"
-        aria-expanded={showTranscript}
-      >
-        <div className="flex items-center gap-2">
-          <img src={angelToast} alt="" width={20} height={20} />
-          <p
-            className="font-pixel text-[9px]"
-            style={{ color: "var(--toast-crust)" }}
-          >
-            ASK TOAST ANGEL
-          </p>
-        </div>
+      <div className="flex items-center gap-2">
+        <img src={angelToast} alt="" width={20} height={20} />
+        <p
+          className="font-pixel text-[9px]"
+          style={{ color: "var(--toast-crust)" }}
+        >
+          ASK TOAST ANGEL
+        </p>
+      </div>
+
         <span
           className="font-pixel text-[9px]"
           style={{ color: "var(--toast-crust)" }}
