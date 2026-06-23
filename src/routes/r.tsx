@@ -24,6 +24,7 @@ type RecipeSearch = {
   b: BreadId;
   t: string;
   s: boolean;
+  n: string;
 };
 
 const BREAD_IDS = new Set<string>(BREADS.map((b) => b.id));
@@ -33,22 +34,26 @@ function parseSearch(raw: Record<string, unknown>): RecipeSearch {
   const b = typeof raw.b === "string" && BREAD_IDS.has(raw.b) ? (raw.b as BreadId) : "white";
   const t = typeof raw.t === "string" ? raw.t : "";
   const s = raw.s === "1" || raw.s === 1;
-  return { b, t, s };
+  const n = typeof raw.n === "string" ? raw.n.slice(0, 120) : "";
+  return { b, t, s, n };
 }
 
 export const Route = createFileRoute("/r")({
   validateSearch: (search) => parseSearch(search as Record<string, unknown>),
   head: ({ match }) => {
-    const { b, t, s } = (match.search ?? { b: "white", t: "", s: false }) as RecipeSearch;
+    const { b, t, s, n } = (match.search ?? { b: "white", t: "", s: false, n: "" }) as RecipeSearch;
     const toppings = t
       .split(",")
       .map((s) => s.trim())
       .filter((s) => TOPPING_IDS.has(s));
-    const name = generateName(b, toppings);
+    const name = n || generateName(b, toppings);
     const title = `${name} — PostToast`;
     const description = `A ${getBread(b).name} toast recipe built on PostToast. Make your own.`;
     const image = cardPublicUrl(b, toppings, s);
-    const url = `https://post-toasty.lovable.app/r?b=${encodeURIComponent(b)}&t=${encodeURIComponent(t)}${s ? `&s=1` : ""}`;
+    const params = new URLSearchParams({ b, t });
+    if (s) params.set("s", "1");
+    if (n) params.set("n", n);
+    const url = `https://post-toasty.lovable.app/r?${params.toString()}`;
     return {
       meta: [
         { title },
@@ -72,6 +77,8 @@ function RecipePage() {
   const breadId: BreadId = search.b;
   const t: string = search.t;
   const salted: boolean = search.s;
+
+  const sharedName: string = search.n;
 
   const toppings = useMemo<ToppingId[]>(
     () =>
@@ -102,7 +109,10 @@ function RecipePage() {
     aiQuery.data.name &&
     aiQuery.data.steps &&
     aiQuery.data.steps.length > 0;
-  const name = aiOk ? (aiQuery.data!.name as string) : fallbackName;
+  // Title precedence: the name baked into the share URL wins so the email /
+  // social headline and the page title always match. Recipe steps still come
+  // from the AI (or local fallback) for shared visitors.
+  const name = sharedName || (aiOk ? (aiQuery.data!.name as string) : fallbackName);
   const recipe = aiOk
     ? (aiQuery.data!.steps as string[]).map((step, i) => `${i + 1}. ${step}`)
     : fallbackRecipe;
