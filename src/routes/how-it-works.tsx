@@ -36,14 +36,12 @@ function HowItWorksPage() {
               PostToast
             </h1>
           </Link>
-          <div className="flex items-center gap-3 sm:gap-4">
-            <Link to="/about" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
-              About
-            </Link>
-            <Link to="/" className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm hidden sm:block underline">
-              Home
-            </Link>
-          </div>
+          <NavMenu
+            links={[
+              { to: "/about", label: "About" },
+              { to: "/", label: "Home" },
+            ]}
+          />
         </div>
 
         <div className="relative arcade-screen crt p-6 sm:p-10 min-h-[420px] flex flex-col">
