@@ -14,6 +14,7 @@ const InputSchema = z.object({
 const RecipeSchema = z.object({
   name: z.string().min(1).max(80),
   steps: z.array(z.string().min(1).max(240)).min(3).max(8),
+  funFact: z.string().min(1).max(280),
 });
 
 export type AiRecipeResult = {
