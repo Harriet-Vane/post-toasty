@@ -159,6 +159,7 @@ function InputScreen({
 
   const [displayed, setDisplayed] = useState(fullText.slice(0, 1));
   const [done, setDone] = useState(false);
+  const [fluttering, setFluttering] = useState(false);
 
   useEffect(() => {
     let i = 1;
@@ -230,8 +231,10 @@ function InputScreen({
           title="toast angel, toast angel, will you be mine?"
           width={96}
           height={96}
-          className="opacity-80"
+          className={`opacity-80 cursor-pointer ${fluttering ? "animate-flutter" : ""}`}
           loading="lazy"
+          onClick={() => setFluttering(true)}
+          onAnimationEnd={() => setFluttering(false)}
         />
         <p className="font-body text-xs opacity-60 max-w-xs">
           In toast we trust
