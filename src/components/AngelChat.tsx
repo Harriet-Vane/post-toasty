@@ -248,7 +248,7 @@ export function AngelChat({
             }`}
           >
             <div
-              className={`font-body text-[12px] leading-snug max-w-[90%] ${
+              className={`font-body text-[15px] leading-snug max-w-[90%] ${
                 m.role === "user" ? "px-2 py-1" : ""
               }`}
               style={
@@ -267,7 +267,7 @@ export function AngelChat({
                   <button
                     onClick={() => vote(i, 1)}
                     disabled={!!m.feedback}
-                    className="text-[12px] leading-none px-1"
+                    className="text-[16px] leading-none px-1"
                     style={{
                       opacity: m.feedback === 1 ? 1 : 0.5,
                       cursor: m.feedback ? "default" : "pointer",
@@ -280,7 +280,7 @@ export function AngelChat({
                   <button
                     onClick={() => vote(i, -1)}
                     disabled={!!m.feedback}
-                    className="text-[12px] leading-none px-1"
+                    className="text-[16px] leading-none px-1"
                     style={{
                       opacity: m.feedback === -1 ? 1 : 0.5,
                       cursor: m.feedback ? "default" : "pointer",
@@ -296,7 +296,7 @@ export function AngelChat({
           </div>
         ))}
         {pending && (
-          <div className="font-body text-[12px] opacity-70 italic">
+          <div className="font-body text-[15px] opacity-70 italic">
             Toast Angel is thinking…
           </div>
         )}
@@ -317,7 +317,7 @@ export function AngelChat({
 
           placeholder="Describe your dream toast…"
           disabled={pending}
-          className="flex-1 font-body text-[12px] p-1.5 resize-none"
+          className="flex-1 font-body text-[15px] p-2 resize-none"
           style={{
             background: "var(--paper)",
             border: "2px solid var(--ink)",
@@ -327,7 +327,7 @@ export function AngelChat({
         <button
           onClick={send}
           disabled={pending || !input.trim()}
-          className="pixel-btn-primary text-[10px] px-2"
+          className="pixel-btn-primary text-[12px] px-2"
           style={{ alignSelf: "stretch" }}
         >
           Send
