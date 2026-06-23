@@ -1,28 +1,109 @@
-## What's broken
+## Goal
 
-The share card's OG image isn't being uploaded, so `/r` link previews and downstream shares don't show the toast image.
+Add a "Describe your toast" chat panel inside the builder (Step 2) that lets the user type natural-language requests like *"PB&J but make it spicy"* or *"a fancy ricotta toast with figs and basil"*. The AI responds by:
 
-## Why
+1. Picking a bread (if the user mentioned one).
+2. Returning an ordered ingredient stack — using existing library ingredients when possible, and inventing new ones (with name, color, render type, emoji) when needed.
+3. Optionally adding a short chat reply ("Loaded a peanut butter + sriracha + banana stack — want it crunchier?").
 
-`ShareScreen` captures the share card (`cardRef`) with `html-to-image`'s `toPng`, then POSTs the result to `/api/public/upload-card`. The uploaded URL is what `/r`'s `og:image` / `twitter:image` point to (via `cardPublicUrl`).
+The user keeps chatting to refine until they hit "Lock it in." Custom ingredients render with the existing BreadCanvas primitives (spread / drizzle / scatter / leaf / etc.) — no on-the-fly image generation.
 
-Recent change: the angel image inside the share card's footer (`src/routes/index.tsx` ~line 880) was swapped from a plain `<img>` to `<ToastAngel>`. `ToastAngel` always renders an inline `<style>{@keyframes toast-angel-heart-rise ...}</style>` sibling to the `<img>`, plus a stateful click handler.
+PostHog AI observability captures each model call (model, tokens, latency, cost, and the user's follow-up sentiment via thumbs).
 
-`html-to-image` clones the captured subtree and serializes it inside an SVG `<foreignObject>`. Inline `<style>` tags inside that subtree are a well-known failure mode — the keyframe block ends up inside the SVG payload and the resulting data URL either throws during decode or yields a broken PNG. `ensureCardUploaded` catches the error and logs `[share] card upload failed`, so `uploadedRef` stays `null` and no card is ever uploaded for that recipe key. `/r` then advertises an `og:image` URL that 404s in storage.
+## UX
 
-The interactive heart-burst angel only needs to live where users actually click it (the hero on `/` and the footer on `/r`), not inside the static captured card.
+Builder Step 2 layout changes from a 3-column grid to a 4-column grid on desktop (`[chat | spreads | canvas | extras]`); on mobile the chat collapses into a button at the top that expands a sheet.
 
-## Fix
+Chat panel:
 
-1. **`src/routes/index.tsx` (share card footer, ~line 880)** — replace the `<ToastAngel width={48} height={48} />` inside the captured `<article ref={cardRef}>` with a plain `<img src={angelToast} alt="" width={48} height={48} className="opacity-80" />`. Add the `angelToast` import if it isn't already in this file. This removes the inline `<style>` from the captured DOM and restores html-to-image's ability to produce a valid PNG.
-2. **Leave the other two `<ToastAngel>` usages alone** — the hero one on `/` (line ~228) and the footer one on `/r` (r.tsx line ~297) are outside any capture and should keep their floating-hearts interaction.
-3. **Tighten the failure surface** — in `ensureCardUploaded`, when capture or upload fails, also call `sonnerToast.error("Couldn't prepare the share image — link previews may be blank.")` so future regressions are visible to users instead of silently producing image-less shares.
+- Header: "Ask Toast Angel" with the angel sprite.
+- Transcript with user/assistant bubbles (assistant uses no background; user bubble uses `--toast-crust` / `--paper`).
+- Composer: textarea + send button. `Enter` sends, `Shift+Enter` newlines.
+- Below each assistant reply: 👍 / 👎 buttons (fires `$ai_feedback` with PostHog AI's standard shape so sentiment shows up in observability).
+- Status line: "Thinking…" while streaming/awaiting.
+- When the model returns a stack, it's applied immediately to `breadId` + `toppings`; canvas updates live. A small "Replaced 4 ingredients" toast confirms it.
 
-## How to verify
+Custom ingredients in the stack chip list render with their AI-chosen emoji and name, same UI as library ingredients.
 
-- Open `/`, build a toast, advance to the share screen.
-- Watch the Network tab: a `POST /api/public/upload-card` should fire within a second of the share screen mounting and return `200` with a `{ url }` pointing at the `toast-cards` bucket.
-- Visit that URL directly — it should render the captured share card as a PNG.
-- Paste the `/r?b=...&t=...` URL into a link-preview debugger (or just check the page source's `og:image`) — it should match the uploaded URL and resolve to the same PNG.
+## Technical Plan
 
-No backend or schema changes; this is purely a presentational tweak to the captured DOM plus a user-visible error toast.
+### 1. Custom topping registry
+
+`src/lib/customToppings.ts`:
+
+- Module-level `Map<ToppingId, Topping>` for AI-invented ingredients.
+- `registerCustomTopping(t: Topping)` / `getCustomTopping(id)`.
+- IDs are prefixed `ai_<slug>_<shortHash>` to avoid colliding with the library.
+
+`src/lib/runchbase.ts`:
+
+- `getTopping()` falls back to `getCustomTopping(id)` when the library lookup misses. This is the only change needed for `BreadCanvas`, `generateName`, `generateRecipe`, etc. to render custom ingredients.
+
+### 2. AI server function
+
+`src/lib/toast-chat.functions.ts` — `chatToastBuilder` server fn (`createServerFn POST`):
+
+Input (Zod):
+
+```ts
+{
+  messages: { role: "user"|"assistant"; content: string }[],
+  currentBread: BreadId,
+  currentToppings: { id: string; name: string }[]
+}
+```
+
+Handler:
+
+- Model: `openai/gpt-5-mini` via the existing `createLovableAiGatewayProvider`.
+- System prompt explains the PostToast world, the available bread IDs, the full library of topping IDs/names, and the rules for inventing new ingredients.
+- `generateText` with `Output.object({ schema })` where schema is:
+  ```ts
+  {
+    reply: string,            // 1–2 short sentences for the chat
+    breadId: BreadId,
+    stack: Array<{
+      kind: "library", id: ToppingId
+    } | {
+      kind: "custom",
+      name: string,
+      side: "spread"|"extra",
+      render: "spread"|"drizzle"|"scatter"|"banana"|"egg"|,
+      color: string,          // hex
+      accent?: string,        // hex
+      emoji: string,          // single emoji
+    }>
+  }
+  ```
+- After the call, emit a PostHog `$ai_generation` event server-side via a lightweight `fetch` to PostHog's capture API (project key already in `src/lib/posthog.ts` — move it to a shared const), with properties: `$ai_model`, `$ai_provider`, `$ai_input` (messages), `$ai_output_choices`, `$ai_input_tokens`, `$ai_output_tokens`, `$ai_latency`, `$ai_trace_id` (uuid returned to client so feedback can be linked), `$ai_http_status`. This is PostHog's documented LLM observability event shape — it powers cost/latency/sentiment dashboards.
+- Returns `{ reply, breadId, stack, traceId, error }` to the client.
+
+### 3. Client chat panel
+
+`src/components/ToastOracle.tsx`:
+
+- Props: `breadId`, `toppings`, `onApplyStack(breadId, ToppingId[])`.
+- Local `messages` state (in-memory only — no persistence; matches the rest of the app).
+- On send: call the server fn via `useServerFn`, append assistant reply, register any custom ingredients into the runtime registry, then call `onApplyStack`.
+- 👍/👎 buttons call `posthog.capture("$ai_feedback", { $ai_trace_id, $ai_feedback: 1|-1 })`.
+- Errors (429 / 402 / generic) surface as a sonner toast and an inline assistant message.
+
+### 4. Wire into BuilderScreen
+
+`src/routes/index.tsx`:
+
+- In step 2, add `<ToastOracle … />` as a new left column.
+- `onApplyStack` calls `setBreadId` and `setToppings` directly.
+- Track `oracle_message_sent`, `oracle_stack_applied`, `oracle_feedback` for product analytics (separate from `$ai_*` observability events).
+
+### 5. No changes needed to
+
+- `BreadCanvas` (custom toppings render through the existing `Topping.render` switch).
+- Recipe AI / share card (recipes naturally reference custom ingredient names because they're in `getTopping`).
+- Database / auth (this feature is fully client + serverless; no persistence requested).
+
+## Out of scope (call out for follow-ups)
+
+- Actual sprite/image generation for custom ingredients (you chose primitives-only).
+- Saving chat history across sessions.
+- Streaming the assistant reply token-by-token — first version waits for the full structured response, which is simpler and fine for short replies.

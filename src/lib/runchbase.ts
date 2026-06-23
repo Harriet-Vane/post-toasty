@@ -1,3 +1,5 @@
+import { getCustomTopping } from "./customToppings";
+
 export type BreadId =
   | "white"
   | "sourdough"
@@ -210,7 +212,10 @@ export function calculateNutrition(breadId: BreadId, toppings: ToppingId[]): Nut
 }
 
 export function getTopping(id: ToppingId): Topping | undefined {
-  return TOPPINGS.find((t) => t.id === id);
+  const found = TOPPINGS.find((t) => t.id === id);
+  if (found) return found;
+  // Fall back to AI-invented custom toppings registered at runtime.
+  return getCustomTopping(id);
 }
 
 export function getBread(id: BreadId) {

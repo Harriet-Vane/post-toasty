@@ -9,6 +9,7 @@ import { generateAiRecipe } from "@/lib/recipe-ai.functions";
 
 import angelToast from "@/assets/angel-toast.png";
 import { ToastAngel } from "@/components/ToastAngel";
+import { ToastOracle } from "@/components/ToastOracle";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { SaltFall } from "@/components/SaltFall";
@@ -413,6 +414,16 @@ function BuilderScreen({
         {selectionToast && (
           <SelectionToast key={selectionToast.id} message={selectionToast.message} />
         )}
+        <div className="mb-3">
+          <ToastOracle
+            breadId={breadId}
+            toppings={toppings}
+            onApplyStack={(b: BreadId, t: ToppingId[]) => {
+              setBreadId(b);
+              setToppings(t);
+            }}
+          />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-4 items-start">
           {/* Left: Spreads & Bases + Stack */}
           <div className="flex flex-col gap-3">
