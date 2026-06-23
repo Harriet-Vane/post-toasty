@@ -8,7 +8,6 @@ import { toast as sonnerToast } from "sonner";
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
 
 import angelToast from "@/assets/angel-toast.png";
-import { FlyingAngel } from "@/components/FlyingAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { SaltFall } from "@/components/SaltFall";
@@ -225,7 +224,7 @@ function InputScreen({
 
 
       <div className="flex flex-col items-center gap-1 mt-auto">
-        <FlyingAngel
+        <img
           src={angelToast}
           alt="Angel toast"
           title="toast angel, toast angel, will you be mine?"
@@ -881,7 +880,7 @@ ${shareUrl}`)}`;
           <span className="font-body text-xs text-[var(--ink)] opacity-80">
             Everyone deserves a good toast.
           </span>
-          <FlyingAngel
+          <img
             src={angelToast}
             alt="Angel toast"
             width={48}

@@ -621,38 +621,3 @@
   from { opacity: 0.3; transform: scale(0.6); }
   to   { opacity: 1;   transform: scale(1.4); }
 }
-
-/* Toast angel: gentle in-place bob + slow wing flap on click.
-   The angel image is rendered as three clipped slices in <FlyingAngel/>;
-   these rules rotate only the wing slices so the bread itself never deforms.
-   The body bobs slightly opposite to the wings (wings down → body lifts). */
-@keyframes angel-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-5px); }
-}
-@keyframes angel-wing-flap-left {
-  0%, 100% { transform: rotate(-22deg); }
-  50%      { transform: rotate(28deg); }
-}
-@keyframes angel-wing-flap-right {
-  0%, 100% { transform: rotate(22deg); }
-  50%      { transform: rotate(-28deg); }
-}
-.angel-bob {
-  animation: angel-bob 1400ms ease-in-out infinite;
-  will-change: transform;
-}
-.angel-wing-left {
-  transform-origin: 100% 55%;
-  animation: angel-wing-flap-left 1400ms ease-in-out infinite;
-  will-change: transform;
-}
-.angel-wing-right {
-  transform-origin: 0% 55%;
-  animation: angel-wing-flap-right 1400ms ease-in-out infinite;
-  will-change: transform;
-}
-
-
-
-
