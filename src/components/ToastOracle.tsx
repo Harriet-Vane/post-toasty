@@ -278,7 +278,8 @@ export function ToastOracle({
             Thinking…
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       <div className="flex gap-1 mt-2">
         <textarea
