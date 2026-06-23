@@ -35,15 +35,20 @@ export function FlyingAngel(props: FlyingAngelProps) {
         }}
       />
       {flying ? (
-        <img
-          {...rest}
+        <div
           aria-hidden="true"
-          className="angel-flying pointer-events-none fixed left-1/2 top-1/2 z-[9999]"
-          style={{
-            width: rest.width,
-            height: rest.height,
-          }}
-        />
+          className="angel-flying-wrap pointer-events-none fixed left-1/2 top-1/2 z-[9999]"
+        >
+          <img
+            {...rest}
+            aria-hidden="true"
+            className="angel-flying-img block"
+            style={{
+              width: rest.width,
+              height: rest.height,
+            }}
+          />
+        </div>
       ) : null}
     </>
   );
