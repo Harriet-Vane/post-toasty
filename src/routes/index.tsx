@@ -119,6 +119,7 @@ function PostToast() {
               onLock={() => setPhase("share")}
               salted={salted}
               onSalted={() => setSalted(true)}
+              onUnsalt={() => setSalted(false)}
             />
           )}
 
