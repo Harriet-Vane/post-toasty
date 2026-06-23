@@ -210,7 +210,17 @@ export function calculateNutrition(breadId: BreadId, toppings: ToppingId[]): Nut
 }
 
 export function getTopping(id: ToppingId): Topping | undefined {
-  return TOPPINGS.find((t) => t.id === id);
+  const found = TOPPINGS.find((t) => t.id === id);
+  if (found) return found;
+  // Fall back to AI-invented custom toppings registered at runtime.
+  // Lazy require avoids a circular import at module init.
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { getCustomTopping } = require("./customToppings") as typeof import("./customToppings");
+    return getCustomTopping(id);
+  } catch {
+    return undefined;
+  }
 }
 
 export function getBread(id: BreadId) {
