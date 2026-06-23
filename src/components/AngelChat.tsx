@@ -78,21 +78,14 @@ export function AngelChat({
   toppings: ToppingId[];
   onApplyStack: (breadId: BreadId, toppings: ToppingId[]) => void;
 }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: "assistant",
-      content:
-        "Tell me what you're craving — “PB&J but spicy,” “fancy ricotta with figs,” whatever — and I'll build the stack.",
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatFn = useServerFn(chatToastBuilder);
 
-  const hasConversation = messages.some((m) => m.role === "user");
-  const showTranscript = expanded || hasConversation;
+  const showTranscript = messages.length > 0;
+
 
   useEffect(() => {
     const el = scrollRef.current;
