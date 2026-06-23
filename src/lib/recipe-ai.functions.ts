@@ -131,6 +131,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
         return {
           name: null,
           steps: null,
+          funFact: null,
           model: modelUsed,
           latencyMs,
           usage: null,
@@ -152,6 +153,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: parsed.data.name,
         steps: parsed.data.steps,
+        funFact: parsed.data.funFact,
         model: modelUsed,
         latencyMs,
         usage,
@@ -163,6 +165,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
+        funFact: null,
         model: null,
         latencyMs: null,
         usage: null,
