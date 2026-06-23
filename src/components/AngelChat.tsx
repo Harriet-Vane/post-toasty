@@ -170,15 +170,11 @@ export function AngelChat({
         });
       });
 
-      const replyText = result.reply!.trim();
-      const withFollowup = /anything else\??$/i.test(replyText)
-        ? replyText
-        : `${replyText}${/[.!?]$/.test(replyText) ? "" : "."} Anything else?`;
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: withFollowup,
+          content: result.reply!.trim(),
           traceId: result.traceId,
         },
       ]);
