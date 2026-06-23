@@ -159,6 +159,7 @@ function InputScreen({
 
   const [displayed, setDisplayed] = useState(fullText.slice(0, 1));
   const [done, setDone] = useState(false);
+  const [fluttering, setFluttering] = useState(false);
 
   useEffect(() => {
     let i = 1;
