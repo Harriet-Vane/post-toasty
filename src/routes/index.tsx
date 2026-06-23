@@ -282,6 +282,7 @@ function BuilderScreen({
   onLock,
   salted,
   onSalted,
+  onUnsalt,
 }: {
   breadId: BreadId;
   setBreadId: (b: BreadId) => void;
@@ -292,6 +293,7 @@ function BuilderScreen({
   onLock: () => void;
   salted: boolean;
   onSalted: () => void;
+  onUnsalt: () => void;
 }) {
   const [isOver, setIsOver] = useState(false);
   const [selectionToast, setSelectionToast] = useState<{ message: string; id: number } | null>(null);
