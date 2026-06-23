@@ -42,7 +42,7 @@ const StackItemSchema = z.union([
     side: z.enum(["spread", "extra"]),
     render: z.enum(VALID_RENDERS),
     color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-    accent: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+    accent: z.string().regex(/^#[0-9a-fA-F]{6}$/).nullable(),
     emoji: z.string().min(1).max(8),
   }),
 ]);
@@ -100,7 +100,7 @@ async function emitPosthogAiGeneration(props: {
       body: JSON.stringify({
         api_key: POSTHOG_KEY,
         event: "$ai_generation",
-        distinct_id: `server:toast-oracle`,
+        distinct_id: `server:toast-angel`,
         properties: {
           $ai_trace_id: props.traceId,
           $ai_model: props.model,
@@ -148,7 +148,7 @@ export const chatToastBuilder = createServerFn({ method: "POST" })
     ).join("\n");
 
     const system = [
-      "You are the toast oracle for PostToast, a playful pixel-art toast builder.",
+      "You are Toast Angel, the friendly assistant for PostToast, a playful pixel-art toast builder.",
       "The user describes a toast they want in natural language. You return a full ingredient stack.",
       "",
       "RESPONSE SHAPE (strict):",
@@ -169,7 +169,7 @@ export const chatToastBuilder = createServerFn({ method: "POST" })
       "- side: 'spread' for things that coat the bread (cheeses, butters, sauces, jams, hummus). 'extra' for things piled on top.",
       "- render: 'spread' = thick layer; 'drizzle' = thin streaks (sauces, oils, honey-likes); 'scatter' = small bits (seeds, herbs, sprinkles, crumbles); 'banana' = banana-like slices; 'egg' = fried-egg shape; 'pickle' = leafy/green wedge (use for leaves like basil, mint, arugula); 'hotdog' = elongated cylinder (use for mushrooms, sausages).",
       "- color: a hex like #aabbcc that matches the real ingredient.",
-      "- accent: optional darker shade for outline/detail.",
+      "- accent: darker shade hex for outline/detail, or null if no accent.",
       "- emoji: one emoji that represents the ingredient.",
       "",
       "PREFER LIBRARY over custom when a close match exists.",

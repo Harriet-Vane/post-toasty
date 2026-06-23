@@ -27,6 +27,22 @@ type ChatMessage = {
   feedback?: 1 | -1;
 };
 
+function friendlyError(raw: string | undefined | null): string {
+  const msg = (raw ?? "").toLowerCase();
+  if (!msg) return "Sorry, that message got stuck in my toaster. Care to try again?";
+  if (msg.includes("rate") || msg.includes("429") || msg.includes("too many"))
+    return "Too many slices at once — give me a sec and try again.";
+  if (msg.includes("402") || msg.includes("credit") || msg.includes("quota"))
+    return "The toaster's out of tokens for now. Try again later.";
+  if (msg.includes("api_key") || msg.includes("unauthorized") || msg.includes("401"))
+    return "Something burned in the back. Try again in a minute.";
+  if (msg.includes("network") || msg.includes("fetch") || msg.includes("timeout"))
+    return "Looks like the toaster unplugged itself. Try again?";
+  if (msg.includes("invalid structure") || msg.includes("schema") || msg.includes("parse"))
+    return "Sorry, that message got stuck in my toaster. Care to try again?";
+  return "Sorry, that message got stuck in my toaster. Care to try again?";
+}
+
 function materializeStack(stack: ToastChatStackItem[]): ToppingId[] {
   const ids: ToppingId[] = [];
   stack.forEach((item, i) => {
@@ -42,7 +58,7 @@ function materializeStack(stack: ToastChatStackItem[]): ToppingId[] {
       side: item.side,
       render: item.render,
       color: item.color,
-      accent: item.accent,
+      accent: item.accent ?? undefined,
       emoji: item.emoji,
       complimentName: item.name.toLowerCase(),
       sound,
@@ -53,7 +69,7 @@ function materializeStack(stack: ToastChatStackItem[]): ToppingId[] {
   return ids;
 }
 
-export function ToastOracle({
+export function AngelChat({
   breadId,
   toppings,
   onApplyStack,
@@ -75,7 +91,6 @@ export function ToastOracle({
   const scrollRef = useRef<HTMLDivElement>(null);
   const chatFn = useServerFn(chatToastBuilder);
 
-  // Auto-expand once the user has sent at least one message.
   const hasConversation = messages.some((m) => m.role === "user");
   const showTranscript = expanded || hasConversation;
 
@@ -94,7 +109,7 @@ export function ToastOracle({
     setMessages(nextMessages);
     setInput("");
     setPending(true);
-    posthog.capture("oracle_message_sent", {
+    posthog.capture("angel_message_sent", {
       stack_size: toppings.length,
       bread_id: breadId,
     });
@@ -119,13 +134,14 @@ export function ToastOracle({
       });
 
       if (result.error || !result.reply || !result.stack || !result.breadId) {
-        const errMsg = result.error ?? "Something went wrong.";
-        sonnerToast.error("Toast oracle hiccuped — try again?");
+        console.error("[angel] server error", result.error);
+        const friendly = friendlyError(result.error);
+        sonnerToast.error(friendly);
         setMessages((prev) => [
           ...prev,
           {
             role: "assistant",
-            content: `(${errMsg})`,
+            content: friendly,
             traceId: result.traceId,
           },
         ]);
@@ -134,7 +150,7 @@ export function ToastOracle({
 
       const newToppings = materializeStack(result.stack);
       onApplyStack(result.breadId, newToppings);
-      posthog.capture("oracle_stack_applied", {
+      posthog.capture("angel_stack_applied", {
         stack_size: newToppings.length,
         bread_id: result.breadId,
         trace_id: result.traceId,
@@ -150,13 +166,14 @@ export function ToastOracle({
         },
       ]);
     } catch (err) {
-      console.error("[oracle] send failed", err);
-      sonnerToast.error("Couldn't reach the toast oracle.");
+      console.error("[angel] send failed", err);
+      const friendly = friendlyError(err instanceof Error ? err.message : String(err));
+      sonnerToast.error(friendly);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "(network error — please retry)",
+          content: friendly,
         },
       ]);
     } finally {
@@ -174,7 +191,7 @@ export function ToastOracle({
       $ai_trace_id: msg.traceId,
       $ai_feedback: value,
     });
-    posthog.capture("oracle_feedback", {
+    posthog.capture("angel_feedback", {
       trace_id: msg.traceId,
       value,
     });
@@ -275,7 +292,7 @@ export function ToastOracle({
         ))}
         {pending && (
           <div className="font-body text-[12px] opacity-70 italic">
-            Thinking…
+            Toast Angel is thinking…
           </div>
         )}
         </div>

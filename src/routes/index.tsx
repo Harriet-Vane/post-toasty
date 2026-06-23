@@ -9,7 +9,7 @@ import { generateAiRecipe } from "@/lib/recipe-ai.functions";
 
 import angelToast from "@/assets/angel-toast.png";
 import { ToastAngel } from "@/components/ToastAngel";
-import { ToastOracle } from "@/components/ToastOracle";
+import { AngelChat } from "@/components/AngelChat";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { SaltFall } from "@/components/SaltFall";
@@ -522,7 +522,7 @@ function BuilderScreen({
           />
         </div>
         <div className="mt-4 max-w-2xl mx-auto w-full">
-          <ToastOracle
+          <AngelChat
             breadId={breadId}
             toppings={toppings}
             onApplyStack={(b: BreadId, t: ToppingId[]) => {
