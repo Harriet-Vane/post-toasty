@@ -700,20 +700,31 @@ function ShareScreen({
   const shareUrl = useMemo(() => {
     const params = new URLSearchParams({ b: breadId, t: toppings.join(",") });
     if (salted) params.set("s", "1");
+    params.set("n", name);
     return `https://post-toasty.lovable.app/r?${params.toString()}`;
-  }, [breadId, toppings, salted]);
+  }, [breadId, toppings, salted, name]);
 
   // Capture the share card and upload it so /r OG tags resolve to a real image.
+  // Width is forced to a fixed value so the captured image is identical
+  // regardless of the visitor's viewport — otherwise on narrow screens the
+  // article renders smaller than the toast/plate inside it and the right side
+  // gets clipped in link previews.
   async function ensureCardUploaded(): Promise<string | null> {
     if (uploadedRef.current) return uploadedRef.current;
     const node = cardRef.current;
     if (!node) return null;
     try {
       const { toPng } = await import("html-to-image");
+      const CAPTURE_WIDTH = 600;
       const dataUrl = await toPng(node, {
         pixelRatio: 2,
         cacheBust: true,
         backgroundColor: "#ffffff",
+        width: CAPTURE_WIDTH,
+        style: {
+          width: `${CAPTURE_WIDTH}px`,
+          maxWidth: `${CAPTURE_WIDTH}px`,
+        },
       });
       const key = cardKey(breadId, toppings, salted);
       const res = await fetch("/api/public/upload-card", {
@@ -732,12 +743,13 @@ function ShareScreen({
     }
   }
 
-  // Kick off the upload as soon as the share screen renders so link previews
-  // are ready by the time someone shares.
+  // Kick off the upload once the AI recipe has resolved so the captured card
+  // contains the final recipe text, not the "Cooking up your recipe…" stub.
   useEffect(() => {
+    if (aiQuery.isLoading) return;
     void ensureCardUploaded();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [aiQuery.isLoading, name]);
 
 
   const enc = encodeURIComponent;
