@@ -14,13 +14,13 @@ const InputSchema = z.object({
 const RecipeSchema = z.object({
   name: z.string().min(1).max(80),
   steps: z.array(z.string().min(1).max(240)).min(3).max(8),
-  funFact: z.string().min(1).max(280),
+  pairing: z.string().min(1).max(200),
 });
 
 export type AiRecipeResult = {
   name: string | null;
   steps: string[] | null;
-  funFact: string | null;
+  pairing: string | null;
   model: string | null;
   latencyMs: number | null;
   usage: {
@@ -41,7 +41,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
-        funFact: null,
+        pairing: null,
         model: null,
         latencyMs: null,
         usage: null,
@@ -58,7 +58,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
-        funFact: null,
+        pairing: null,
         model: null,
         latencyMs: null,
         usage: null,
@@ -95,7 +95,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       "Write 4 to 7 numbered steps that reference the actual bread and toppings the user chose. Each step is one short sentence under ~90 characters, starting with a plain verb (Toast, Spread, Add, Top, Finish). Include a useful technical detail when it helps (temperature, timing, thickness, texture cue).",
       "Do NOT include the leading number in each step — return raw strings; the client renders the numbering.",
       "",
-      "FUN FACT: End every recipe with a single 'funFact' field — one sentence, true, genuinely interesting, about bread. Tie it to the bread the user chose when possible (history, science, baking technique, cultural note). No jokes, no hype, no 'did you know.'",
+      "PAIRING: End every recipe with a single 'pairing' field — a short, simple suggestion for a non-alcoholic drink that matches the vibe and flavor profile of this toast. Be specific: name the drink and (if relevant) the style or blend — e.g. 'Earl Grey, hot,' 'builder's tea with milk,' 'a flat white,' 'medium-roast pour-over,' 'cold lemonade,' 'fresh orange juice,' 'iced black coffee,' 'English Breakfast.' One sentence, plain voice, no jokes. Never alcoholic.",
     ].join("\n");
 
     const user = [
@@ -131,7 +131,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
         return {
           name: null,
           steps: null,
-          funFact: null,
+          pairing: null,
           model: modelUsed,
           latencyMs,
           usage: null,
@@ -153,7 +153,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: parsed.data.name,
         steps: parsed.data.steps,
-        funFact: parsed.data.funFact,
+        pairing: parsed.data.pairing,
         model: modelUsed,
         latencyMs,
         usage,
@@ -165,7 +165,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
-        funFact: null,
+        pairing: null,
         model: null,
         latencyMs: null,
         usage: null,
