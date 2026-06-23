@@ -836,6 +836,17 @@ ${shareUrl}`)}`;
           )}
         </div>
 
+        {aiOk && aiQuery.data?.funFact ? (
+          <div className="mt-4">
+            <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
+              FUN FACT
+            </p>
+            <p className="font-body text-sm text-[var(--ink)]">
+              {aiQuery.data.funFact}
+            </p>
+          </div>
+        ) : null}
+
         <div className="mt-4">
           <p className="font-pixel text-[9px] mb-2" style={{ color: "var(--toast-crust)" }}>
             NUTRITION (approx, per toast)

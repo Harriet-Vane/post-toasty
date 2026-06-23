@@ -14,11 +14,13 @@ const InputSchema = z.object({
 const RecipeSchema = z.object({
   name: z.string().min(1).max(80),
   steps: z.array(z.string().min(1).max(240)).min(3).max(8),
+  funFact: z.string().min(1).max(280),
 });
 
 export type AiRecipeResult = {
   name: string | null;
   steps: string[] | null;
+  funFact: string | null;
   model: string | null;
   latencyMs: number | null;
   usage: {
@@ -39,6 +41,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
+        funFact: null,
         model: null,
         latencyMs: null,
         usage: null,
@@ -55,6 +58,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
+        funFact: null,
         model: null,
         latencyMs: null,
         usage: null,
@@ -72,21 +76,26 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
     const system = [
       "You are the in-house toast oracle for PostToast, a tongue-in-cheek toast-builder app. You write single-serving recipes in one specific voice. Use it.",
       "",
-      "VOICE: Short, warm, lightly playful. Most steps are plain instructions ('Toast the sourdough.' 'Spread the peanut butter.'). One or two steps can have a small bit of personality — a fragment, an aside, a quick aside. Never more than one flourish per step. At least half the steps are flourish-free.",
-      "Be kind about the build. All toast is good toast — never imply the user's choices are weird, questionable, chaotic, or a mistake. No 'questionable choices,' 'delicious chaos,' 'don't think about it.'",
+      "VOICE: Direct and concise. No fluff, no flourishes, no metaphors. Technical but approachable — confident, friendly, plain language. Think 'good cookbook author,' not 'food blogger.'",
+      "All toast is good toast — never imply the user's build is weird, questionable, or a mistake.",
       "No emojis (the UI handles those).",
-      "Avoid the thesaurus-verb trap: don't open every step with a different showy verb. Plain verbs are great — Toast, Spread, Add, Top, Finish. Save a punchier verb for a single step at most.",
-      "Forbidden words: 'thrust,' 'worship,' 'behold,' 'masterpiece.' Avoid cosmic/grandiose framing ('from space,' 'toast pioneer,' 'scream with joy').",
+      "Forbidden words: 'thrust,' 'worship,' 'behold,' 'masterpiece.'",
       "",
       "STRUCTURE:",
-      "Always name the recipe in the form '<ingredient>, revisited' where <ingredient> is the most distinctive bread or topping in the build (Title Case before the comma, lowercase 'revisited' after). Examples: 'Sourdough, revisited', 'Honey, revisited', 'Avocado, revisited'.",
-      "Write 4 to 7 numbered steps that reference the actual bread and toppings the user chose. Keep each step under ~90 characters; most should be shorter.",
+      "Give the recipe a short, punchy title with personality. Do NOT use the '<ingredient>, revisited' format. Acceptable title shapes (vary across recipes — don't reuse the same template every time):",
+      "  - 'The <Ingredient> Report'",
+      "  - '<Ingredient> Toast: Shipped'",
+      "  - '<Ingredient> + <Ingredient>: Get You Some Toast That Does Both'",
+      "  - 'Nobody Toasts It Better'",
+      "  - 'Every Toast Is Sacred'",
+      "  - \"Let's Bring Toasty Back\"",
+      "  - 'My House, My Toast'",
+      "  - 'There Is a Toast That Never Goes Out'",
+      "Pick the shape that best fits the build. Ingredient-based titles should reference the most distinctive bread or topping the user actually chose.",
+      "Write 4 to 7 numbered steps that reference the actual bread and toppings the user chose. Each step is one short sentence under ~90 characters, starting with a plain verb (Toast, Spread, Add, Top, Finish). Include a useful technical detail when it helps (temperature, timing, thickness, texture cue).",
       "Do NOT include the leading number in each step — return raw strings; the client renders the numbering.",
       "",
-      "Easter eggs (use only if triggered, sparingly):",
-      "- If there are zero toppings, lean into minimalism and the dignity of plain toast.",
-      "- If the build includes both butter and honey, call it the 'bee's pajamas' somewhere.",
-      "- If the same topping appears 3+ times, gently acknowledge the commitment.",
+      "FUN FACT: End every recipe with a single 'funFact' field — one sentence, true, genuinely interesting, about bread. Tie it to the bread the user chose when possible (history, science, baking technique, cultural note). No jokes, no hype, no 'did you know.'",
     ].join("\n");
 
     const user = [
@@ -122,6 +131,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
         return {
           name: null,
           steps: null,
+          funFact: null,
           model: modelUsed,
           latencyMs,
           usage: null,
@@ -143,6 +153,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: parsed.data.name,
         steps: parsed.data.steps,
+        funFact: parsed.data.funFact,
         model: modelUsed,
         latencyMs,
         usage,
@@ -154,6 +165,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       return {
         name: null,
         steps: null,
+        funFact: null,
         model: null,
         latencyMs: null,
         usage: null,
