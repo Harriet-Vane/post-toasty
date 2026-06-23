@@ -285,13 +285,14 @@ export function ToastOracle({
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onFocus={() => setExpanded(true)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               send();
             }
           }}
-          rows={2}
+          rows={showTranscript ? 2 : 1}
           placeholder="Describe your dream toast…"
           disabled={pending}
           className="flex-1 font-body text-[12px] p-1.5 resize-none"
