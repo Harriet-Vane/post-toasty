@@ -95,7 +95,7 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
       "Write 4 to 7 numbered steps that reference the actual bread and toppings the user chose. Each step is one short sentence under ~90 characters, starting with a plain verb (Toast, Spread, Add, Top, Finish). Include a useful technical detail when it helps (temperature, timing, thickness, texture cue).",
       "Do NOT include the leading number in each step — return raw strings; the client renders the numbering.",
       "",
-      "FUN FACT: End every recipe with a single 'funFact' field — one sentence, true, genuinely interesting, about bread. Tie it to the bread the user chose when possible (history, science, baking technique, cultural note). No jokes, no hype, no 'did you know.'",
+      "PAIRING: End every recipe with a single 'pairing' field — a short, simple suggestion for a non-alcoholic drink that matches the vibe and flavor profile of this toast. Be specific: name the drink and (if relevant) the style or blend — e.g. 'Earl Grey, hot,' 'builder's tea with milk,' 'a flat white,' 'medium-roast pour-over,' 'cold lemonade,' 'fresh orange juice,' 'iced black coffee,' 'English Breakfast.' One sentence, plain voice, no jokes. Never alcoholic.",
     ].join("\n");
 
     const user = [
