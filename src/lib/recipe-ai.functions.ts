@@ -112,15 +112,8 @@ export const generateAiRecipe = createServerFn({ method: "POST" })
     }
 
     try {
-      let modelUsed = PRIMARY_MODEL;
-      let attempt;
-      try {
-        attempt = await callModel(PRIMARY_MODEL);
-      } catch (err) {
-        console.warn("[recipe-ai] primary model failed, falling back", err);
-        modelUsed = FALLBACK_MODEL;
-        attempt = await callModel(FALLBACK_MODEL);
-      }
+      const modelUsed = MODEL;
+      const attempt = await callModel(MODEL);
 
       const { result, latencyMs } = attempt;
       const output = (result as unknown as { output?: unknown }).output;
