@@ -224,14 +224,10 @@ function InputScreen({
 
 
       <div className="flex flex-col items-center gap-1 mt-auto">
-        <img
-          src={angelToast}
-          alt="Angel toast"
+        <ToastAngel
           title="toast angel, toast angel, will you be mine?"
           width={96}
           height={96}
-          className="opacity-80"
-          loading="lazy"
         />
         <p className="font-body text-xs opacity-60 max-w-xs">
           In toast we trust
