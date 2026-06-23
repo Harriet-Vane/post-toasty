@@ -8,6 +8,7 @@ import { toast as sonnerToast } from "sonner";
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
 
 import angelToast from "@/assets/angel-toast.png";
+import { ToastAngel } from "@/components/ToastAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast";
 import { SaltFall } from "@/components/SaltFall";
@@ -224,14 +225,10 @@ function InputScreen({
 
 
       <div className="flex flex-col items-center gap-1 mt-auto">
-        <img
-          src={angelToast}
-          alt="Angel toast"
+        <ToastAngel
           title="toast angel, toast angel, will you be mine?"
           width={96}
           height={96}
-          className="opacity-80"
-          loading="lazy"
         />
         <p className="font-body text-xs opacity-60 max-w-xs">
           In toast we trust
@@ -880,14 +877,8 @@ ${shareUrl}`)}`;
           <span className="font-body text-xs text-[var(--ink)] opacity-80">
             Everyone deserves a good toast.
           </span>
-          <img
-            src={angelToast}
-            alt="Angel toast"
-            width={48}
-            height={48}
-            className="opacity-80"
-            loading="lazy"
-          />
+          <ToastAngel width={48} height={48} />
+
         </footer>
       </article>
 

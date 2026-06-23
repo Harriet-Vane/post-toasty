@@ -5,6 +5,7 @@ import posthog from "posthog-js";
 import { useEffect, useMemo, useRef } from "react";
 
 import angelToast from "@/assets/angel-toast.png";
+import { ToastAngel } from "@/components/ToastAngel";
 import { BreadCanvas } from "@/components/BreadCanvas";
 import { cardPublicUrl } from "@/lib/cardKey";
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
@@ -294,14 +295,8 @@ function RecipePage() {
               <span className="font-body text-xs text-[var(--ink)] opacity-80">
                 Everyone deserves a good toast.
               </span>
-              <img
-                src={angelToast}
-                alt="Angel toast"
-                width={48}
-                height={48}
-                className="opacity-80"
-                loading="lazy"
-              />
+              <ToastAngel width={48} height={48} />
+
             </footer>
           </article>
 
