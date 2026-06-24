@@ -325,7 +325,7 @@ function ToppingLayer({
     }
     case "scatter": {
       const count =
-        topping.id === "sprinkles" ? 70 : topping.id === "cinnamon" ? 80 : topping.id === "tomato" ? 9 : 18;
+        topping.id === "sprinkles" ? 70 : topping.id === "cinnamon" ? 80 : topping.id === "tomato" ? 9 : topping.id === "gummy" ? 55 : 18;
       if (topping.id === "pineapple") {
         // Rings extend past the bread edges (rendered outside the bread clip).
         const seed = hash(seedKey);
