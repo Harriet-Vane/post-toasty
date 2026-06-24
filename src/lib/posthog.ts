@@ -5,6 +5,26 @@ import { useRouter } from "@tanstack/react-router";
 const POSTHOG_KEY = "phc_yDPSEJTQgShjMvfjj96uDCHbRdAVuvuPcDyQWH7CWjs6";
 const POSTHOG_HOST = "https://us.i.posthog.com";
 
+// Marks this browser as internal (your own usage) so PostHog stops capturing.
+// Visit the live site once with `?internal=1` to opt out, or `?internal=0` to
+// opt back in. The choice is persisted in localStorage across visits.
+const INTERNAL_FLAG = "ph_internal_user";
+
+function applyInternalOptOut(ph: typeof posthog) {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const flag = params.get("internal");
+    if (flag === "1") localStorage.setItem(INTERNAL_FLAG, "1");
+    else if (flag === "0") localStorage.removeItem(INTERNAL_FLAG);
+
+    if (localStorage.getItem(INTERNAL_FLAG) === "1") {
+      ph.opt_out_capturing();
+    }
+  } catch {
+    /* localStorage unavailable (e.g. SSR) — skip */
+  }
+}
+
 export function track(event: string, props?: Record<string, unknown>) {
   try {
     posthog.capture(event, props);
@@ -28,6 +48,7 @@ export function usePostHogInit() {
         capture_pageleave: true,
         loaded: (ph) => {
           if (process.env.NODE_ENV === "development") ph.debug();
+          applyInternalOptOut(ph);
         },
       });
       initialized = true;
