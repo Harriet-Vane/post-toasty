@@ -184,7 +184,7 @@ function RecipePage() {
             links={[
               { to: "/about", label: "About" },
               { to: "/how-it-works", label: "How It Works" },
-              { to: "/", label: "Make one" },
+              { to: "/", label: "Make some toast" },
             ]}
           />
         </div>
