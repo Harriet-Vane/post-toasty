@@ -325,7 +325,36 @@ function ToppingLayer({
     }
     case "scatter": {
       const count =
-        topping.id === "sprinkles" ? 70 : topping.id === "cinnamon" ? 80 : topping.id === "tomato" ? 9 : topping.id === "gummy" ? 55 : 18;
+        topping.id === "sprinkles" ? 70 : topping.id === "cinnamon" ? 80 : topping.id === "tomato" ? 9 : topping.id === "gummy" ? 55 : topping.id === "oliveoil" ? 22 : 18;
+      if (topping.id === "oliveoil") {
+        // Chickpea salad: creamy base with chunky chickpea halves and herb flecks
+        const seed = hash(seedKey);
+        const pts = scatterPositions(count, seedKey, { x: 28, y: 32, w: 144, h: 136 });
+        return (
+          <g>
+            <ellipse cx="100" cy="100" rx="78" ry="68" fill={topping.color} opacity="0.92" />
+            <ellipse cx="92" cy="88" rx="60" ry="46" fill="#f3e8c2" opacity="0.55" />
+            {pts.map((p, i) => {
+              const variant = (i + seed) % 4;
+              if (variant === 0) {
+                // herb fleck (parsley)
+                return (
+                  <circle key={i} cx={p.x} cy={p.y} r="1.6" fill="#3f6a2a" opacity="0.85" />
+                );
+              }
+              // chickpea half — rounded pebble with a soft highlight
+              const rx = 5.4 + (i % 3) * 0.6;
+              const ry = 4.2 + (i % 2) * 0.5;
+              return (
+                <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r})`}>
+                  <ellipse rx={rx} ry={ry} fill={topping.color} stroke={topping.accent} strokeWidth="0.7" />
+                  <ellipse cx={-rx * 0.3} cy={-ry * 0.35} rx={rx * 0.35} ry={ry * 0.3} fill="#fff6d8" opacity="0.7" />
+                </g>
+              );
+            })}
+          </g>
+        );
+      }
       if (topping.id === "pineapple") {
         // Rings extend past the bread edges (rendered outside the bread clip).
         const seed = hash(seedKey);

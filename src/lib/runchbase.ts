@@ -62,7 +62,7 @@ export const TOPPINGS: Topping[] = [
   { id: "marmalade", name: "Marmalade", side: "spread", render: "spread", color: "#e38a2a", emoji: "🍊", complimentName: "marmalade", sound: "M" },
   { id: "lemoncurd", name: "Lemon Curd", side: "spread", render: "spread", color: "#f4e04a", emoji: "🍋", complimentName: "lemon curd", sound: "L" },
   { id: "honey", name: "Honey", side: "spread", render: "drizzle", color: "#e3a82a", emoji: "🍯", complimentName: "honey", sound: "H" },
-  { id: "oliveoil", name: "Olive Oil + Salt", side: "spread", render: "drizzle", color: "#c9c163", emoji: "🫒", complimentName: "olive oil", sound: "O" },
+  { id: "oliveoil", name: "Chickpea Salad", side: "spread", render: "scatter", color: "#e8d9a8", accent: "#a8864a", emoji: "🥗", complimentName: "chickpea salad", sound: "C" },
   { id: "fluff", name: "Marshmallow Fluff", side: "spread", render: "spread", color: "#fffdf2", accent: "#e6dfc0", emoji: "☁️", complimentName: "marshmallow fluff", sound: "M" },
   { id: "marmite", name: "Marmite", side: "spread", render: "spread", color: "#3d2b1f", emoji: "🫙", complimentName: "marmite", sound: "C" },
 
