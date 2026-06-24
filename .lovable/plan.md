@@ -1,29 +1,12 @@
-## Problem
+## Fix high-severity dependency vulnerabilities
 
-On `/r/$slug`, the recipe title flickers: it renders with the deterministic `fallbackName` first, then swaps to the AI-generated name once `generateAiRecipe` resolves. The slug only carries a shared name in some cases; when it doesn't, the AI result currently overrides the fallback for the heading.
+The advisories all trace to `undici`, a transitive dependency of `@tanstack/react-start` (currently `1.167.50`). The fix is to bump `@tanstack/react-start` so it pulls in a patched `undici`.
 
-Relevant line in `src/routes/r.$slug.tsx`:
+### Steps
+1. Upgrade `@tanstack/react-start` from `1.167.50` to the latest `1.168.26` (run `bun add @tanstack/react-start@latest`). This refreshes the transitive `undici` to a version that includes the SOCKS5 TLS bypass, WebSocket DoS, and SOCKS5 proxy pool reuse fixes.
+2. Reinstall to refresh the lockfile so the new transitive `undici` is locked in.
+3. Verify the build still runs and re-run the security scan to confirm the high-severity findings clear. The medium-severity undici/js-yaml/start-server-core advisories should also drop, since they share the same upstream package.
 
-```ts
-const name = sharedName || (aiOk ? aiQuery.data!.name : fallbackName);
-```
-
-## Fix
-
-Decouple the heading from the AI response. Use a stable title source that's known on first paint, and let the AI response only affect the recipe steps / pairing.
-
-Change the `name` derivation to:
-
-```ts
-const name = sharedName || fallbackName;
-```
-
-Effects:
-- The `<h2>` title (line 205) and `head()` meta `title` / `og:title` both already use `sharedName || fallbackName` semantics on the server. The client now matches, so no swap occurs.
-- The AI recipe steps and pairing block continue to render when `aiOk`, unchanged.
-- No change to loader, head(), or share-card logic.
-
-## Scope
-
-- Edit one line in `src/routes/r.$slug.tsx` (the `name` assignment).
-- No other files touched. No schema or dependency changes.
+### Notes
+- `@tanstack/react-router` (`1.168.25`) is already aligned with the new start version, so no separate bump needed.
+- No application code changes required — this is a dependency-only update within the same minor range.
