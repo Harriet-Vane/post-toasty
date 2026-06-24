@@ -329,11 +329,11 @@ function ToppingLayer({
       if (topping.id === "oliveoil") {
         // Chickpea salad: creamy base with chunky chickpea halves and herb flecks
         const seed = hash(seedKey);
-        const pts = scatterPositions(count, seedKey, { x: 24, y: 28, w: 152, h: 144 });
+        const pts = scatterPositions(count, seedKey, { x: 4, y: 4, w: 192, h: 192 });
         return (
           <g>
-            <ellipse cx="100" cy="100" rx="78" ry="68" fill={topping.color} opacity="0.92" />
-            <ellipse cx="92" cy="88" rx="60" ry="46" fill="#f3e8c2" opacity="0.55" />
+            <rect x="0" y="0" width="200" height="200" fill={topping.color} opacity="0.95" />
+            <ellipse cx="92" cy="88" rx="80" ry="64" fill="#f3e8c2" opacity="0.5" />
             {pts.map((p, i) => {
               const variant = (i + seed) % 3;
               if (variant === 0) {
