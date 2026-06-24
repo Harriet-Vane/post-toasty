@@ -31,7 +31,7 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   tomato: "To-may-to, to-mah-to. Let's eat.",
   egg: "Sunnyside up!",
   cinnamon: "Just like mom used to make.",
-  gummy: "No reason not to!",
+  gummy: "The universal solvent",
   pickle: "AKA rocket, an objectively cooler name",
   hotdog: "Lightly sauteed in miso butter, oh yes",
   pumpkinseeds: "Stay salty, my friend.",
