@@ -421,13 +421,81 @@ function ToppingLayer({
               );
             }
             if (topping.id === "gummy") {
-              const colors = ["#f04e8a", "#34a85a", "#ffd23f", "#ff7a3a", "#56b3ff"];
-              const color = colors[(i + hash(seedKey)) % colors.length];
+              // Everything bagel seasoning: poppy seeds, sesame seeds, garlic/onion flakes, salt
+              const variant = (i + hash(seedKey)) % 5;
+              if (variant === 0) {
+                // poppy seed - tiny black dot
+                return <circle key={i} cx={p.x} cy={p.y} r="1.3" fill="#1a1a1a" />;
+              }
+              if (variant === 1) {
+                // white sesame seed - small oval
+                return (
+                  <ellipse
+                    key={i}
+                    cx={p.x}
+                    cy={p.y}
+                    rx="2.2"
+                    ry="1.2"
+                    fill="#f4e4c1"
+                    stroke="#a8946a"
+                    strokeWidth="0.3"
+                    transform={`rotate(${p.r} ${p.x} ${p.y})`}
+                  />
+                );
+              }
+              if (variant === 2) {
+                // black sesame seed
+                return (
+                  <ellipse
+                    key={i}
+                    cx={p.x}
+                    cy={p.y}
+                    rx="2"
+                    ry="1.1"
+                    fill="#2a2a2a"
+                    transform={`rotate(${p.r} ${p.x} ${p.y})`}
+                  />
+                );
+              }
+              if (variant === 3) {
+                // dried garlic flake - irregular tan chip
+                return (
+                  <rect
+                    key={i}
+                    x={p.x - 2.2}
+                    y={p.y - 1.4}
+                    width="4.4"
+                    height="2.6"
+                    rx="0.8"
+                    fill="#e6c98a"
+                    stroke="#8a6f3a"
+                    strokeWidth="0.4"
+                    transform={`rotate(${p.r} ${p.x} ${p.y})`}
+                  />
+                );
+              }
+              // salt flake
+              return (
+                <rect
+                  key={i}
+                  x={p.x - 1.4}
+                  y={p.y - 1.4}
+                  width="2.8"
+                  height="2.8"
+                  fill="#fafafa"
+                  stroke="#bdbdbd"
+                  strokeWidth="0.4"
+                  transform={`rotate(${p.r} ${p.x} ${p.y})`}
+                />
+              );
+            }
+            if (topping.id === "frosting") {
+              // Pickled red onion ring
               return (
                 <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r})`}>
-                  <ellipse rx="7.5" ry="9" fill={color} stroke="#222" strokeWidth="1.2" />
-                  <circle cx="-2.4" cy="-4" r="1.1" fill="#222" />
-                  <circle cx="2.4" cy="-4" r="1.1" fill="#222" />
+                  <ellipse rx="11" ry="9" fill="none" stroke={topping.color} strokeWidth="3" opacity="0.9" />
+                  <ellipse rx="7.5" ry="6" fill="none" stroke={topping.accent} strokeWidth="1.6" opacity="0.85" />
+                  <ellipse rx="4" ry="3.2" fill="none" stroke={topping.color} strokeWidth="1.2" opacity="0.7" />
                 </g>
               );
             }
