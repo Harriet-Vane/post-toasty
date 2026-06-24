@@ -785,6 +785,10 @@ function ShareScreen({
       console.error("[share] card upload failed", err);
       sonnerToast.error("Couldn't prepare the share image — link previews may be blank.");
       return null;
+    } finally {
+      node.classList.remove("is-capturing");
+      node.style.width = prevWidth;
+      node.style.maxWidth = prevMaxWidth;
     }
   }
 
