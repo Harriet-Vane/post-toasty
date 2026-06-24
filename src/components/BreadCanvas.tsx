@@ -424,21 +424,21 @@ function ToppingLayer({
               // Everything bagel seasoning: poppy seeds, sesame seeds, garlic/onion flakes, salt
               const variant = (i + hash(seedKey)) % 5;
               if (variant === 0) {
-                // poppy seed - tiny black dot
-                return <circle key={i} cx={p.x} cy={p.y} r="1.3" fill="#1a1a1a" />;
+                // poppy seed - small black dot
+                return <circle key={i} cx={p.x} cy={p.y} r="2" fill="#1a1a1a" />;
               }
               if (variant === 1) {
-                // white sesame seed - small oval
+                // white sesame seed - oval
                 return (
                   <ellipse
                     key={i}
                     cx={p.x}
                     cy={p.y}
-                    rx="2.2"
-                    ry="1.2"
+                    rx="3.4"
+                    ry="1.9"
                     fill="#f4e4c1"
                     stroke="#a8946a"
-                    strokeWidth="0.3"
+                    strokeWidth="0.4"
                     transform={`rotate(${p.r} ${p.x} ${p.y})`}
                   />
                 );
@@ -450,8 +450,8 @@ function ToppingLayer({
                     key={i}
                     cx={p.x}
                     cy={p.y}
-                    rx="2"
-                    ry="1.1"
+                    rx="3.1"
+                    ry="1.7"
                     fill="#2a2a2a"
                     transform={`rotate(${p.r} ${p.x} ${p.y})`}
                   />
@@ -462,14 +462,14 @@ function ToppingLayer({
                 return (
                   <rect
                     key={i}
-                    x={p.x - 2.2}
-                    y={p.y - 1.4}
-                    width="4.4"
-                    height="2.6"
-                    rx="0.8"
+                    x={p.x - 3.2}
+                    y={p.y - 2}
+                    width="6.4"
+                    height="3.8"
+                    rx="1"
                     fill="#e6c98a"
                     stroke="#8a6f3a"
-                    strokeWidth="0.4"
+                    strokeWidth="0.5"
                     transform={`rotate(${p.r} ${p.x} ${p.y})`}
                   />
                 );
@@ -478,13 +478,13 @@ function ToppingLayer({
               return (
                 <rect
                   key={i}
-                  x={p.x - 1.4}
-                  y={p.y - 1.4}
-                  width="2.8"
-                  height="2.8"
+                  x={p.x - 2}
+                  y={p.y - 2}
+                  width="4"
+                  height="4"
                   fill="#fafafa"
                   stroke="#bdbdbd"
-                  strokeWidth="0.4"
+                  strokeWidth="0.5"
                   transform={`rotate(${p.r} ${p.x} ${p.y})`}
                 />
               );
@@ -493,9 +493,9 @@ function ToppingLayer({
               // Pickled red onion ring
               return (
                 <g key={i} transform={`translate(${p.x} ${p.y}) rotate(${p.r})`}>
-                  <ellipse rx="11" ry="9" fill="none" stroke={topping.color} strokeWidth="3" opacity="0.9" />
-                  <ellipse rx="7.5" ry="6" fill="none" stroke={topping.accent} strokeWidth="1.6" opacity="0.85" />
-                  <ellipse rx="4" ry="3.2" fill="none" stroke={topping.color} strokeWidth="1.2" opacity="0.7" />
+                  <ellipse rx="17" ry="14" fill="none" stroke={topping.color} strokeWidth="3.5" opacity="0.9" />
+                  <ellipse rx="12" ry="9.5" fill="none" stroke={topping.accent} strokeWidth="1.8" opacity="0.85" />
+                  <ellipse rx="7" ry="5.5" fill="none" stroke={topping.color} strokeWidth="1.4" opacity="0.75" />
                 </g>
               );
             }
