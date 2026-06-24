@@ -735,6 +735,8 @@ function ShareScreen({
     if (uploadedRef.current) return uploadedRef.current;
     const node = cardRef.current;
     if (!node) return null;
+    const prevWidth = node.style.width;
+    const prevMaxWidth = node.style.maxWidth;
     try {
       const { toPng } = await import("html-to-image");
       // Force a fixed desktop-sized layout, then measure the resulting
@@ -742,10 +744,12 @@ function ShareScreen({
       // bounds (plus a margin for the offset box-shadow on the right/bottom).
       const CAPTURE_WIDTH = 600;
       const SHADOW_PAD = 16;
-      const prevWidth = node.style.width;
-      const prevMaxWidth = node.style.maxWidth;
       node.style.width = `${CAPTURE_WIDTH}px`;
       node.style.maxWidth = `${CAPTURE_WIDTH}px`;
+      // Swap to a capture-friendly variant of the dazzle stage so
+      // html-to-image doesn't drop conic gradients / blend modes and
+      // leave just the raw pink+blue plate glow.
+      node.classList.add("is-capturing");
       // Force a reflow so we measure the new width's height.
       void node.offsetHeight;
       const measuredHeight = Math.ceil(node.getBoundingClientRect().height);
@@ -767,9 +771,6 @@ function ShareScreen({
         },
       });
 
-      node.style.width = prevWidth;
-      node.style.maxWidth = prevMaxWidth;
-
       const key = cardKey(breadId, toppings, salted);
       const res = await fetch("/api/public/upload-card", {
         method: "POST",
@@ -784,6 +785,10 @@ function ShareScreen({
       console.error("[share] card upload failed", err);
       sonnerToast.error("Couldn't prepare the share image — link previews may be blank.");
       return null;
+    } finally {
+      node.classList.remove("is-capturing");
+      node.style.width = prevWidth;
+      node.style.maxWidth = prevMaxWidth;
     }
   }
 
