@@ -37,7 +37,7 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   pumpkinseeds: "Stay salty, my friend.",
   pineapple: "Pineapple belongs on everything, frankly.",
   whip: "Whip it good!",
-  frosting: "Among the few perks of being an adult.",
+  frosting: "Tangy and perfect, like you",
   ghost: "Feeling spicy!",
   sprinkles: "You're a mermaid unicorn!",
 };
