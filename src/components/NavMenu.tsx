@@ -52,10 +52,10 @@ export function NavMenu({ extras, links }: NavMenuProps) {
           aria-label="Open menu"
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className="grid place-items-center w-9 h-9 rounded-md border-2 border-[var(--paper)] text-[var(--paper)] bg-transparent active:translate-y-px"
+          className="grid place-items-center w-9 h-9 text-[var(--toast-gold)] bg-transparent active:translate-y-px"
         >
           <span className="sr-only">Menu</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
             {open ? (
               <>
                 <line x1="5" y1="5" x2="19" y2="19" />
@@ -70,6 +70,7 @@ export function NavMenu({ extras, links }: NavMenuProps) {
             )}
           </svg>
         </button>
+
 
         {open && (
           <div
