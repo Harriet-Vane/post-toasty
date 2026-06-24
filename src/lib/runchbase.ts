@@ -78,7 +78,7 @@ export const TOPPINGS: Topping[] = [
   { id: "pumpkinseeds", name: "Pumpkin Seeds", side: "extra", render: "scatter", color: "#c4a35a", emoji: "🎃", complimentName: "pumpkin seed", sound: "P" },
   { id: "pineapple", name: "Pineapple", side: "extra", render: "scatter", color: "#f6d04a", accent: "#d4a81a", emoji: "🍍", complimentName: "pineapple", sound: "P" },
   { id: "whip", name: "Whipped Cream", side: "extra", render: "spread", color: "#ffffff", accent: "#e6e6e6", emoji: "🍦", complimentName: "whipped cream", sound: "W" },
-  { id: "frosting", name: "Cake Frosting", side: "extra", render: "spread", color: "#ff9ed1", accent: "#c45a96", emoji: "🎂", complimentName: "cake frosting", sound: "C" },
+  { id: "frosting", name: "Pickled Red Onions", side: "extra", render: "scatter", color: "#c44a7a", accent: "#5a1530", emoji: "🧅", complimentName: "pickled red onion", sound: "C" },
   { id: "ghost", name: "Hot Sauce", side: "extra", render: "drizzle", color: "#b8281a", emoji: "🌶️", complimentName: "hot sauce", sound: "H" },
   { id: "sprinkles", name: "Rainbow Sprinkles", side: "extra", render: "scatter", color: "#ff5fb4", accent: "#2db6ff", emoji: "🌈", complimentName: "rainbow sprinkles", sound: "R" },
 ];
