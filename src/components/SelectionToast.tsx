@@ -21,7 +21,7 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   marmalade: "Marvelous in every way!",
   lemoncurd: "A highly sophisticated palate appears!",
   honey: "Finger-licking good!",
-  oliveoil: "Weird flex, but OK!",
+  oliveoil: "It's the chickpea of the sea!",
   fluff: "The New Englander in me bows to the New Englander in you.",
   marmite: "The original, definitive, acquired taste.",
 
