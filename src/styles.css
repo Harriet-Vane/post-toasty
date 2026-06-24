@@ -274,6 +274,28 @@
   50%      { transform: scale(1.2); opacity: 1; }
 }
 
+/* Capture-only overrides: html-to-image can't reliably rasterize
+   conic gradients, mix-blend-mode, or our multi-layer plate glow, so
+   when capturing the share card we swap to a flat, deterministic look. */
+.is-capturing *,
+.is-capturing *::before,
+.is-capturing *::after {
+  animation: none !important;
+}
+.is-capturing .dazzle-stage {
+  background: #1b0840 !important;
+}
+.is-capturing .dazzle-stage .dazzle-rays,
+.is-capturing .dazzle-stage .dazzle-stars {
+  display: none !important;
+}
+.is-capturing .dazzle-stage .dazzle-toast {
+  box-shadow: none !important;
+}
+.is-capturing .dazzle-stage .dazzle-toast::after {
+  display: none !important;
+}
+
 .dazzle-stage {
   position: relative;
   overflow: hidden;
