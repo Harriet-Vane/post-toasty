@@ -72,7 +72,7 @@ export const TOPPINGS: Topping[] = [
   { id: "tomato", name: "Tomato", side: "extra", render: "scatter", color: "#d63a2e", accent: "#7c1b15", emoji: "🍅", complimentName: "tomato", sound: "T" },
   { id: "egg", name: "Fried Egg", side: "extra", render: "egg", color: "#fffaf0", accent: "#f1b800", emoji: "🍳", complimentName: "fried egg", sound: "F" },
   { id: "cinnamon", name: "Cinnamon Sugar", side: "extra", render: "scatter", color: "#a45e2b", accent: "#f3e3b9", emoji: "🍂", complimentName: "cinnamon sugar", sound: "S" },
-  { id: "gummy", name: "Gummy Bears", side: "extra", render: "scatter", color: "#f04e8a", accent: "#34a85a", emoji: "🐻", complimentName: "gummy bear", sound: "G" },
+  { id: "gummy", name: "Everything Bagel Seasoning", side: "extra", render: "scatter", color: "#2a2a2a", accent: "#e8d9b0", emoji: "🥯", complimentName: "everything bagel seasoning", sound: "G" },
   { id: "pickle", name: "Arugula", side: "extra", render: "pickle", color: "#6b9c4a", accent: "#3a5a28", emoji: "🥬", complimentName: "arugula", sound: "P" },
   { id: "hotdog", name: "Oyster Mushrooms", side: "extra", render: "hotdog", color: "#e8d6b3", accent: "#7a5a3a", emoji: "🍄", complimentName: "oyster mushrooms", sound: "O" },
   { id: "pumpkinseeds", name: "Pumpkin Seeds", side: "extra", render: "scatter", color: "#c4a35a", emoji: "🎃", complimentName: "pumpkin seed", sound: "P" },
