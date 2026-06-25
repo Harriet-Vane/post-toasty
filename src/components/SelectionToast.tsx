@@ -5,7 +5,7 @@ export const SELECTION_MESSAGES: Record<string, string> = {
   wholewheat: "So healthy! So brown!",
   rye: "This is the kind with extra seeds. Be warned.",
   englishmuffin: "Nooks and crannies FTW!",
-  bagel: "Only valid in New York",
+  bagel: "New York New York! It's a hell of a toast.",
   scone: "Okay but which topping comes first??",
   mystery: "YOLO",
 
