@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import posthog from "posthog-js";
 import { useRouter } from "@tanstack/react-router";
 
@@ -11,6 +11,40 @@ export function track(event: string, props?: Record<string, unknown>) {
   } catch {
     /* posthog not initialized yet */
   }
+}
+
+/**
+ * Read the variant of a multivariate feature flag (e.g. an experiment) and
+ * re-render when flags finish loading or change. Calling `getFeatureFlag` is
+ * also what registers the user's experiment exposure, so reading the flag here
+ * is what makes the experiment measure anything.
+ *
+ * Returns the variant key (e.g. "control" / "make-my-toast"), `false` if the
+ * user isn't in the flag, or `undefined` while flags are still loading.
+ */
+export function useFeatureFlagVariant(
+  flagKey: string,
+): string | boolean | undefined {
+  const [variant, setVariant] = useState<string | boolean | undefined>(() => {
+    try {
+      return posthog.getFeatureFlag(flagKey);
+    } catch {
+      return undefined;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      // Fires immediately with the current flags and again on any change.
+      return posthog.onFeatureFlags(() => {
+        setVariant(posthog.getFeatureFlag(flagKey));
+      });
+    } catch {
+      /* posthog not initialized yet */
+    }
+  }, [flagKey]);
+
+  return variant;
 }
 
 let initialized = false;
