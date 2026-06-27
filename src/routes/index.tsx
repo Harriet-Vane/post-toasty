@@ -17,6 +17,7 @@ import { NavMenu } from "@/components/NavMenu";
 
 import { cardKey } from "@/lib/cardKey";
 import { buildShareSlug, SHARE_ORIGIN } from "@/lib/shortShare";
+import { useFeatureFlagVariant } from "@/lib/posthog";
 
 import {
   BREADS,
@@ -301,6 +302,12 @@ function BuilderScreen({
   const [selectionToast, setSelectionToast] = useState<{ message: string; id: number } | null>(null);
   const [saltFalling, setSaltFalling] = useState(false);
 
+  // Experiment "ingredients-cta-copy-test": the "make-my-toast" variant swaps
+  // the CTA copy to reinforce that a recipe is generated next. Reading the flag
+  // here also registers the user's exposure.
+  const ctaVariant = useFeatureFlagVariant("ingredients-cta-copy-test");
+  const ctaLabel = ctaVariant === "make-my-toast" ? "Make my toast" : "Let's eat!";
+
   function addSalt() {
     if (saltFalling) return;
     posthog.capture("add_salt_clicked", { bread_id: breadId, topping_count: toppings.length });
@@ -532,7 +539,7 @@ function BuilderScreen({
               }}
               className="pixel-btn-primary mt-3"
             >
-              Let&apos;s eat!
+              {ctaLabel}
             </button>
           </div>
 
