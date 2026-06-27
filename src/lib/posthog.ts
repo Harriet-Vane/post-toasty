@@ -5,6 +5,20 @@ import { useRouter } from "@tanstack/react-router";
 const POSTHOG_KEY = "phc_yDPSEJTQgShjMvfjj96uDCHbRdAVuvuPcDyQWH7CWjs6";
 const POSTHOG_HOST = "https://us.i.posthog.com";
 
+// The app also runs inside the Lovable editor/preview on *.lovable.app and
+// *.lovableproject.com. That traffic is just us building the app, not real
+// visitors, so we opt out of capturing there. Real visits to posttoasty.com
+// (including our own) are still captured — that's the data we want to learn from.
+function applyPreviewOptOut(ph: typeof posthog) {
+  try {
+    if (window.location.hostname.includes("lovable")) {
+      ph.opt_out_capturing();
+    }
+  } catch {
+    /* window unavailable (e.g. SSR) — skip */
+  }
+}
+
 export function track(event: string, props?: Record<string, unknown>) {
   try {
     posthog.capture(event, props);
@@ -62,6 +76,7 @@ export function usePostHogInit() {
         capture_pageleave: true,
         loaded: (ph) => {
           if (process.env.NODE_ENV === "development") ph.debug();
+          applyPreviewOptOut(ph);
         },
       });
       initialized = true;
