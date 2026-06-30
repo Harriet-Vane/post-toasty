@@ -9,7 +9,7 @@ const POSTHOG_HOST = "https://us.i.posthog.com";
 // *.lovableproject.com. That traffic is just us building the app, not real
 // visitors, so we opt out of capturing there. Real visits to posttoasty.com
 // (including our own) are still captured — that's the data we want to learn from.
-function applyPreviewOptOut(ph: typeof posthog) {
+function applyPreviewOptOut(ph: any) {
   try {
     if (window.location.hostname.includes("lovable")) {
       ph.opt_out_capturing();
