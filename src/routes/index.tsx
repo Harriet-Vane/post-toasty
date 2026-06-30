@@ -715,6 +715,7 @@ function ShareScreen({
 
   const [shareOpen, setShareOpen] = useState(false);
   const [shareEmail, setShareEmail] = useState("");
+  const [marketingOptIn, setMarketingOptIn] = useState(false);
   // We only identify a given sharer once per share session, even if they try
   // several share methods in a row.
   const identifiedRef = useRef(false);
@@ -840,6 +841,20 @@ ${shareUrl}`)}`;
     } catch {
       /* posthog not initialized yet */
     }
+    // Persist the capture so we have a durable record (and a queue for a future
+    // HubSpot sync). Fire-and-forget — never block or break sharing on this.
+    void fetch("/api/public/capture-share-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        bread_id: breadId,
+        recipe_name: name,
+        share_url: shareUrl,
+        topping_ids: toppings,
+        marketing_opt_in: marketingOptIn,
+      }),
+    }).catch((err) => console.error("[share] email capture failed", err));
   }
 
   function openShare(href: string) {
@@ -1046,6 +1061,18 @@ ${shareUrl}`)}`;
               <p className="font-body text-[11px] text-[var(--ink)] opacity-70 mt-1">
                 Add it and we'll remember your toasts. Totally optional.
               </p>
+              <label className="flex items-start gap-2 mt-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={marketingOptIn}
+                  onChange={(e) => setMarketingOptIn(e.target.checked)}
+                  className="mt-0.5"
+                  aria-label="Email me toasty news and updates"
+                />
+                <span className="font-body text-[11px] text-[var(--ink)] opacity-70">
+                  Email me toasty news and updates.
+                </span>
+              </label>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {socialLinks.map((s) => (

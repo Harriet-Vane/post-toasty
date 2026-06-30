@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RSlugRouteImport } from './routes/r.$slug'
 import { Route as ApiPublicUploadCardRouteImport } from './routes/api/public/upload-card'
+import { Route as ApiPublicCaptureShareEmailRouteImport } from './routes/api/public/capture-share-email'
 
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
@@ -40,12 +41,19 @@ const ApiPublicUploadCardRoute = ApiPublicUploadCardRouteImport.update({
   path: '/api/public/upload-card',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCaptureShareEmailRoute =
+  ApiPublicCaptureShareEmailRouteImport.update({
+    id: '/api/public/capture-share-email',
+    path: '/api/public/capture-share-email',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/how-it-works': typeof HowItWorksRoute
   '/r/$slug': typeof RSlugRoute
+  '/api/public/capture-share-email': typeof ApiPublicCaptureShareEmailRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +61,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/how-it-works': typeof HowItWorksRoute
   '/r/$slug': typeof RSlugRoute
+  '/api/public/capture-share-email': typeof ApiPublicCaptureShareEmailRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRoutesById {
@@ -61,6 +70,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/how-it-works': typeof HowItWorksRoute
   '/r/$slug': typeof RSlugRoute
+  '/api/public/capture-share-email': typeof ApiPublicCaptureShareEmailRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRouteTypes {
@@ -70,15 +80,23 @@ export interface FileRouteTypes {
     | '/about'
     | '/how-it-works'
     | '/r/$slug'
+    | '/api/public/capture-share-email'
     | '/api/public/upload-card'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/how-it-works' | '/r/$slug' | '/api/public/upload-card'
+  to:
+    | '/'
+    | '/about'
+    | '/how-it-works'
+    | '/r/$slug'
+    | '/api/public/capture-share-email'
+    | '/api/public/upload-card'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/how-it-works'
     | '/r/$slug'
+    | '/api/public/capture-share-email'
     | '/api/public/upload-card'
   fileRoutesById: FileRoutesById
 }
@@ -87,6 +105,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   HowItWorksRoute: typeof HowItWorksRoute
   RSlugRoute: typeof RSlugRoute
+  ApiPublicCaptureShareEmailRoute: typeof ApiPublicCaptureShareEmailRoute
   ApiPublicUploadCardRoute: typeof ApiPublicUploadCardRoute
 }
 
@@ -127,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicUploadCardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/capture-share-email': {
+      id: '/api/public/capture-share-email'
+      path: '/api/public/capture-share-email'
+      fullPath: '/api/public/capture-share-email'
+      preLoaderRoute: typeof ApiPublicCaptureShareEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -135,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   HowItWorksRoute: HowItWorksRoute,
   RSlugRoute: RSlugRoute,
+  ApiPublicCaptureShareEmailRoute: ApiPublicCaptureShareEmailRoute,
   ApiPublicUploadCardRoute: ApiPublicUploadCardRoute,
 }
 export const routeTree = rootRouteImport
