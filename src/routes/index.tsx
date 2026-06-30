@@ -714,6 +714,10 @@ function ShareScreen({
 
 
   const [shareOpen, setShareOpen] = useState(false);
+  const [shareEmail, setShareEmail] = useState("");
+  // We only identify a given sharer once per share session, even if they try
+  // several share methods in a row.
+  const identifiedRef = useRef(false);
   const cardRef = useRef<HTMLElement | null>(null);
   const uploadedRef = useRef<string | null>(null);
   const variant = useMemo(() => {
@@ -815,6 +819,28 @@ ${shareUrl}`)}`;
     { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}&quote=${enc(shareText)}` },
     { label: "Threads", href: `https://www.threads.net/intent/post?text=${enc(`${shareText} ${shareUrl}`)}` },
   ];
+
+  // If the sharer chose to give us their email, attach it to their PostHog
+  // identity so their (previously anonymous) journey becomes attributable, and
+  // record a share_email_captured event. Entirely optional — does nothing when
+  // the field is left blank or doesn't look like an email.
+  function captureShareEmail(method: string) {
+    const email = shareEmail.trim();
+    if (!email || identifiedRef.current) return;
+    // Light validation — just enough to skip obvious typos, not a strict check.
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    identifiedRef.current = true;
+    try {
+      posthog.identify(email, { email });
+      posthog.capture("share_email_captured", {
+        share_method: method,
+        bread_id: breadId,
+        topping_count: toppings.length,
+      });
+    } catch {
+      /* posthog not initialized yet */
+    }
+  }
 
   function openShare(href: string) {
     void ensureCardUploaded();
@@ -999,6 +1025,28 @@ ${shareUrl}`)}`;
             <p className="font-body text-sm text-[var(--ink)] opacity-80 mb-3">
               Bring some toasty love to the world.
             </p>
+            <div className="mb-4">
+              <label
+                htmlFor="share-email"
+                className="font-pixel text-[9px] block mb-2"
+                style={{ color: "var(--toast-crust)" }}
+              >
+                YOUR EMAIL (OPTIONAL)
+              </label>
+              <input
+                id="share-email"
+                type="email"
+                value={shareEmail}
+                onChange={(e) => setShareEmail(e.target.value)}
+                placeholder="you@example.com"
+                aria-label="Your email (optional)"
+                className="w-full min-w-0 font-body text-xs text-[var(--ink)] bg-[var(--paper)] px-2 py-2"
+                style={{ border: "2px solid var(--ink)" }}
+              />
+              <p className="font-body text-[11px] text-[var(--ink)] opacity-70 mt-1">
+                Add it and we'll remember your toasts. Totally optional.
+              </p>
+            </div>
             <div className="grid grid-cols-2 gap-2">
               {socialLinks.map((s) => (
                 <button
@@ -1007,6 +1055,7 @@ ${shareUrl}`)}`;
                   className="pixel-btn"
                   style={{ justifyContent: "flex-start" }}
                   onClick={() => {
+                    captureShareEmail(s.label.toLowerCase());
                     posthog.capture("recipe_shared", {
                       share_method: s.label.toLowerCase(),
                       bread_id: breadId,
@@ -1042,6 +1091,7 @@ ${shareUrl}`)}`;
                     try {
                       await navigator.clipboard.writeText(shareUrl);
                       sonnerToast.success("Link copied!");
+                      captureShareEmail("copy_link");
                       posthog.capture("recipe_shared", {
                         share_method: "copy_link",
                         bread_id: breadId,
