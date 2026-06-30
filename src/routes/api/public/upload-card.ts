@@ -35,10 +35,18 @@ export const Route = createFileRoute("/api/public/upload-card")({
           return Response.json({ error: "Bad image size" }, { status: 400 });
         }
 
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { createClient } = await import("@supabase/supabase-js");
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY;
+        if (!supabaseUrl || !supabaseKey) {
+          return Response.json({ error: "Supabase env not configured" }, { status: 500 });
+        }
+        const client = createClient(supabaseUrl, supabaseKey, {
+          auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+        });
         const path = `cards/${key}.png`;
 
-        const { error } = await supabaseAdmin.storage
+        const { error } = await client.storage
           .from("toast-cards")
           .upload(path, bytes, {
             contentType: "image/png",
@@ -47,10 +55,11 @@ export const Route = createFileRoute("/api/public/upload-card")({
           });
 
         if (error) {
+          console.error("[upload-card] storage upload failed", error);
           return Response.json({ error: error.message }, { status: 500 });
         }
 
-        const { data } = supabaseAdmin.storage
+        const { data } = client.storage
           .from("toast-cards")
           .getPublicUrl(path);
 

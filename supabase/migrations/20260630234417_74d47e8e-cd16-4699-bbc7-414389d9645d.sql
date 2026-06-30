@@ -1,0 +1,2 @@
+CREATE POLICY "Anon can upload toast cards" ON storage.objects FOR INSERT TO anon WITH CHECK (bucket_id = 'toast-cards');
+CREATE POLICY "Anon can update toast cards" ON storage.objects FOR UPDATE TO anon USING (bucket_id = 'toast-cards') WITH CHECK (bucket_id = 'toast-cards');
