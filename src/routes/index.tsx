@@ -1085,6 +1085,47 @@ ${shareUrl}`)}`;
                 </button>
               </div>
             </div>
+
+            <div className="mt-5 pt-4" style={{ borderTop: "2px dashed var(--ink)" }}>
+              <h5 className="font-pixel text-[11px] mb-2 text-[var(--ink)]">
+                SUBSCRIBE TO TOASTY UPDATES
+              </h5>
+              <div className="flex gap-2">
+                <input
+                  id="share-email"
+                  type="email"
+                  value={shareEmail}
+                  onChange={(e) => setShareEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  aria-label="Your email (optional)"
+                  className="flex-1 min-w-0 font-body text-xs text-[var(--ink)] bg-[var(--paper)] px-2 py-2"
+                  style={{ border: "2px solid var(--ink)" }}
+                />
+                <button
+                  type="button"
+                  className="pixel-btn"
+                  onClick={() => {
+                    const email = shareEmail.trim();
+                    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                      sonnerToast.error("Hmm, that email looks off.");
+                      return;
+                    }
+                    if (identifiedRef.current) {
+                      sonnerToast.success("Thanks! You're the toastiest.");
+                      return;
+                    }
+                    captureShareEmail("submit");
+                    sonnerToast.success("Thanks! You're the toastiest.");
+                  }}
+                >
+                  Submit
+                </button>
+              </div>
+              <p className="font-body text-[11px] text-[var(--ink)] opacity-70 mt-1">
+                Add it and we'll remember your toasts. Totally optional.
+              </p>
+            </div>
+
           </div>
         </div>
       )}
