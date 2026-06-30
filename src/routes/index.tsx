@@ -1025,51 +1025,8 @@ ${shareUrl}`)}`;
             <p className="font-body text-sm text-[var(--ink)] opacity-80 mb-3">
               Bring some toasty love to the world.
             </p>
-            <div className="mb-4">
-              <label
-                htmlFor="share-email"
-                className="font-pixel text-[9px] block mb-2"
-                style={{ color: "var(--toast-crust)" }}
-              >
-                YOUR EMAIL (OPTIONAL)
-              </label>
-              <div className="flex gap-2">
-                <input
-                  id="share-email"
-                  type="email"
-                  value={shareEmail}
-                  onChange={(e) => setShareEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  aria-label="Your email (optional)"
-                  className="flex-1 min-w-0 font-body text-xs text-[var(--ink)] bg-[var(--paper)] px-2 py-2"
-                  style={{ border: "2px solid var(--ink)" }}
-                />
-                <button
-                  type="button"
-                  className="pixel-btn"
-                  onClick={() => {
-                    const email = shareEmail.trim();
-                    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                      sonnerToast.error("Hmm, that email looks off.");
-                      return;
-                    }
-                    if (identifiedRef.current) {
-                      sonnerToast.success("Already got it — thanks!");
-                      return;
-                    }
-                    captureShareEmail("submit");
-                    sonnerToast.success("Email saved. Toast on.");
-                  }}
-                >
-                  Submit
-                </button>
-              </div>
-              <p className="font-body text-[11px] text-[var(--ink)] opacity-70 mt-1">
-                Add it and we'll remember your toasts. Totally optional.
-              </p>
-
-            </div>
             <div className="grid grid-cols-2 gap-2">
+
               {socialLinks.map((s) => (
                 <button
                   key={s.label}
