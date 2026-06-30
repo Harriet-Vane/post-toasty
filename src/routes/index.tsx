@@ -1122,7 +1122,7 @@ ${shareUrl}`)}`;
                 </button>
               </div>
               <p className="font-body text-[11px] text-[var(--ink)] opacity-70 mt-1">
-                Add it and we'll remember your toasts. Totally optional.
+                Totally optional. Updates will be rare and non-annoying. Pinky swear.
               </p>
             </div>
 
