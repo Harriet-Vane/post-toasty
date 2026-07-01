@@ -27,6 +27,8 @@ export function SubscribeLink({ className }: { className?: string }) {
     setEmail("");
     setOpen(false);
     setFlying(true);
+    setShowConfirm(true);
+    setTimeout(() => setShowConfirm(false), 3000);
   }
 
   return (
