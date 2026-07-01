@@ -78,7 +78,7 @@ export function SubscribeLink({ className }: { className?: string }) {
               </button>
             </div>
             <p className="font-body text-[11px] text-[var(--ink)] opacity-70 mt-1">
-              Totally optional. Updates will be rare and non-annoying. Pinky swear.
+              Totally optional. Unsubscribe anytime.
             </p>
           </div>
         </div>,
