@@ -526,16 +526,19 @@
 /* Modal */
 .share-modal-backdrop {
   position: fixed; inset: 0; z-index: 50;
-  background: var(--paper);
+  background: transparent;
   display: flex; align-items: center; justify-content: center;
   padding: 1rem;
 }
 .share-modal {
   background: var(--paper);
+  background-color: var(--paper);
+  opacity: 1;
   border: 4px solid var(--ink);
   box-shadow: 8px 8px 0 0 var(--ink);
   max-width: 420px; width: 100%;
   padding: 1.25rem;
+  isolation: isolate;
 }
 
 /* Selection toast */
