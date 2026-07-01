@@ -88,8 +88,8 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
       ))}
       <style>{`
         @keyframes flyRight {
-          0% { transform: translateX(calc(var(--start-right) * -1)); }
-          100% { transform: translateX(130vw); }
+          0% { transform: translateX(calc((var(--start-offset) + 40vw) * -1)); }
+          100% { transform: translateX(120vw); }
         }
         @keyframes flyBob {
           from { transform: translateY(calc(var(--bob) * -1)); }
