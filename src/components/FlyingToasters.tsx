@@ -17,7 +17,7 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     setMounted(true);
-    const t = setTimeout(onDone, 15000);
+    const t = setTimeout(onDone, 4000);
     return () => clearTimeout(t);
   }, [onDone]);
 
@@ -29,8 +29,8 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
         top: 10 + Math.random() * 70,
         startOffset: 20 + Math.random() * 30,
         size: 100 + Math.random() * 60,
-        delay: Math.random() * 2.5,
-        duration: 9 + Math.random() * 4,
+        delay: 0,
+        duration: 3 + Math.random() * 0.8,
         bob: 8 + Math.random() * 14,
       });
     }
