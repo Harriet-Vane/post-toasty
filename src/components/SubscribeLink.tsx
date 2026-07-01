@@ -26,7 +26,6 @@ export function SubscribeLink({ className }: { className?: string }) {
     setEmail("");
     setOpen(false);
     setFlying(true);
-    sonnerToast.success("You're subscribed", { position: "top-center" });
   }
 
   return (
