@@ -72,6 +72,45 @@ function parseExistingId(bodyText: string): string | undefined {
   }
 }
 
+function isExistingContactConflict(status: number, bodyText: string) {
+  return status === 409 && /contact\s+already\s+exists|CONTACT_EXISTS/i.test(bodyText);
+}
+
+async function findExistingContactId(
+  email: string,
+  lovableKey: string,
+  hubspotKey: string,
+) {
+  const res = await fetch(`${GATEWAY_URL}/crm/v3/objects/contacts/search`, {
+    method: "POST",
+    headers: authHeaders(lovableKey, hubspotKey),
+    body: JSON.stringify({
+      filterGroups: [
+        {
+          filters: [
+            {
+              propertyName: "email",
+              operator: "EQ",
+              value: email,
+            },
+          ],
+        },
+      ],
+      properties: ["email", SUBSCRIBER_PROPERTY],
+      limit: 1,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error("HubSpot contact search failed", res.status, body);
+    return undefined;
+  }
+
+  const data = (await res.json()) as { results?: Array<{ id?: string }> };
+  return data.results?.[0]?.id;
+}
+
 async function stampExistingContact(
   id: string,
   lovableKey: string,
@@ -87,7 +126,10 @@ async function stampExistingContact(
   if (!res.ok) {
     const body = await res.text();
     console.error("HubSpot contact PATCH failed", res.status, body);
+    return false;
   }
+  console.info("HubSpot existing contact stamped as subscriber");
+  return true;
 }
 
 export const createHubSpotContact = createServerFn({ method: "POST" })
@@ -118,13 +160,20 @@ export const createHubSpotContact = createServerFn({ method: "POST" })
         }),
       });
 
-      if (res.ok) return { ok: true as const, existed: false };
+      if (res.ok) {
+        console.info("HubSpot contact created as subscriber");
+        return { ok: true as const, existed: false };
+      }
 
       const bodyText = await res.text();
-      if (res.status === 409 && /CONTACT_EXISTS/i.test(bodyText)) {
-        const id = parseExistingId(bodyText);
-        if (id) await stampExistingContact(id, lovableKey, hubspotKey);
-        return { ok: true as const, existed: true };
+      if (isExistingContactConflict(res.status, bodyText)) {
+        const id = parseExistingId(bodyText) ?? (await findExistingContactId(data.email, lovableKey, hubspotKey));
+        if (id) {
+          const stamped = await stampExistingContact(id, lovableKey, hubspotKey);
+          return { ok: stamped, existed: true, reason: stamped ? undefined : "patch_failed" };
+        }
+        console.error("HubSpot existing contact ID could not be resolved");
+        return { ok: false as const, existed: true, reason: "existing_id_not_found" };
       }
 
       console.error("HubSpot contact create failed", res.status, bodyText);
