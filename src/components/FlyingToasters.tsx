@@ -56,11 +56,11 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
           style={{
             position: "absolute",
             top: `${f.top}vh`,
-            right: 0,
+            left: 0,
             width: `${f.size}px`,
             height: `${f.size}px`,
-            animation: `flyRight ${f.duration}s linear ${f.delay}s forwards`,
-            ["--start-right" as string]: `${f.startRight}vw`,
+            animation: `flyRight ${f.duration}s linear ${f.delay}s both`,
+            ["--start-offset" as string]: `${f.startOffset}vw`,
           }}
         >
           <div
