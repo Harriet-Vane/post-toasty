@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import posthog from "posthog-js";
 import { toast as sonnerToast } from "sonner";
 import { createHubSpotContact } from "@/lib/hubspot.functions";
@@ -35,7 +36,7 @@ export function SubscribeLink({ className }: { className?: string }) {
         Subscribe
       </button>
 
-      {open && (
+      {open && typeof document !== "undefined" && createPortal(
         <div
           className="share-modal-backdrop"
           onClick={() => setOpen(false)}
@@ -77,7 +78,8 @@ export function SubscribeLink({ className }: { className?: string }) {
               Totally optional. Updates will be rare and non-annoying. Pinky swear.
             </p>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
