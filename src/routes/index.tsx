@@ -15,6 +15,7 @@ import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast
 import { SaltFall } from "@/components/SaltFall";
 import { NavMenu } from "@/components/NavMenu";
 import { SubscribeLink } from "@/components/SubscribeLink";
+import { FlyingToasters } from "@/components/FlyingToasters";
 
 
 import { cardKey } from "@/lib/cardKey";
