@@ -30,7 +30,7 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
         startOffset: 20 + Math.random() * 30,
         size: 100 + Math.random() * 60,
         delay: 0,
-        duration: 3 + Math.random() * 0.8,
+        duration: 6 + Math.random() * 2,
         bob: 8 + Math.random() * 14,
       });
     }
