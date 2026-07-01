@@ -5,7 +5,7 @@ import toasterAsset from "@/assets/flying-toaster-pixel.png.asset.json";
 type Flyer = {
   id: number;
   top: number;
-  startRight: number;
+  startOffset: number;
   size: number;
   delay: number;
   duration: number;
