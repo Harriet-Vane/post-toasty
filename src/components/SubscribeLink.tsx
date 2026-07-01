@@ -9,6 +9,7 @@ export function SubscribeLink({ className }: { className?: string }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [flying, setFlying] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   function submit() {
     const value = email.trim();
@@ -26,6 +27,8 @@ export function SubscribeLink({ className }: { className?: string }) {
     setEmail("");
     setOpen(false);
     setFlying(true);
+    setShowConfirm(true);
+    setTimeout(() => setShowConfirm(false), 3000);
   }
 
   return (
@@ -85,7 +88,7 @@ export function SubscribeLink({ className }: { className?: string }) {
       )}
 
       {flying && <FlyingToasters onDone={() => setFlying(false)} />}
-      {flying && typeof document !== "undefined" && createPortal(
+      {showConfirm && typeof document !== "undefined" && createPortal(
         <div
           aria-live="polite"
           style={{
