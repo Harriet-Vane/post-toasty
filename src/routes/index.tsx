@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
+import { createHubSpotContact } from "@/lib/hubspot.functions";
 
 import angelToast from "@/assets/angel-toast.png";
 import { ToastAngel } from "@/components/ToastAngel";
