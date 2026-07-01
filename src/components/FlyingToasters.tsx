@@ -5,7 +5,7 @@ import toasterAsset from "@/assets/flying-toaster-pixel.png.asset.json";
 type Flyer = {
   id: number;
   top: number;
-  startRight: number;
+  startOffset: number;
   size: number;
   delay: number;
   duration: number;
@@ -27,7 +27,7 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
       arr.push({
         id: i,
         top: 10 + Math.random() * 70,
-        startRight: 100 + Math.random() * 40,
+        startOffset: 20 + Math.random() * 30,
         size: 100 + Math.random() * 60,
         delay: Math.random() * 2.5,
         duration: 9 + Math.random() * 4,
@@ -56,11 +56,11 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
           style={{
             position: "absolute",
             top: `${f.top}vh`,
-            right: 0,
+            left: 0,
             width: `${f.size}px`,
             height: `${f.size}px`,
-            animation: `flyRight ${f.duration}s linear ${f.delay}s forwards`,
-            ["--start-right" as string]: `${f.startRight}vw`,
+            animation: `flyRight ${f.duration}s linear ${f.delay}s both`,
+            ["--start-offset" as string]: `${f.startOffset}vw`,
           }}
         >
           <div
@@ -88,8 +88,8 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
       ))}
       <style>{`
         @keyframes flyRight {
-          0% { transform: translateX(calc(var(--start-right) * -1)); }
-          100% { transform: translateX(130vw); }
+          0% { transform: translateX(calc((var(--start-offset) + 40vw) * -1)); }
+          100% { transform: translateX(120vw); }
         }
         @keyframes flyBob {
           from { transform: translateY(calc(var(--bob) * -1)); }
