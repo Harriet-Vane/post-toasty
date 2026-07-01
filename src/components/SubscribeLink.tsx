@@ -23,6 +23,17 @@ export function SubscribeLink({ className }: { className?: string }) {
     console.error("HubSpot sync failed", reason);
   }
 
+  function reportSyncSuccess(existed: boolean) {
+    try {
+      posthog.capture("hubspot_sync_succeeded", {
+        existed,
+        share_method: "subscribe_link",
+      });
+    } catch {
+      /* posthog not initialized yet */
+    }
+  }
+
   function submit() {
     const value = email.trim();
     if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
@@ -37,7 +48,8 @@ export function SubscribeLink({ className }: { className?: string }) {
     }
     createHubSpotContact({ data: { email: value, source: "subscribe_link" } })
       .then((result) => {
-        if (!result?.ok) reportSyncFailure(result?.reason ?? "unknown");
+        if (result?.ok) reportSyncSuccess(result.existed ?? false);
+        else reportSyncFailure(result?.reason ?? "unknown");
       })
       .catch((err) => {
         reportSyncFailure("exception");
