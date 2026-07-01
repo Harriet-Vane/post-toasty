@@ -17,7 +17,7 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     setMounted(true);
-    const t = setTimeout(onDone, 4000);
+    const t = setTimeout(onDone, 8000);
     return () => clearTimeout(t);
   }, [onDone]);
 
