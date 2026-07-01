@@ -1,6 +1,94 @@
 import { createServerFn } from "@tanstack/react-start";
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/hubspot";
+const SUBSCRIBER_PROPERTY = "posttoasty_subscriber";
+
+let propertyEnsured = false;
+
+function authHeaders(lovableKey: string, hubspotKey: string) {
+  return {
+    Authorization: `Bearer ${lovableKey}`,
+    "X-Connection-Api-Key": hubspotKey,
+    "Content-Type": "application/json",
+  };
+}
+
+async function ensureSubscriberProperty(lovableKey: string, hubspotKey: string) {
+  if (propertyEnsured) return;
+  const headers = authHeaders(lovableKey, hubspotKey);
+
+  try {
+    const check = await fetch(
+      `${GATEWAY_URL}/crm/v3/properties/contacts/${SUBSCRIBER_PROPERTY}`,
+      { method: "GET", headers },
+    );
+    if (check.ok) {
+      propertyEnsured = true;
+      return;
+    }
+    if (check.status !== 404) {
+      const body = await check.text();
+      console.error("HubSpot property check failed", check.status, body);
+      // Don't cache — retry next call.
+      return;
+    }
+
+    const create = await fetch(`${GATEWAY_URL}/crm/v3/properties/contacts`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: SUBSCRIBER_PROPERTY,
+        label: "PostToasty Subscriber",
+        type: "enumeration",
+        fieldType: "booleancheckbox",
+        groupName: "contactinformation",
+        description:
+          "True when the contact submitted their email via the PostToasty share modal.",
+        options: [
+          { label: "True", value: "true", displayOrder: 0, hidden: false },
+          { label: "False", value: "false", displayOrder: 1, hidden: false },
+        ],
+      }),
+    });
+
+    if (create.ok || create.status === 409) {
+      propertyEnsured = true;
+      return;
+    }
+    const body = await create.text();
+    console.error("HubSpot property create failed", create.status, body);
+  } catch (err) {
+    console.error("HubSpot property ensure threw", err);
+  }
+}
+
+function parseExistingId(bodyText: string): string | undefined {
+  try {
+    const parsed = JSON.parse(bodyText) as { message?: string };
+    const match = parsed.message?.match(/Existing ID:\s*(\d+)/i);
+    return match?.[1];
+  } catch {
+    return undefined;
+  }
+}
+
+async function stampExistingContact(
+  id: string,
+  lovableKey: string,
+  hubspotKey: string,
+) {
+  const res = await fetch(`${GATEWAY_URL}/crm/v3/objects/contacts/${id}`, {
+    method: "PATCH",
+    headers: authHeaders(lovableKey, hubspotKey),
+    body: JSON.stringify({
+      properties: { [SUBSCRIBER_PROPERTY]: "true" },
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    console.error("HubSpot contact PATCH failed", res.status, body);
+  }
+}
 
 export const createHubSpotContact = createServerFn({ method: "POST" })
   .inputValidator((data: { email: string; source?: string }) => {
@@ -16,20 +104,19 @@ export const createHubSpotContact = createServerFn({ method: "POST" })
       return { ok: false as const, reason: "not_configured" };
     }
 
+    await ensureSubscriberProperty(lovableKey, hubspotKey);
+
     try {
       const res = await fetch(`${GATEWAY_URL}/crm/v3/objects/contacts`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${lovableKey}`,
-          "X-Connection-Api-Key": hubspotKey,
-          "Content-Type": "application/json",
-        },
+        headers: authHeaders(lovableKey, hubspotKey),
         body: JSON.stringify({
           properties: {
             email: data.email,
             hs_lead_source: data.source
               ? `PostToast share modal (${data.source})`
               : "PostToast share modal",
+            [SUBSCRIBER_PROPERTY]: "true",
           },
         }),
       });
@@ -37,8 +124,9 @@ export const createHubSpotContact = createServerFn({ method: "POST" })
       if (res.ok) return { ok: true as const, existed: false };
 
       const bodyText = await res.text();
-      // HubSpot returns 409 with CONTACT_EXISTS when the email is already a contact.
       if (res.status === 409 && /CONTACT_EXISTS/i.test(bodyText)) {
+        const id = parseExistingId(bodyText);
+        if (id) await stampExistingContact(id, lovableKey, hubspotKey);
         return { ok: true as const, existed: true };
       }
 
