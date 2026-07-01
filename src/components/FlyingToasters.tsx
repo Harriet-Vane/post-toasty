@@ -27,7 +27,7 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
       arr.push({
         id: i,
         top: 10 + Math.random() * 70,
-        startRight: 100 + Math.random() * 40,
+        startOffset: 20 + Math.random() * 30,
         size: 100 + Math.random() * 60,
         delay: Math.random() * 2.5,
         duration: 9 + Math.random() * 4,
