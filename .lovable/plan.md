@@ -1,13 +1,10 @@
-## Changes
+## Plan
 
-**`src/components/FlyingToasters.tsx`**
-- Increase flyer `duration` to `6 + Math.random() * 2` (6–8s).
-- Increase `onDone` timeout to `8000` so the portal stays until the last flyer clears.
-- Portal wrapper already has `pointerEvents: "none"` — confirm it stays so the page stays clickable.
+1. Update `src/components/FlyingToasters.tsx` so each toaster starts just off the left edge instead of far off-screen.
+2. Remove the randomized `startOffset` distance that currently makes the first visible toaster take time to reach the viewport.
+3. Keep the existing behavior: exactly 3 toasters, left-to-right movement, 6–8 second duration, no click-blocking overlay, and the confirmation UI toast hiding after 3 seconds.
+4. Verify in the preview that toasters are visible immediately when Subscribe is submitted and continue flying for 6–8 seconds.
 
-**`src/components/SubscribeLink.tsx`**
-- The centered "YOU'RE SUBSCRIBED" overlay is currently tied to `flying` (unmounts at 8s). Split it into its own state `showConfirm` that turns on with `flying` on submit and auto-clears via a 3s `setTimeout`.
-- Overlay wrapper already uses `pointerEvents: "none"` — keep it, so clicks pass through while it's visible.
+## Technical detail
 
-## Result
-Click Submit → both appear instantly. Centered toast disappears at 3s. Flyers finish drifting across between 6–8s. Underlying UI remains clickable throughout.
+The current CSS has no animation delay, but the `0%` keyframe starts at `translateX(calc((var(--start-offset) + 40vw) * -1))`; with `startOffset` set to `20–50vw`, toasters begin `60–90vw` off-screen left. That creates the visible delay. The fix is to start them around `-110%` of their own width / just outside the viewport instead of many viewport-widths away.

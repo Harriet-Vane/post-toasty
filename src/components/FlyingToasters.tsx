@@ -5,7 +5,6 @@ import toasterAsset from "@/assets/flying-toaster-pixel.png.asset.json";
 type Flyer = {
   id: number;
   top: number;
-  startOffset: number;
   size: number;
   delay: number;
   duration: number;
@@ -27,7 +26,6 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
       arr.push({
         id: i,
         top: 10 + Math.random() * 70,
-        startOffset: 20 + Math.random() * 30,
         size: 100 + Math.random() * 60,
         delay: 0,
         duration: 6 + Math.random() * 2,
@@ -60,7 +58,6 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
             width: `${f.size}px`,
             height: `${f.size}px`,
             animation: `flyRight ${f.duration}s linear ${f.delay}s both`,
-            ["--start-offset" as string]: `${f.startOffset}vw`,
           }}
         >
           <div
@@ -88,7 +85,7 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
       ))}
       <style>{`
         @keyframes flyRight {
-          0% { transform: translateX(calc((var(--start-offset) + 40vw) * -1)); }
+          0% { transform: translateX(-110%); }
           100% { transform: translateX(120vw); }
         }
         @keyframes flyBob {
