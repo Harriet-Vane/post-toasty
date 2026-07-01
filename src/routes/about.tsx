@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 import angelToast from "@/assets/angel-toast.png";
 import { NavMenu } from "@/components/NavMenu";
+import { SubscribeLink } from "@/components/SubscribeLink";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
