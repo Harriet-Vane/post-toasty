@@ -46,7 +46,7 @@ export function SubscribeLink({ className }: { className?: string }) {
           <div className="share-modal" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between mb-3">
               <h4 className="font-pixel text-[13px] mt-2 text-[var(--ink)]">
-                SUBSCRIBE TO TOASTY UPDATES
+                SUBSCRIBE TO UPDATES
               </h4>
               <button
                 onClick={() => setOpen(false)}
