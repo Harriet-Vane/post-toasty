@@ -183,9 +183,9 @@ function RecipePage() {
           <NavMenu
             links={[
               { to: "/about", label: "About" },
-              { to: "/how-it-works", label: "How It Works" },
               { to: "/", label: "Make some toast" },
             ]}
+            extras={<SubscribeLink className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline" />}
           />
         </div>
 
