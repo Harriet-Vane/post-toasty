@@ -9,6 +9,7 @@ export function SubscribeLink({ className }: { className?: string }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [flying, setFlying] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   function submit() {
     const value = email.trim();
