@@ -113,9 +113,6 @@ export const createHubSpotContact = createServerFn({ method: "POST" })
         body: JSON.stringify({
           properties: {
             email: data.email,
-            hs_lead_source: data.source
-              ? `PostToast share modal (${data.source})`
-              : "PostToast share modal",
             [SUBSCRIBER_PROPERTY]: "true",
           },
         }),
