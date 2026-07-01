@@ -11,6 +11,18 @@ export function SubscribeLink({ className }: { className?: string }) {
   const [flying, setFlying] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  function reportSyncFailure(reason: string) {
+    try {
+      posthog.capture("hubspot_sync_failed", {
+        reason,
+        share_method: "subscribe_link",
+      });
+    } catch {
+      /* posthog not initialized yet */
+    }
+    console.error("HubSpot sync failed", reason);
+  }
+
   function submit() {
     const value = email.trim();
     if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
@@ -23,7 +35,14 @@ export function SubscribeLink({ className }: { className?: string }) {
     } catch {
       /* posthog not initialized yet */
     }
-    createHubSpotContact({ data: { email: value, source: "subscribe_link" } }).catch(() => {});
+    createHubSpotContact({ data: { email: value, source: "subscribe_link" } })
+      .then((result) => {
+        if (!result?.ok) reportSyncFailure(result?.reason ?? "unknown");
+      })
+      .catch((err) => {
+        reportSyncFailure("exception");
+        console.error("HubSpot sync threw", err);
+      });
     setEmail("");
     setOpen(false);
     setFlying(true);

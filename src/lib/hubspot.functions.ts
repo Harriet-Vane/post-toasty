@@ -101,6 +101,9 @@ export const createHubSpotContact = createServerFn({ method: "POST" })
     const lovableKey = process.env.LOVABLE_API_KEY;
     const hubspotKey = process.env.HUBSPOT_API_KEY;
     if (!lovableKey || !hubspotKey) {
+      console.error(
+        "HubSpot sync skipped: missing API keys (need LOVABLE_API_KEY and HUBSPOT_API_KEY)",
+      );
       return { ok: false as const, reason: "not_configured" };
     }
 
