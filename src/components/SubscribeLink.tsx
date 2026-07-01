@@ -85,6 +85,28 @@ export function SubscribeLink({ className }: { className?: string }) {
       )}
 
       {flying && <FlyingToasters onDone={() => setFlying(false)} />}
+      {flying && typeof document !== "undefined" && createPortal(
+        <div
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+            zIndex: 2147483647,
+          }}
+        >
+          <div
+            className="font-pixel text-[13px] text-[var(--ink)] bg-[var(--paper)] px-4 py-3"
+            style={{ border: "2px solid var(--ink)", boxShadow: "4px 4px 0 var(--ink)" }}
+          >
+            YOU'RE SUBSCRIBED
+          </div>
+        </div>,
+        document.body,
+      )}
     </>
   );
 }
