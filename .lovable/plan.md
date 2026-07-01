@@ -1,29 +1,31 @@
 ## Goal
-When a user submits their email in the Share modal, also send it to your HubSpot account as a contact (in addition to the existing PostHog `identify` + `share_email_captured` event).
+Automatically add every email captured in the Share modal to an active (dynamic) list in HubSpot, using a custom contact property as the filter.
 
 ## Approach
-Your workspace already has **Beth's HubSpot** connected via the Lovable connector gateway, so no new API keys or OAuth setup needed. HubSpot's `HUBSPOT_API_KEY` env var is already available server-side.
+HubSpot's active lists can't be written to directly via API — membership is defined by filters. Standard pattern: stamp new contacts with a custom property, then create the active list in HubSpot filtered on that property.
 
-We'll call HubSpot's `POST /crm/v3/objects/contacts` through the gateway from a new server function so the API key never touches the browser.
+We'll extend the existing `createHubSpotContact` server function to set a custom property `posttoasty_subscriber = true` on every contact it creates or updates. Then you create the active list once in HubSpot.
 
 ## Changes
 
-**1. New server function: `src/lib/hubspot.functions.ts`**
-- `createHubSpotContact` — public (no auth middleware, since sharers aren't logged-in users).
-- Validates `{ email, source?: string }` with a simple email regex.
-- POSTs to `https://connector-gateway.lovable.dev/hubspot/crm/v3/objects/contacts` with headers `Authorization: Bearer ${LOVABLE_API_KEY}` and `X-Connection-Api-Key: ${HUBSPOT_API_KEY}`.
-- Body: `{ properties: { email, lifecyclestage: "subscriber", hs_lead_source: "PostToast share modal" } }`.
-- Handles the `409 CONTACT_EXISTS` response as success (idempotent — same email submitting again is fine).
-- Returns `{ ok: true, existed?: boolean }`; on other errors, returns `{ ok: false }` (never throws to the client — email capture is best-effort and shouldn't block the toast).
+**1. Update `src/lib/hubspot.functions.ts`**
+- Add a one-time bootstrap step (idempotent) that ensures the custom property `posttoasty_subscriber` (type: `enumeration`, single checkbox, values `true`/`false`) exists in the `contacts` object schema. It calls `GET /crm/v3/properties/contacts/posttoasty_subscriber`; on 404 it `POST`s to `/crm/v3/properties/contacts` to create it. Result cached in a module-level flag so we only hit it once per server instance.
+- In the create-contact call, add `posttoasty_subscriber: "true"` to `properties`.
+- When HubSpot returns `409 CONTACT_EXISTS`, parse the existing contact ID from the error body and `PATCH /crm/v3/objects/contacts/{id}` to set `posttoasty_subscriber: "true"` (so previously captured emails also flow into the list next time they submit).
 
-**2. Wire it into `src/routes/index.tsx`**
-- Inside `captureShareEmail(method)`, after the existing PostHog calls, fire-and-forget `createHubSpotContact({ data: { email, source: method } })`.
-- Wrap in `.catch(() => {})` so a HubSpot outage never breaks the UI or the "Thanks! You're the toastiest." toast.
+**2. No changes to `src/routes/index.tsx`**
+- The existing fire-and-forget `createHubSpotContact` call already covers the email capture flow.
 
-## Scope required (heads-up)
-Your HubSpot key must have `crm.objects.contacts.write`. If the first call returns `MISSING_SCOPES`, you'll need to regenerate the HubSpot private-app token with that scope and reconnect — Lovable can't grant provider scopes for you.
+## What you'll do in HubSpot (one-time, ~2 minutes)
+After the first email flows through and the property is auto-created:
+1. HubSpot → Contacts → Lists → Create list → **Active list**.
+2. Filter: `Contact property` → `Posttoasty Subscriber` → `is equal to any of` → `true`.
+3. Save. New PostToasty subscribers appear in the list automatically going forward, and existing contacts who re-submit get backfilled.
+
+## Required HubSpot scopes
+Your private-app token needs `crm.schemas.contacts.write` (to create the property) plus the existing `crm.objects.contacts.write`. If the property-creation call returns `MISSING_SCOPES`, regenerate the token with that scope and reconnect — I'll surface the exact error in server logs.
 
 ## What we're NOT doing
-- No custom HubSpot list assignment, workflows, or property mapping beyond `email` + lead source. Easy to add later if you want.
-- Not touching the existing `share_email_captures` table or PostHog wiring.
-- No changes to the Submit button, toast copy, or modal layout.
+- Not calling the Lists API to add contacts directly (active lists don't support that; only static lists do, and you chose active).
+- Not creating the list itself via API (HubSpot's v3 Lists API for creation is gated and brittle; the manual one-time setup is faster and more reliable).
+- Not changing PostHog, the Submit button, or any UI copy.
