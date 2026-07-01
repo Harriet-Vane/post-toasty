@@ -15,6 +15,7 @@ import { SelectionToast, getSelectionMessage } from "@/components/SelectionToast
 import { SaltFall } from "@/components/SaltFall";
 import { NavMenu } from "@/components/NavMenu";
 import { SubscribeLink } from "@/components/SubscribeLink";
+import { FlyingToasters } from "@/components/FlyingToasters";
 
 
 import { cardKey } from "@/lib/cardKey";
@@ -718,6 +719,7 @@ function ShareScreen({
 
 
   const [shareOpen, setShareOpen] = useState(false);
+  const [shareFlying, setShareFlying] = useState(false);
   const [shareEmail, setShareEmail] = useState("");
   // We only identify a given sharer once per share session, even if they try
   // several share methods in a row.
@@ -1047,6 +1049,7 @@ ${shareUrl}`)}`;
                       topping_count: toppings.length,
                     });
                     openShare(s.href);
+                    setShareFlying(true);
                     setShareOpen(false);
                   }}
                 >
@@ -1082,6 +1085,7 @@ ${shareUrl}`)}`;
                         bread_id: breadId,
                         topping_count: toppings.length,
                       });
+                      setShareFlying(true);
                     } catch {
                       sonnerToast.error("Couldn't copy — select the link and copy manually.");
                     }
@@ -1092,8 +1096,9 @@ ${shareUrl}`)}`;
               </div>
             </div>
 
+      {shareFlying && <FlyingToasters onDone={() => setShareFlying(false)} />}
 
-          </div>
+    </div>
         </div>
       )}
 
