@@ -719,6 +719,7 @@ function ShareScreen({
 
 
   const [shareOpen, setShareOpen] = useState(false);
+  const [shareFlying, setShareFlying] = useState(false);
   const [shareEmail, setShareEmail] = useState("");
   // We only identify a given sharer once per share session, even if they try
   // several share methods in a row.
