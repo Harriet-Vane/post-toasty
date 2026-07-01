@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { NavMenu } from "@/components/NavMenu";
+import { SubscribeLink } from "@/components/SubscribeLink";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import posthog from "posthog-js";
