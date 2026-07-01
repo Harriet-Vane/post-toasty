@@ -1078,7 +1078,7 @@ ${shareUrl}`)}`;
                   onClick={async () => {
                     try {
                       await navigator.clipboard.writeText(shareUrl);
-                      sonnerToast.success("Link copied!");
+                      sonnerToast.success("Link copied");
                       captureShareEmail("copy_link");
                       posthog.capture("recipe_shared", {
                         share_method: "copy_link",
