@@ -1,17 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import toasterImg from "@/assets/flying-toaster.png";
-import toastImg from "@/assets/flying-toast.png";
+import toasterAsset from "@/assets/flying-toaster-pixel.png.asset.json";
 
 type Flyer = {
   id: number;
-  kind: "toaster" | "toast";
-  top: number; // vh
-  startLeft: number; // vw (start position, right of screen)
-  size: number; // px
-  delay: number; // s
-  duration: number; // s
-  bob: number; // px vertical bob amplitude
+  top: number;
+  startRight: number;
+  size: number;
+  delay: number;
+  duration: number;
+  bob: number;
 };
 
 export function FlyingToasters({ onDone }: { onDone: () => void }) {
@@ -19,21 +17,19 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     setMounted(true);
-    const t = setTimeout(onDone, 12000);
+    const t = setTimeout(onDone, 15000);
     return () => clearTimeout(t);
   }, [onDone]);
 
   const flyers = useMemo<Flyer[]>(() => {
     const arr: Flyer[] = [];
-    let id = 0;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 3; i++) {
       arr.push({
-        id: id++,
-        kind: "toaster",
-        top: 5 + Math.random() * 80,
-        startLeft: 100 + Math.random() * 60,
-        size: 90 + Math.random() * 70,
-        delay: Math.random() * 3,
+        id: i,
+        top: 10 + Math.random() * 70,
+        startRight: 100 + Math.random() * 40,
+        size: 100 + Math.random() * 60,
+        delay: Math.random() * 2.5,
         duration: 9 + Math.random() * 4,
         bob: 8 + Math.random() * 14,
       });
@@ -60,11 +56,11 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
           style={{
             position: "absolute",
             top: `${f.top}vh`,
-            left: 0,
+            right: 0,
             width: `${f.size}px`,
             height: `${f.size}px`,
-            animation: `flyLeft ${f.duration}s linear ${f.delay}s forwards`,
-            ["--start-left" as string]: `${f.startLeft}vw`,
+            animation: `flyRight ${f.duration}s linear ${f.delay}s forwards`,
+            ["--start-right" as string]: `${f.startRight}vw`,
           }}
         >
           <div
@@ -72,12 +68,11 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
               width: "100%",
               height: "100%",
               animation: `flyBob ${0.6 + Math.random() * 0.4}s ease-in-out ${f.delay}s infinite alternate`,
-              transform: `translateY(0)`,
               ["--bob" as string]: `${f.bob}px`,
             }}
           >
             <img
-              src={f.kind === "toaster" ? toasterImg : toastImg}
+              src={toasterAsset.url}
               alt=""
               width={f.size}
               height={f.size}
@@ -92,9 +87,9 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
         </div>
       ))}
       <style>{`
-        @keyframes flyLeft {
-          0% { transform: translateX(var(--start-left)); }
-          100% { transform: translateX(-30vw); }
+        @keyframes flyRight {
+          0% { transform: translateX(calc(var(--start-right) * -1)); }
+          100% { transform: translateX(130vw); }
         }
         @keyframes flyBob {
           from { transform: translateY(calc(var(--bob) * -1)); }
