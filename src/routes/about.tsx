@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 import angelToast from "@/assets/angel-toast.png";
 import { NavMenu } from "@/components/NavMenu";
+import { SubscribeLink } from "@/components/SubscribeLink";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -39,9 +40,9 @@ function AboutPage() {
           </Link>
           <NavMenu
             links={[
-              { to: "/how-it-works", label: "How It Works" },
               { to: "/", label: "Home" },
             ]}
+            extras={<SubscribeLink className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline" />}
           />
         </div>
 

@@ -92,14 +92,16 @@ function PostToast() {
           <NavMenu
             links={[
               { to: "/about", label: "About" },
-              { to: "/how-it-works", label: "How It Works" },
             ]}
             extras={
-              phase !== "input" ? (
-                <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
-                  Start over
-                </button>
-              ) : null
+              <>
+                <SubscribeLink className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline" />
+                {phase !== "input" ? (
+                  <button onClick={reset} className="pixel-btn-ghost text-[var(--paper)] border-[var(--paper)]">
+                    Start over
+                  </button>
+                ) : null}
+              </>
             }
           />
         </div>
@@ -142,7 +144,7 @@ function PostToast() {
         {/* Cabinet footer */}
         <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
           <a href="https://www.bethdunn.com" target="_blank" rel="noopener noreferrer" className="font-pixel text-[9px] hover:underline">© Beth Dunn</a>
-          <SubscribeLink />
+          <span className="font-body text-xs">because toast is the best</span>
         </div>
       </div>
     </main>

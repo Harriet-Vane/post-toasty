@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { NavMenu } from "@/components/NavMenu";
+import { SubscribeLink } from "@/components/SubscribeLink";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import posthog from "posthog-js";
@@ -183,9 +184,9 @@ function RecipePage() {
           <NavMenu
             links={[
               { to: "/about", label: "About" },
-              { to: "/how-it-works", label: "How It Works" },
               { to: "/", label: "Make some toast" },
             ]}
+            extras={<SubscribeLink className="font-body text-[var(--paper)] opacity-80 text-xs sm:text-sm underline" />}
           />
         </div>
 
@@ -310,7 +311,7 @@ function RecipePage() {
 
         <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
           <a href="https://www.bethdunn.com" target="_blank" rel="noopener noreferrer" className="font-pixel text-[9px] hover:underline">© Beth Dunn</a>
-          <span className="font-body text-xs">because toast is the most</span>
+          <span className="font-body text-xs">because toast is the best</span>
         </div>
       </div>
     </main>

@@ -9,17 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RSlugRouteImport } from './routes/r.$slug'
 import { Route as ApiPublicUploadCardRouteImport } from './routes/api/public/upload-card'
 
-const HowItWorksRoute = HowItWorksRouteImport.update({
-  id: '/how-it-works',
-  path: '/how-it-works',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -44,14 +38,12 @@ const ApiPublicUploadCardRoute = ApiPublicUploadCardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/how-it-works': typeof HowItWorksRoute
   '/r/$slug': typeof RSlugRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/how-it-works': typeof HowItWorksRoute
   '/r/$slug': typeof RSlugRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
@@ -59,46 +51,26 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/how-it-works': typeof HowItWorksRoute
   '/r/$slug': typeof RSlugRoute
   '/api/public/upload-card': typeof ApiPublicUploadCardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/about'
-    | '/how-it-works'
-    | '/r/$slug'
-    | '/api/public/upload-card'
+  fullPaths: '/' | '/about' | '/r/$slug' | '/api/public/upload-card'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/how-it-works' | '/r/$slug' | '/api/public/upload-card'
-  id:
-    | '__root__'
-    | '/'
-    | '/about'
-    | '/how-it-works'
-    | '/r/$slug'
-    | '/api/public/upload-card'
+  to: '/' | '/about' | '/r/$slug' | '/api/public/upload-card'
+  id: '__root__' | '/' | '/about' | '/r/$slug' | '/api/public/upload-card'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  HowItWorksRoute: typeof HowItWorksRoute
   RSlugRoute: typeof RSlugRoute
   ApiPublicUploadCardRoute: typeof ApiPublicUploadCardRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/how-it-works': {
-      id: '/how-it-works'
-      path: '/how-it-works'
-      fullPath: '/how-it-works'
-      preLoaderRoute: typeof HowItWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -133,7 +105,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  HowItWorksRoute: HowItWorksRoute,
   RSlugRoute: RSlugRoute,
   ApiPublicUploadCardRoute: ApiPublicUploadCardRoute,
 }
