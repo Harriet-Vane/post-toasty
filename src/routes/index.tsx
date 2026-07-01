@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
 
 import { generateAiRecipe } from "@/lib/recipe-ai.functions";
+import { createHubSpotContact } from "@/lib/hubspot.functions";
 
 import angelToast from "@/assets/angel-toast.png";
 import { ToastAngel } from "@/components/ToastAngel";
@@ -840,6 +841,8 @@ ${shareUrl}`)}`;
     } catch {
       /* posthog not initialized yet */
     }
+    // Best-effort push to HubSpot; never blocks the UI.
+    createHubSpotContact({ data: { email, source: method } }).catch(() => {});
   }
 
   function openShare(href: string) {
