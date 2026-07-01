@@ -3,10 +3,12 @@ import { createPortal } from "react-dom";
 import posthog from "posthog-js";
 import { toast as sonnerToast } from "sonner";
 import { createHubSpotContact } from "@/lib/hubspot.functions";
+import { FlyingToasters } from "./FlyingToasters";
 
 export function SubscribeLink({ className }: { className?: string }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [flying, setFlying] = useState(false);
 
   function submit() {
     const value = email.trim();
@@ -21,9 +23,9 @@ export function SubscribeLink({ className }: { className?: string }) {
       /* posthog not initialized yet */
     }
     createHubSpotContact({ data: { email: value, source: "subscribe_link" } }).catch(() => {});
-    sonnerToast.success("Thanks! You're the toastiest.");
     setEmail("");
     setOpen(false);
+    setFlying(true);
   }
 
   return (
@@ -81,6 +83,8 @@ export function SubscribeLink({ className }: { className?: string }) {
         </div>,
         document.body,
       )}
+
+      {flying && <FlyingToasters onDone={() => setFlying(false)} />}
     </>
   );
 }
