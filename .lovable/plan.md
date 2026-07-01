@@ -1,22 +1,33 @@
-The `id-preview--…lovable.app` URL serves a **static preview build**, which is separate from the working dev sandbox iframe next to chat. That screen ("Preview has not been built yet") means the last preview build either hasn't finished or errored out — the live dev preview itself is rendering fine (I inspected it: full DOM, no console/SSR errors, only harmless `inputValidator` deprecation warnings).
+# Update toast copy
 
-Since you just looked for the first time, the most likely cause is simply that a fresh build hasn't been triggered yet against that URL, or the last one failed silently.
+Apply the user-provided strings verbatim. Only string literals change — no logic, no styling.
 
-## Plan
+## `src/components/SelectionToast.tsx`
 
-1. Wait ~1–2 minutes and refresh the shared preview link once. First-time visits often just need the build to finish.
-2. If it's still stuck, trigger a fresh build by publishing (the publish flow rebuilds the preview snapshot as part of the deploy):
-   - Confirm no unresolved critical security findings first.
-   - Publish to your existing `post-toasty.lovable.app` URL. This also refreshes the shared preview build.
-3. If publishing fails or the shared preview is still blank after the build completes, pull the preview build logs and fix whatever error surfaces there (most likely a route/loader failure that only trips during the static build, not dev SSR).
+Replace the `SELECTION_MESSAGES` map values:
 
-## Nothing to change in code right now
+- `white`: "You rebel"
+- `wholewheat`: "So healthy, so… brown?"
+- `englishmuffin`: "Nooks and crannies FTW"
+- `bagel`: "Only valid in New York." (also switch curly `“` to straight `"`)
+- `scone`: "Okay but which topping comes first?"
+- `almondbutter`: "Oooh so fancy"
+- `hummus`: "Heck yeah hummus"
+- `marmalade`: "Marvelous in every way"
+- `lemoncurd`: "A highly sophisticated palate appears"
+- `honey`: "Finger-licking good"
+- `oliveoil`: "It's the chickpea of the sea"
+- `banana`: "BA-NA-NA"
+- `egg`: "Sunnyside up"
+- `whip`: "Whip it good"
+- `ghost`: "Feeling spicy"
+- `sprinkles`: "You're a mermaid unicorn"
 
-I didn't find any error in the running dev preview, so no code edit is warranted yet. If step 3 turns up a real build error, I'll come back with a targeted fix plan for that specific error.
+All other entries already match the requested copy — leave as-is.
 
-## What I need from you
+## No other files need changes
 
-Tell me which you'd like:
-- **Wait and refresh** — do nothing, just retry the link in a minute.
-- **Publish now** — I'll run the publish flow to force a rebuild.
-- **Investigate first** — I'll pull build logs and diagnose before touching anything.
+- `sourdough`, `rye`, `mystery`, all butter/spread lines already present, `avocado`, `tomato`, `cinnamon`, `gummy`, `pickle`, `hotdog`, `pumpkinseeds`, `pineapple`, `frosting`, default → already match.
+- Custom overlays "SALTY GOODNESS FTW" and "YOU'RE SUBSCRIBED" → unchanged.
+- Sonner strings in `src/routes/index.tsx` (share image capture failure, pop-up blocked, copy failure) and `src/components/SubscribeLink.tsx` ("Hmm, that email looks off.") → already match.
+- `sonnerToast.success("Link copied!")` in `src/routes/index.tsx` → change to `"Link copied"`.
