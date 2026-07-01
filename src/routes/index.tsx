@@ -1096,8 +1096,9 @@ ${shareUrl}`)}`;
               </div>
             </div>
 
+      {shareFlying && <FlyingToasters onDone={() => setShareFlying(false)} />}
 
-          </div>
+    </div>
         </div>
       )}
 
