@@ -88,7 +88,7 @@ export function SubscribeLink({ className }: { className?: string }) {
       )}
 
       {flying && <FlyingToasters onDone={() => setFlying(false)} />}
-      {flying && typeof document !== "undefined" && createPortal(
+      {showConfirm && typeof document !== "undefined" && createPortal(
         <div
           aria-live="polite"
           style={{
