@@ -1085,6 +1085,7 @@ ${shareUrl}`)}`;
                         bread_id: breadId,
                         topping_count: toppings.length,
                       });
+                      setShareFlying(true);
                     } catch {
                       sonnerToast.error("Couldn't copy — select the link and copy manually.");
                     }
