@@ -19,37 +19,23 @@ export function FlyingToasters({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     setMounted(true);
-    const t = setTimeout(onDone, 4200);
+    const t = setTimeout(onDone, 12000);
     return () => clearTimeout(t);
   }, [onDone]);
 
   const flyers = useMemo<Flyer[]>(() => {
     const arr: Flyer[] = [];
     let id = 0;
-    // toasters
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 8; i++) {
       arr.push({
         id: id++,
         kind: "toaster",
         top: 5 + Math.random() * 80,
-        startLeft: 100 + Math.random() * 40,
-        size: 90 + Math.random() * 70,
-        delay: Math.random() * 1.2,
-        duration: 2.8 + Math.random() * 1.4,
-        bob: 8 + Math.random() * 14,
-      });
-    }
-    // toast slices
-    for (let i = 0; i < 9; i++) {
-      arr.push({
-        id: id++,
-        kind: "toast",
-        top: 5 + Math.random() * 85,
         startLeft: 100 + Math.random() * 60,
-        size: 40 + Math.random() * 40,
-        delay: Math.random() * 1.6,
-        duration: 2.6 + Math.random() * 1.4,
-        bob: 6 + Math.random() * 12,
+        size: 90 + Math.random() * 70,
+        delay: Math.random() * 3,
+        duration: 9 + Math.random() * 4,
+        bob: 8 + Math.random() * 14,
       });
     }
     return arr;
