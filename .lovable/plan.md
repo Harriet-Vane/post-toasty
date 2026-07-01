@@ -1,33 +1,18 @@
-# Update toast copy
+## Idle hop for Toast Angel
 
-Apply the user-provided strings verbatim. Only string literals change — no logic, no styling.
+Add a subtle "hop" animation that plays once after the user has been idle for 10 seconds, then stops until the next idle cycle.
 
-## `src/components/SelectionToast.tsx`
+### Behavior
+- Idle timer starts on mount and resets on any user interaction (`mousemove`, `keydown`, `touchstart`, `scroll`, `click`).
+- After 10s of no activity, the angel plays a single hop (~600ms: quick up, soft landing, tiny squash).
+- Timer does not re-arm until the user interacts again — so it's "once per idle stretch," not a loop.
+- Existing click behavior (flying toasters) is preserved.
 
-Replace the `SELECTION_MESSAGES` map values:
+### Implementation
+Edit only `src/components/ToastAngel.tsx`:
+- Add a `hopping` state and a CSS class `angel-hop` toggled for the animation duration.
+- Use a `useEffect` to attach passive window listeners that clear + restart a 10s timeout; on timeout fire, set `hopping=true` and unset after animation ends. Do not re-arm until an activity event fires.
+- Inline `<style>` block (matching the pattern used in `FlyingToasters.tsx`) defining `@keyframes angel-hop` — small translateY(-10px) with a subtle scaleY squash on landing, `ease-out`, 600ms, runs once.
+- Respect `prefers-reduced-motion`: skip the animation entirely.
 
-- `white`: "You rebel"
-- `wholewheat`: "So healthy, so… brown?"
-- `englishmuffin`: "Nooks and crannies FTW"
-- `bagel`: "Only valid in New York." (also switch curly `“` to straight `"`)
-- `scone`: "Okay but which topping comes first?"
-- `almondbutter`: "Oooh so fancy"
-- `hummus`: "Heck yeah hummus"
-- `marmalade`: "Marvelous in every way"
-- `lemoncurd`: "A highly sophisticated palate appears"
-- `honey`: "Finger-licking good"
-- `oliveoil`: "It's the chickpea of the sea"
-- `banana`: "BA-NA-NA"
-- `egg`: "Sunnyside up"
-- `whip`: "Whip it good"
-- `ghost`: "Feeling spicy"
-- `sprinkles`: "You're a mermaid unicorn"
-
-All other entries already match the requested copy — leave as-is.
-
-## No other files need changes
-
-- `sourdough`, `rye`, `mystery`, all butter/spread lines already present, `avocado`, `tomato`, `cinnamon`, `gummy`, `pickle`, `hotdog`, `pumpkinseeds`, `pineapple`, `frosting`, default → already match.
-- Custom overlays "SALTY GOODNESS FTW" and "YOU'RE SUBSCRIBED" → unchanged.
-- Sonner strings in `src/routes/index.tsx` (share image capture failure, pop-up blocked, copy failure) and `src/components/SubscribeLink.tsx` ("Hmm, that email looks off.") → already match.
-- `sonnerToast.success("Link copied!")` in `src/routes/index.tsx` → change to `"Link copied"`.
+No changes to other files.
