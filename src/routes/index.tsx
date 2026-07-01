@@ -1049,6 +1049,7 @@ ${shareUrl}`)}`;
                       topping_count: toppings.length,
                     });
                     openShare(s.href);
+                    setShareFlying(true);
                     setShareOpen(false);
                   }}
                 >
