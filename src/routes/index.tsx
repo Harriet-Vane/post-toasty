@@ -144,7 +144,7 @@ function PostToast() {
         {/* Cabinet footer */}
         <div className="flex items-center justify-between px-2 pt-3 sm:pt-4 text-[var(--paper)] opacity-70">
           <a href="https://www.bethdunn.com" target="_blank" rel="noopener noreferrer" className="font-pixel text-[9px] hover:underline">© Beth Dunn</a>
-          <SubscribeLink />
+          <span className="font-body text-xs">because toast is the best</span>
         </div>
       </div>
     </main>
