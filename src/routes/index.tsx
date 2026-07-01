@@ -841,6 +841,8 @@ ${shareUrl}`)}`;
     } catch {
       /* posthog not initialized yet */
     }
+    // Best-effort push to HubSpot; never blocks the UI.
+    createHubSpotContact({ data: { email, source: method } }).catch(() => {});
   }
 
   function openShare(href: string) {
